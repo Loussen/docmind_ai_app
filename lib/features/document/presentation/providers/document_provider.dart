@@ -1,0 +1,219 @@
+import 'dart:io';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../data/models/document_model.dart';
+import '../../data/repositories/document_repository.dart';
+
+// Upload state
+enum UploadStatus { idle, selecting, uploading, processing, success, error }
+
+class UploadState {
+  final UploadStatus status;
+  final File? selectedFile;
+  final String? fileName;
+  final double uploadProgress;
+  final DocumentModel? uploadedDocument;
+  final String? errorMessage;
+
+  const UploadState({
+    this.status = UploadStatus.idle,
+    this.selectedFile,
+    this.fileName,
+    this.uploadProgress = 0,
+    this.uploadedDocument,
+    this.errorMessage,
+  });
+
+  UploadState copyWith({
+    UploadStatus? status,
+    File? selectedFile,
+    String? fileName,
+    double? uploadProgress,
+    DocumentModel? uploadedDocument,
+    String? errorMessage,
+  }) {
+    return UploadState(
+      status: status ?? this.status,
+      selectedFile: selectedFile ?? this.selectedFile,
+      fileName: fileName ?? this.fileName,
+      uploadProgress: uploadProgress ?? this.uploadProgress,
+      uploadedDocument: uploadedDocument ?? this.uploadedDocument,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
+  bool get isUploading => status == UploadStatus.uploading;
+  bool get isProcessing => status == UploadStatus.processing;
+  bool get hasFile => selectedFile != null;
+}
+
+class UploadNotifier extends StateNotifier<UploadState> {
+  final DocumentRepository _documentRepository;
+
+  UploadNotifier(this._documentRepository) : super(const UploadState());
+
+  void selectFile(File file, String fileName) {
+    state = UploadState(
+      status: UploadStatus.selecting,
+      selectedFile: file,
+      fileName: fileName,
+    );
+  }
+
+  Future<DocumentModel?> uploadDocument() async {
+    if (state.selectedFile == null) return null;
+
+    state = state.copyWith(status: UploadStatus.uploading, uploadProgress: 0);
+
+    final result = await _documentRepository.uploadDocument(
+      file: state.selectedFile!,
+      fileName: state.fileName ?? 'document',
+      onProgress: (sent, total) {
+        state = state.copyWith(uploadProgress: sent / total);
+      },
+    );
+
+    return result.fold(
+      (error) {
+        state = state.copyWith(
+          status: UploadStatus.error,
+          errorMessage: error,
+        );
+        return null;
+      },
+      (document) {
+        state = state.copyWith(
+          status: UploadStatus.success,
+          uploadedDocument: document,
+        );
+        return document;
+      },
+    );
+  }
+
+  void reset() {
+    state = const UploadState();
+  }
+
+  void clearError() {
+    state = state.copyWith(errorMessage: null, status: UploadStatus.idle);
+  }
+}
+
+final uploadProvider = StateNotifierProvider<UploadNotifier, UploadState>((ref) {
+  final repository = ref.watch(documentRepositoryProvider);
+  return UploadNotifier(repository);
+});
+
+// Documents list state
+class DocumentsState {
+  final List<DocumentModel> documents;
+  final bool isLoading;
+  final bool hasMore;
+  final int currentPage;
+  final String? errorMessage;
+
+  const DocumentsState({
+    this.documents = const [],
+    this.isLoading = false,
+    this.hasMore = true,
+    this.currentPage = 1,
+    this.errorMessage,
+  });
+
+  DocumentsState copyWith({
+    List<DocumentModel>? documents,
+    bool? isLoading,
+    bool? hasMore,
+    int? currentPage,
+    String? errorMessage,
+  }) {
+    return DocumentsState(
+      documents: documents ?? this.documents,
+      isLoading: isLoading ?? this.isLoading,
+      hasMore: hasMore ?? this.hasMore,
+      currentPage: currentPage ?? this.currentPage,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+}
+
+class DocumentsNotifier extends StateNotifier<DocumentsState> {
+  final DocumentRepository _documentRepository;
+
+  DocumentsNotifier(this._documentRepository) : super(const DocumentsState());
+
+  Future<void> loadDocuments({bool refresh = false}) async {
+    if (state.isLoading) return;
+    if (!refresh && !state.hasMore) return;
+
+    final page = refresh ? 1 : state.currentPage;
+    state = state.copyWith(isLoading: true);
+
+    final result = await _documentRepository.getDocuments(page: page);
+
+    result.fold(
+      (error) {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: error,
+        );
+      },
+      (documents) {
+        state = state.copyWith(
+          documents: refresh ? documents : [...state.documents, ...documents],
+          isLoading: false,
+          hasMore: documents.length >= 20,
+          currentPage: page + 1,
+        );
+      },
+    );
+  }
+
+  Future<void> deleteDocument(String id) async {
+    final result = await _documentRepository.deleteDocument(id);
+    result.fold(
+      (error) {
+        state = state.copyWith(errorMessage: error);
+      },
+      (_) {
+        state = state.copyWith(
+          documents: state.documents.where((doc) => doc.id != id).toList(),
+        );
+      },
+    );
+  }
+
+  void addDocument(DocumentModel document) {
+    state = state.copyWith(
+      documents: [document, ...state.documents],
+    );
+  }
+
+  void updateDocument(DocumentModel document) {
+    state = state.copyWith(
+      documents: state.documents.map((doc) {
+        return doc.id == document.id ? document : doc;
+      }).toList(),
+    );
+  }
+}
+
+final documentsProvider = StateNotifierProvider<DocumentsNotifier, DocumentsState>((ref) {
+  final repository = ref.watch(documentRepositoryProvider);
+  return DocumentsNotifier(repository);
+});
+
+// Single document provider
+final documentProvider = FutureProvider.family<DocumentModel?, String>((ref, id) async {
+  final repository = ref.watch(documentRepositoryProvider);
+  final result = await repository.getDocument(id);
+  return result.fold((error) => null, (document) => document);
+});
+
+// Recent documents provider
+final recentDocumentsProvider = Provider<List<DocumentModel>>((ref) {
+  final documentsState = ref.watch(documentsProvider);
+  return documentsState.documents.take(5).toList();
+});
+
