@@ -29,23 +29,25 @@ class SubscriptionModel with _$SubscriptionModel {
 
   const factory SubscriptionModel({
     required String id,
-    required String userId,
+    @JsonKey(name: 'user_id') required int userId,
     required SubscriptionPlan plan,
     required SubscriptionStatus status,
-    required DateTime startDate,
-    DateTime? endDate,
-    String? appleTransactionId,
+    @JsonKey(name: 'start_date') required DateTime startDate,
+    @JsonKey(name: 'end_date') DateTime? endDate,
+    @JsonKey(name: 'apple_transaction_id') String? appleTransactionId,
+    @JsonKey(name: 'apple_original_transaction_id')
     String? appleOriginalTransactionId,
-    required bool isAutoRenewing,
-    required DateTime createdAt,
-    DateTime? updatedAt,
+    @JsonKey(name: 'is_auto_renewing') required bool isAutoRenewing,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
   }) = _SubscriptionModel;
 
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionModelFromJson(json);
 
   bool get isActive => status == SubscriptionStatus.active;
-  bool get isPro => plan == SubscriptionPlan.pro || plan == SubscriptionPlan.proPlus;
+  bool get isPro =>
+      plan == SubscriptionPlan.pro || plan == SubscriptionPlan.proPlus;
   bool get isProPlus => plan == SubscriptionPlan.proPlus;
   bool get isFree => plan == SubscriptionPlan.free;
 
@@ -76,11 +78,11 @@ class SubscriptionPlanInfo with _$SubscriptionPlanInfo {
     required String id,
     required String name,
     required String description,
-    required double monthlyPrice,
-    required double yearlyPrice,
+    @JsonKey(name: 'monthly_price') required double monthlyPrice,
+    @JsonKey(name: 'yearly_price') required double yearlyPrice,
     required List<String> features,
-    required bool isPopular,
-    required SubscriptionPlan planType,
+    @JsonKey(name: 'is_popular') required bool isPopular,
+    @JsonKey(name: 'plan_type') required SubscriptionPlan planType,
   }) = _SubscriptionPlanInfo;
 
   factory SubscriptionPlanInfo.fromJson(Map<String, dynamic> json) =>
@@ -92,23 +94,24 @@ class UsageModel with _$UsageModel {
   const UsageModel._();
 
   const factory UsageModel({
-    required int dailyDocsUsed,
-    required int dailyDocsLimit,
-    required int totalDocsProcessed,
+    @JsonKey(name: 'daily_docs_used') required int dailyDocsUsed,
+    @JsonKey(name: 'daily_docs_limit') required int dailyDocsLimit,
+    @JsonKey(name: 'total_docs_processed') required int totalDocsProcessed,
+    @JsonKey(name: 'total_summaries_generated')
     required int totalSummariesGenerated,
-    required DateTime lastResetDate,
+    @JsonKey(name: 'last_reset_date') required DateTime lastResetDate,
   }) = _UsageModel;
 
   factory UsageModel.fromJson(Map<String, dynamic> json) =>
       _$UsageModelFromJson(json);
 
-  bool get hasReachedDailyLimit => 
+  bool get hasReachedDailyLimit =>
       dailyDocsLimit > 0 && dailyDocsUsed >= dailyDocsLimit;
 
-  int get remainingDocs => 
+  int get remainingDocs =>
       dailyDocsLimit > 0 ? dailyDocsLimit - dailyDocsUsed : -1;
 
-  double get usagePercentage => 
+  double get usagePercentage =>
       dailyDocsLimit > 0 ? dailyDocsUsed / dailyDocsLimit : 0;
 }
 
@@ -135,4 +138,3 @@ class VerifyPurchaseResponse with _$VerifyPurchaseResponse {
   factory VerifyPurchaseResponse.fromJson(Map<String, dynamic> json) =>
       _$VerifyPurchaseResponseFromJson(json);
 }
-

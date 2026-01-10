@@ -34,123 +34,62 @@ class MainShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = _calculateSelectedIndex(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: child,
-      bottomNavigationBar: Container(
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (index) => _onItemTapped(context, index),
+        backgroundColor: AppColors.surfaceLight,
+        indicatorColor: AppColors.primary.withOpacity(0.12),
+        height: 65,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Iconsax.home_2),
+            selectedIcon: Icon(Iconsax.home_25, color: AppColors.primary),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Iconsax.clock),
+            selectedIcon: Icon(Iconsax.clock5, color: AppColors.primary),
+            label: 'History',
+          ),
+          NavigationDestination(
+            icon: Icon(Iconsax.setting_4),
+            selectedIcon: Icon(Iconsax.setting_45, color: AppColors.primary),
+            label: 'Settings',
+          ),
+        ],
+      ),
+      floatingActionButton: Container(
+        width: 56,
+        height: 56,
         decoration: BoxDecoration(
-          color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+          gradient: AppColors.primaryGradient,
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: isDark ? Colors.black26 : AppColors.shadowLight,
-              blurRadius: 20,
-              offset: const Offset(0, -4),
+              color: AppColors.primary.withOpacity(0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _NavItem(
-                  icon: Iconsax.home_2,
-                  activeIcon: Iconsax.home_25,
-                  label: 'Home',
-                  isSelected: selectedIndex == 0,
-                  onTap: () => _onItemTapped(context, 0),
-                ),
-                _NavItem(
-                  icon: Iconsax.clock,
-                  activeIcon: Iconsax.clock5,
-                  label: 'History',
-                  isSelected: selectedIndex == 1,
-                  onTap: () => _onItemTapped(context, 1),
-                ),
-                _NavItem(
-                  icon: Iconsax.setting_2,
-                  activeIcon: Iconsax.setting_25,
-                  label: 'Settings',
-                  isSelected: selectedIndex == 2,
-                  onTap: () => _onItemTapped(context, 2),
-                ),
-              ],
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => context.push('/upload'),
+            borderRadius: BorderRadius.circular(16),
+            child: const Icon(
+              Iconsax.add,
+              color: Colors.white,
+              size: 28,
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/upload'),
-        backgroundColor: AppColors.primary,
-        elevation: 4,
-        child: const Icon(Iconsax.add, color: Colors.white, size: 28),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final IconData activeIcon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _NavItem({
-    required this.icon,
-    required this.activeIcon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withOpacity(0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isSelected ? activeIcon : icon,
-              color: isSelected
-                  ? AppColors.primary
-                  : (isDark
-                      ? AppColors.textTertiaryDark
-                      : AppColors.textTertiary),
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected
-                    ? AppColors.primary
-                    : (isDark
-                        ? AppColors.textTertiaryDark
-                        : AppColors.textTertiary),
-              ),
-            ),
-          ],
-        ),
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -143,9 +143,11 @@ class SettingsScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              subscriptionState.isPremium
-                                  ? 'Premium Member'
-                                  : 'Free Plan',
+                              subscriptionState.isProPlus
+                                  ? 'Pro+ Member'
+                                  : subscriptionState.isPremium
+                                      ? 'Pro Member'
+                                      : 'Free Plan',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,

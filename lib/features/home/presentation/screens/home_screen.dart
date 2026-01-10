@@ -111,7 +111,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            subscriptionState.isPremium ? 'Pro' : 'Free',
+                            subscriptionState.isProPlus 
+                                ? 'Pro+' 
+                                : subscriptionState.isPremium 
+                                    ? 'Pro' 
+                                    : 'Free',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,

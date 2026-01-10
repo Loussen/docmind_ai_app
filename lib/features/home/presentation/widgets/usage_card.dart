@@ -99,8 +99,8 @@ class UsageCard extends StatelessWidget {
   Widget _buildFreeCard() {
     final used = usage?.dailyDocsUsed ?? 0;
     final limit = usage?.dailyDocsLimit ?? AppConstants.freeDocsPerDay;
-    final remaining = limit - used;
-    final progress = used / limit;
+    final remaining = (limit - used).clamp(0, limit);
+    final progress = limit > 0 ? (used / limit).clamp(0.0, 1.0) : 0.0;
 
     return Container(
       padding: const EdgeInsets.all(20),
