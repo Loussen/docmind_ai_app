@@ -105,6 +105,37 @@ final uploadProvider = StateNotifierProvider<UploadNotifier, UploadState>((ref) 
   return UploadNotifier(repository);
 });
 
+// Filter types
+enum DocumentFilterType { all, pdf, docx, image }
+
+extension DocumentFilterTypeExtension on DocumentFilterType {
+  String get value {
+    switch (this) {
+      case DocumentFilterType.all:
+        return 'all';
+      case DocumentFilterType.pdf:
+        return 'pdf';
+      case DocumentFilterType.docx:
+        return 'docx';
+      case DocumentFilterType.image:
+        return 'image';
+    }
+  }
+
+  String get label {
+    switch (this) {
+      case DocumentFilterType.all:
+        return 'All Documents';
+      case DocumentFilterType.pdf:
+        return 'PDF Only';
+      case DocumentFilterType.docx:
+        return 'Word Only';
+      case DocumentFilterType.image:
+        return 'Images Only';
+    }
+  }
+}
+
 // Documents list state
 class DocumentsState {
   final List<DocumentModel> documents;
@@ -112,6 +143,8 @@ class DocumentsState {
   final bool hasMore;
   final int currentPage;
   final String? errorMessage;
+  final DocumentFilterType filterType;
+  final String? searchQuery;
 
   const DocumentsState({
     this.documents = const [],
@@ -119,6 +152,8 @@ class DocumentsState {
     this.hasMore = true,
     this.currentPage = 1,
     this.errorMessage,
+    this.filterType = DocumentFilterType.all,
+    this.searchQuery,
   });
 
   DocumentsState copyWith({
@@ -127,6 +162,8 @@ class DocumentsState {
     bool? hasMore,
     int? currentPage,
     String? errorMessage,
+    DocumentFilterType? filterType,
+    String? searchQuery,
   }) {
     return DocumentsState(
       documents: documents ?? this.documents,
@@ -134,6 +171,8 @@ class DocumentsState {
       hasMore: hasMore ?? this.hasMore,
       currentPage: currentPage ?? this.currentPage,
       errorMessage: errorMessage ?? this.errorMessage,
+      filterType: filterType ?? this.filterType,
+      searchQuery: searchQuery ?? this.searchQuery,
     );
   }
 }
@@ -150,7 +189,11 @@ class DocumentsNotifier extends StateNotifier<DocumentsState> {
     final page = refresh ? 1 : state.currentPage;
     state = state.copyWith(isLoading: true);
 
-    final result = await _documentRepository.getDocuments(page: page);
+    final result = await _documentRepository.getDocuments(
+      page: page,
+      type: state.filterType.value,
+      search: state.searchQuery,
+    );
 
     result.fold(
       (error) {
@@ -168,6 +211,41 @@ class DocumentsNotifier extends StateNotifier<DocumentsState> {
         );
       },
     );
+  }
+
+  Future<void> setFilter(DocumentFilterType filterType) async {
+    if (state.filterType == filterType) return;
+    
+    state = state.copyWith(
+      filterType: filterType,
+      documents: [],
+      currentPage: 1,
+      hasMore: true,
+    );
+    
+    await loadDocuments(refresh: true);
+  }
+
+  Future<void> setSearch(String? query) async {
+    state = state.copyWith(
+      searchQuery: query,
+      documents: [],
+      currentPage: 1,
+      hasMore: true,
+    );
+    
+    await loadDocuments(refresh: true);
+  }
+
+  void clearFilters() {
+    state = state.copyWith(
+      filterType: DocumentFilterType.all,
+      searchQuery: null,
+      documents: [],
+      currentPage: 1,
+      hasMore: true,
+    );
+    loadDocuments(refresh: true);
   }
 
   Future<void> deleteDocument(String id) async {

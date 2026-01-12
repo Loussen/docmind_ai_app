@@ -19,14 +19,17 @@ class UsageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
     if (isPremium) {
-      return _buildPremiumCard();
+      return _buildPremiumCard(isDark);
     }
 
-    return _buildFreeCard();
+    return _buildFreeCard(theme, isDark);
   }
 
-  Widget _buildPremiumCard() {
+  Widget _buildPremiumCard(bool isDark) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -41,7 +44,7 @@ class UsageCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF667eea).withOpacity(0.3),
+            color: const Color(0xFF667eea).withOpacity(isDark ? 0.4 : 0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -96,7 +99,7 @@ class UsageCard extends StatelessWidget {
     );
   }
 
-  Widget _buildFreeCard() {
+  Widget _buildFreeCard(ThemeData theme, bool isDark) {
     final used = usage?.dailyDocsUsed ?? 0;
     final limit = usage?.dailyDocsLimit ?? AppConstants.freeDocsPerDay;
     final remaining = (limit - used).clamp(0, limit);
@@ -105,12 +108,14 @@ class UsageCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(
+          color: isDark ? AppColors.dividerDark : AppColors.divider,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: isDark ? AppColors.shadowDark : AppColors.shadowLight,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -122,12 +127,12 @@ class UsageCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Daily Usage',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               Container(
@@ -162,9 +167,9 @@ class UsageCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progress.clamp(0.0, 1.0),
               minHeight: 8,
-              backgroundColor: AppColors.divider,
+              backgroundColor: isDark ? AppColors.dividerDark : AppColors.divider,
               valueColor: AlwaysStoppedAnimation<Color>(
-                progress >= 1.0 ? AppColors.error : AppColors.primary,
+                progress >= 1.0 ? AppColors.error : theme.colorScheme.primary,
               ),
             ),
           ),
@@ -175,21 +180,21 @@ class UsageCard extends StatelessWidget {
             children: [
               Text(
                 '$used of $limit documents used today',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
-                  color: AppColors.textSecondary,
+                  color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                 ),
               ),
               GestureDetector(
                 onTap: onUpgrade,
-                child: Row(
+                child: const Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Iconsax.crown,
                       size: 16,
                       color: AppColors.secondary,
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       'Upgrade',
                       style: TextStyle(

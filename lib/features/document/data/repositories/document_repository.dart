@@ -47,14 +47,29 @@ class DocumentRepository {
   Future<Either<String, List<DocumentModel>>> getDocuments({
     int page = 1,
     int perPage = 20,
+    String? type,
+    String? status,
+    String? search,
   }) async {
     try {
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'per_page': perPage,
+      };
+      
+      if (type != null && type != 'all') {
+        queryParams['type'] = type;
+      }
+      if (status != null) {
+        queryParams['status'] = status;
+      }
+      if (search != null && search.isNotEmpty) {
+        queryParams['search'] = search;
+      }
+
       final response = await _dioClient.get(
         ApiConstants.documents,
-        queryParameters: {
-          'page': page,
-          'per_page': perPage,
-        },
+        queryParameters: queryParams,
       );
 
       final documents = (response.data['data'] as List)

@@ -47,48 +47,99 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
     final documentsState = ref.watch(documentsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
-        title: const Text('History'),
-        actions: [
-          if (documentsState.documents.isNotEmpty)
-            PopupMenuButton<String>(
-              icon: const Icon(Iconsax.filter),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('History'),
+            if (documentsState.filterType != DocumentFilterType.all)
+              Text(
+                documentsState.filterType.label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                  color: isDark
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondary,
+                ),
               ),
-              onSelected: (value) {
-                // Handle filter
+          ],
+        ),
+        actions: [
+          if (documentsState.filterType != DocumentFilterType.all)
+            IconButton(
+              icon: const Icon(Iconsax.close_circle),
+              onPressed: () {
+                ref.read(documentsProvider.notifier).clearFilters();
               },
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: 'all',
-                  child: Text('All Documents'),
-                ),
-                const PopupMenuItem(
-                  value: 'pdf',
-                  child: Text('PDF Only'),
-                ),
-                const PopupMenuItem(
-                  value: 'docx',
-                  child: Text('Word Only'),
-                ),
-                const PopupMenuItem(
-                  value: 'image',
-                  child: Text('Images Only'),
-                ),
-              ],
+              tooltip: 'Clear filters',
             ),
+          PopupMenuButton<DocumentFilterType>(
+            icon: Icon(
+              Iconsax.filter,
+              color: documentsState.filterType != DocumentFilterType.all
+                  ? colorScheme.primary
+                  : null,
+            ),
+            color: colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            onSelected: (value) {
+              ref.read(documentsProvider.notifier).setFilter(value);
+            },
+            itemBuilder: (context) => DocumentFilterType.values.map((type) {
+              final isSelected = documentsState.filterType == type;
+              return PopupMenuItem(
+                value: type,
+                child: Row(
+                  children: [
+                    Icon(
+                      _getFilterIcon(type),
+                      size: 20,
+                      color: isSelected
+                          ? colorScheme.primary
+                          : isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      type.label,
+                      style: TextStyle(
+                        color: isSelected
+                            ? colorScheme.primary
+                            : colorScheme.onSurface,
+                        fontWeight: isSelected ? FontWeight.w600 : null,
+                      ),
+                    ),
+                    if (isSelected) ...[
+                      const Spacer(),
+                      Icon(
+                        Iconsax.tick_circle5,
+                        size: 18,
+                        color: colorScheme.primary,
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
         ],
       ),
       body: RefreshIndicator(
         onRefresh: _loadData,
-        color: AppColors.primary,
+        color: colorScheme.primary,
         child: documentsState.documents.isEmpty
-            ? _buildEmptyState(documentsState.isLoading)
+            ? _buildEmptyState(documentsState.isLoading, isDark, colorScheme)
             : ListView.builder(
                 controller: _scrollController,
                 padding: const EdgeInsets.all(24),
@@ -153,7 +204,11 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     );
   }
 
-  Widget _buildEmptyState(bool isLoading) {
+  Widget _buildEmptyState(
+      bool isLoading, bool isDark, ColorScheme colorScheme) {
+    final documentsState = ref.watch(documentsProvider);
+    final hasFilter = documentsState.filterType != DocumentFilterType.all;
+
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -169,37 +224,43 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: colorScheme.primary.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Iconsax.document_text,
+                child: Icon(
+                  hasFilter ? Iconsax.filter_remove : Iconsax.document_text,
                   size: 60,
-                  color: AppColors.primary,
+                  color: colorScheme.primary,
                 ),
               ),
             ),
             const SizedBox(height: 24),
             FadeInUp(
               delay: const Duration(milliseconds: 200),
-              child: const Text(
-                'No documents yet',
+              child: Text(
+                hasFilter
+                    ? 'No ${documentsState.filterType.label.toLowerCase()}'
+                    : 'No documents yet',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: colorScheme.onSurface,
                 ),
               ),
             ),
             const SizedBox(height: 8),
             FadeInUp(
               delay: const Duration(milliseconds: 300),
-              child: const Text(
-                'Upload your first document and start\ngetting AI-powered summaries',
+              child: Text(
+                hasFilter
+                    ? 'Try removing filters or uploading\nnew documents'
+                    : 'Upload your first document and start\ngetting AI-powered summaries',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
-                  color: AppColors.textSecondary,
+                  color: isDark
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondary,
                   height: 1.5,
                 ),
               ),
@@ -207,11 +268,19 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             const SizedBox(height: 32),
             FadeInUp(
               delay: const Duration(milliseconds: 400),
-              child: ElevatedButton.icon(
-                onPressed: () => context.push('/upload'),
-                icon: const Icon(Iconsax.add),
-                label: const Text('Upload Document'),
-              ),
+              child: hasFilter
+                  ? OutlinedButton.icon(
+                      onPressed: () {
+                        ref.read(documentsProvider.notifier).clearFilters();
+                      },
+                      icon: const Icon(Iconsax.filter_remove),
+                      label: const Text('Clear Filters'),
+                    )
+                  : ElevatedButton.icon(
+                      onPressed: () => context.push('/upload'),
+                      icon: const Icon(Iconsax.add),
+                      label: const Text('Upload Document'),
+                    ),
             ),
           ],
         ),
@@ -220,13 +289,20 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
+    final theme = Theme.of(context);
+
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Delete Document'),
-        content: const Text(
+        title: Text(
+          'Delete Document',
+          style: TextStyle(color: theme.colorScheme.onSurface),
+        ),
+        content: Text(
           'Are you sure you want to delete this document?',
+          style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.8)),
         ),
         actions: [
           TextButton(
@@ -245,5 +321,17 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     );
     return result ?? false;
   }
-}
 
+  IconData _getFilterIcon(DocumentFilterType type) {
+    switch (type) {
+      case DocumentFilterType.all:
+        return Iconsax.document;
+      case DocumentFilterType.pdf:
+        return Iconsax.document_text;
+      case DocumentFilterType.docx:
+        return Iconsax.document_1;
+      case DocumentFilterType.image:
+        return Iconsax.image;
+    }
+  }
+}

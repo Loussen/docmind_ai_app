@@ -38,6 +38,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    
     final user = ref.watch(currentUserProvider);
     final documentsState = ref.watch(documentsProvider);
     final subscriptionState = ref.watch(subscriptionProvider);
@@ -46,7 +50,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _loadData,
-        color: AppColors.primary,
+        color: colorScheme.primary,
         child: CustomScrollView(
           slivers: [
             // App Bar
@@ -54,7 +58,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               expandedHeight: 120,
               floating: false,
               pinned: true,
-              backgroundColor: AppColors.backgroundLight,
+              backgroundColor: theme.scaffoldBackgroundColor,
               flexibleSpace: FlexibleSpaceBar(
                 titlePadding: const EdgeInsets.only(left: 24, bottom: 16),
                 title: Column(
@@ -63,19 +67,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   children: [
                     Text(
                       'Hello, ${user?.name ?? 'there'}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.textSecondary,
+                        color: isDark
+                            ? AppColors.textSecondaryDark
+                            : AppColors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 2),
-                    const Text(
+                    Text(
                       'DocMind AI',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: colorScheme.onSurface,
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -95,7 +101,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       decoration: BoxDecoration(
                         color: subscriptionState.isPremium
                             ? AppColors.accent.withOpacity(0.1)
-                            : AppColors.primary.withOpacity(0.1),
+                            : colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -107,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             size: 18,
                             color: subscriptionState.isPremium
                                 ? AppColors.accent
-                                : AppColors.primary,
+                                : colorScheme.primary,
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -121,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               fontWeight: FontWeight.w600,
                               color: subscriptionState.isPremium
                                   ? AppColors.accent
-                                  : AppColors.primary,
+                                  : colorScheme.primary,
                             ),
                           ),
                         ],
@@ -155,12 +161,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     FadeInUp(
                       delay: const Duration(milliseconds: 100),
                       duration: const Duration(milliseconds: 500),
-                      child: const Text(
+                      child: Text(
                         'Quick Actions',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -204,12 +210,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Recent Documents',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
+                              color: colorScheme.onSurface,
                             ),
                           ),
                           if (documentsState.documents.isNotEmpty)
@@ -235,7 +241,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     else if (recentDocs.isEmpty)
                       FadeInUp(
                         delay: const Duration(milliseconds: 400),
-                        child: _buildEmptyState(),
+                        child: _buildEmptyState(isDark, colorScheme),
                       )
                     else
                       ...recentDocs.asMap().entries.map((entry) {
@@ -273,13 +279,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(bool isDark, ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(
+          color: isDark ? AppColors.dividerDark : AppColors.divider,
+        ),
       ),
       child: Column(
         children: [
@@ -287,31 +295,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: colorScheme.primary.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Iconsax.document_text,
               size: 40,
-              color: AppColors.primary,
+              color: colorScheme.primary,
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             'No documents yet',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+              color: colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Upload your first document and let AI summarize it for you',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              color: AppColors.textSecondary,
+              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: 24),

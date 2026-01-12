@@ -19,17 +19,22 @@ class DocumentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.divider),
+          border: Border.all(
+            color: isDark ? AppColors.dividerDark : AppColors.divider,
+          ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.shadowLight,
+              color: isDark ? AppColors.shadowDark : AppColors.shadowLight,
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -60,10 +65,10 @@ class DocumentCard extends StatelessWidget {
                 children: [
                   Text(
                     document.originalName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -83,34 +88,42 @@ class DocumentCard extends StatelessWidget {
                       Container(
                         width: 4,
                         height: 4,
-                        decoration: const BoxDecoration(
-                          color: AppColors.textTertiary,
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppColors.textTertiaryDark
+                              : AppColors.textTertiary,
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         document.fileSizeFormatted,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: AppColors.textTertiary,
+                          color: isDark
+                              ? AppColors.textTertiaryDark
+                              : AppColors.textTertiary,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Container(
                         width: 4,
                         height: 4,
-                        decoration: const BoxDecoration(
-                          color: AppColors.textTertiary,
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppColors.textTertiaryDark
+                              : AppColors.textTertiary,
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         '${document.pageCount} pages',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: AppColors.textTertiary,
+                          color: isDark
+                              ? AppColors.textTertiaryDark
+                              : AppColors.textTertiary,
                         ),
                       ),
                     ],
@@ -118,9 +131,11 @@ class DocumentCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     _formatDate(document.createdAt),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.textTertiary,
+                      color: isDark
+                          ? AppColors.textTertiaryDark
+                          : AppColors.textTertiary,
                     ),
                   ),
                 ],
@@ -128,21 +143,21 @@ class DocumentCard extends StatelessWidget {
             ),
             
             // Status or Arrow
-            _buildStatusIndicator(),
+            _buildStatusIndicator(isDark, theme.colorScheme),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatusIndicator() {
+  Widget _buildStatusIndicator(bool isDark, ColorScheme colorScheme) {
     if (document.isProcessing) {
-      return const SizedBox(
+      return SizedBox(
         width: 24,
         height: 24,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+          valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
         ),
       );
     }
@@ -180,9 +195,9 @@ class DocumentCard extends StatelessWidget {
       );
     }
 
-    return const Icon(
+    return Icon(
       Iconsax.arrow_right_3,
-      color: AppColors.textTertiary,
+      color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiary,
       size: 20,
     );
   }

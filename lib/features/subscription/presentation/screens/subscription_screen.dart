@@ -17,68 +17,98 @@ class SubscriptionScreen extends ConsumerStatefulWidget {
 
 class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   bool _isYearly = true;
+  String? _purchasingProductId;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
     final subscriptionState = ref.watch(subscriptionProvider);
+    final isPremium = subscriptionState.isPremium;
+
+    // Reset purchasing state when not purchasing
+    if (!subscriptionState.isPurchasing && _purchasingProductId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() => _purchasingProductId = null);
+        }
+      });
+    }
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Iconsax.close_circle),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Upgrade'),
+        title: Text(isPremium ? 'Manage Subscription' : 'Upgrade'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Current Subscription Card (if premium)
+            if (isPremium) ...[
+              FadeInDown(
+                duration: const Duration(milliseconds: 500),
+                child: _buildCurrentPlanCard(subscriptionState),
+              ),
+              const SizedBox(height: 24),
+            ],
+
             // Hero Section
             FadeInDown(
               duration: const Duration(milliseconds: 500),
+              delay: Duration(milliseconds: isPremium ? 100 : 0),
               child: Column(
                 children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-                      ),
-                      borderRadius: BorderRadius.circular(28),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF667eea).withOpacity(0.4),
-                          blurRadius: 24,
-                          offset: const Offset(0, 12),
+                  if (!isPremium) ...[
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
                         ),
-                      ],
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF667eea).withOpacity(0.4),
+                            blurRadius: 24,
+                            offset: const Offset(0, 12),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Iconsax.crown5,
+                        size: 48,
+                        color: Colors.white,
+                      ),
                     ),
-                    child: const Icon(
-                      Iconsax.crown5,
-                      size: 48,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Unlock Premium',
+                    const SizedBox(height: 24),
+                  ],
+                  Text(
+                    isPremium ? 'Change Your Plan' : 'Unlock Premium',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: colorScheme.onSurface,
                       letterSpacing: -0.5,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Get unlimited access to all features',
+                  Text(
+                    isPremium
+                        ? 'Upgrade or switch to a different plan'
+                        : 'Get unlimited access to all features',
                     style: TextStyle(
                       fontSize: 16,
-                      color: AppColors.textSecondary,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -94,7 +124,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: AppColors.inputBackground,
+                  color: isDark
+                      ? AppColors.inputBackgroundDark
+                      : AppColors.inputBackground,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Row(
@@ -107,13 +139,14 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: !_isYearly
-                                ? AppColors.surfaceLight
+                                ? colorScheme.surface
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: !_isYearly
                                 ? [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.05),
+                                      color: Colors.black
+                                          .withOpacity(isDark ? 0.2 : 0.05),
                                       blurRadius: 8,
                                     ),
                                   ]
@@ -126,8 +159,10 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                               color: !_isYearly
-                                  ? AppColors.textPrimary
-                                  : AppColors.textTertiary,
+                                  ? colorScheme.onSurface
+                                  : isDark
+                                      ? AppColors.textTertiaryDark
+                                      : AppColors.textTertiary,
                             ),
                           ),
                         ),
@@ -141,13 +176,14 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: _isYearly
-                                ? AppColors.surfaceLight
+                                ? colorScheme.surface
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: _isYearly
                                 ? [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.05),
+                                      color: Colors.black
+                                          .withOpacity(isDark ? 0.2 : 0.05),
                                       blurRadius: 8,
                                     ),
                                   ]
@@ -162,8 +198,10 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color: _isYearly
-                                      ? AppColors.textPrimary
-                                      : AppColors.textTertiary,
+                                      ? colorScheme.onSurface
+                                      : isDark
+                                          ? AppColors.textTertiaryDark
+                                          : AppColors.textTertiary,
                                 ),
                               ),
                               const SizedBox(width: 6),
@@ -199,7 +237,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
             // Plans
             FadeInUp(
-              delay: const Duration(milliseconds: 200),
+              delay: Duration(milliseconds: isPremium ? 300 : 200),
               duration: const Duration(milliseconds: 500),
               child: _buildPlanCard(
                 title: 'Pro',
@@ -212,18 +250,19 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   'Export to PDF',
                   'Email support',
                 ],
-                isPopular: true,
+                isPopular: !subscriptionState.isProPlus,
                 productId: _isYearly
                     ? AppConstants.proYearlyProductId
                     : AppConstants.proMonthlyProductId,
                 subscriptionState: subscriptionState,
+                planType: 'pro',
               ),
             ),
 
             const SizedBox(height: 16),
 
             FadeInUp(
-              delay: const Duration(milliseconds: 300),
+              delay: Duration(milliseconds: isPremium ? 400 : 300),
               duration: const Duration(milliseconds: 500),
               child: _buildPlanCard(
                 title: 'Pro+',
@@ -237,11 +276,12 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   'Priority support',
                   'Early access to features',
                 ],
-                isPopular: false,
+                isPopular: subscriptionState.isProPlus,
                 productId: _isYearly
                     ? AppConstants.proPlusYearlyProductId
                     : AppConstants.proPlusMonthlyProductId,
                 subscriptionState: subscriptionState,
+                planType: 'pro_plus',
               ),
             ),
 
@@ -348,10 +388,17 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     required bool isPopular,
     required String productId,
     required SubscriptionState subscriptionState,
+    required String planType, // 'pro' or 'pro_plus'
   }) {
     final price = _isYearly ? yearlyPrice : monthlyPrice;
     final period = _isYearly ? 'year' : 'month';
     final perMonth = _isYearly ? (yearlyPrice / 12) : monthlyPrice;
+
+    // Determine button state based on current subscription
+    final currentPlan = subscriptionState.subscription?.plan;
+    final isCurrentPlan = _isCurrentPlan(currentPlan, planType, _isYearly);
+    final buttonInfo = _getButtonInfo(currentPlan, planType, title);
+    final isThisButtonPurchasing = _purchasingProductId == productId;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -359,13 +406,18 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
         color: AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isPopular ? AppColors.primary : AppColors.divider,
-          width: isPopular ? 2 : 1,
+          color: isCurrentPlan
+              ? AppColors.success
+              : isPopular
+                  ? AppColors.primary
+                  : AppColors.divider,
+          width: isCurrentPlan || isPopular ? 2 : 1,
         ),
-        boxShadow: isPopular
+        boxShadow: isPopular || isCurrentPlan
             ? [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: (isCurrentPlan ? AppColors.success : AppColors.primary)
+                      .withOpacity(0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -386,7 +438,26 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   color: AppColors.textPrimary,
                 ),
               ),
-              if (isPopular)
+              if (isCurrentPlan)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.success,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    'CURRENT',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              else if (isPopular)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -479,40 +550,273 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             width: double.infinity,
             height: 52,
             child: ElevatedButton(
-              onPressed: subscriptionState.isPurchasing
+              onPressed: isCurrentPlan || subscriptionState.isPurchasing
                   ? null
-                  : () => _purchasePlan(productId),
+                  : () => _purchasePlan(productId, buttonInfo.isDowngrade),
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    isPopular ? AppColors.primary : AppColors.inputBackground,
-                foregroundColor:
-                    isPopular ? Colors.white : AppColors.textPrimary,
+                backgroundColor: isCurrentPlan
+                    ? AppColors.success.withOpacity(0.1)
+                    : buttonInfo.isDowngrade
+                        ? AppColors.inputBackground
+                        : isPopular
+                            ? AppColors.primary
+                            : AppColors.inputBackground,
+                foregroundColor: isCurrentPlan
+                    ? AppColors.success
+                    : buttonInfo.isDowngrade
+                        ? AppColors.textSecondary
+                        : isPopular
+                            ? Colors.white
+                            : AppColors.textPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
-              child: subscriptionState.isPurchasing
+              child: isThisButtonPurchasing
                   ? const SizedBox(
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(strokeWidth: 2.5),
                     )
-                  : Text(
-                      'Get $title',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (buttonInfo.icon != null) ...[
+                          Icon(buttonInfo.icon, size: 18),
+                          const SizedBox(width: 8),
+                        ],
+                        Text(
+                          buttonInfo.text,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
             ),
+          ),
+          if (buttonInfo.isDowngrade && !isCurrentPlan)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                'Changes at end of billing period',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCurrentPlanCard(SubscriptionState subscriptionState) {
+    final subscription = subscriptionState.subscription;
+    if (subscription == null) return const SizedBox.shrink();
+
+    final planName = subscription.isProPlus ? 'Pro+' : 'Pro';
+    final endDate = subscription.endDate;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(
+                  Iconsax.crown5,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$planName Member',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subscription.isAutoRenewing
+                          ? 'Auto-renews ${endDate != null ? _formatDate(endDate) : 'soon'}'
+                          : 'Expires ${endDate != null ? _formatDate(endDate) : 'soon'}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white.withOpacity(0.8),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Text(
+                  'ACTIVE',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  void _purchasePlan(String productId) {
-    ref.read(subscriptionProvider.notifier).purchaseSubscription(productId);
+  String _formatDate(DateTime date) {
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return '${months[date.month - 1]} ${date.day}, ${date.year}';
+  }
+
+  bool _isCurrentPlan(dynamic currentPlan, String planType, bool isYearly) {
+    if (currentPlan == null) return false;
+
+    // Check if plan type matches (pro or pro_plus)
+    final currentPlanStr = currentPlan.toString().toLowerCase();
+    if (planType == 'pro' && currentPlanStr == 'pro') return true;
+    if (planType == 'pro_plus' &&
+        (currentPlanStr == 'pro_plus' || currentPlanStr == 'proplus'))
+      return true;
+
+    return false;
+  }
+
+  _ButtonInfo _getButtonInfo(
+      dynamic currentPlan, String planType, String title) {
+    if (currentPlan == null) {
+      return _ButtonInfo(text: 'Get $title', icon: null, isDowngrade: false);
+    }
+
+    final currentPlanStr = currentPlan.toString().toLowerCase();
+    final currentLevel = _getPlanLevel(currentPlanStr);
+    final targetLevel = _getPlanLevel(planType);
+
+    if (currentLevel == targetLevel) {
+      return _ButtonInfo(
+          text: 'Current Plan', icon: Iconsax.tick_circle5, isDowngrade: false);
+    } else if (targetLevel > currentLevel) {
+      return _ButtonInfo(
+          text: 'Upgrade to $title',
+          icon: Iconsax.arrow_up_2,
+          isDowngrade: false);
+    } else {
+      return _ButtonInfo(
+          text: 'Downgrade to $title',
+          icon: Iconsax.arrow_down,
+          isDowngrade: true);
+    }
+  }
+
+  int _getPlanLevel(String plan) {
+    switch (plan.toLowerCase()) {
+      case 'free':
+        return 0;
+      case 'pro':
+        return 1;
+      case 'pro_plus':
+      case 'proplus':
+        return 2;
+      default:
+        return 0;
+    }
+  }
+
+  void _purchasePlan(String productId, bool isDowngrade) {
+    setState(() => _purchasingProductId = productId);
+
+    if (isDowngrade) {
+      _showDowngradeConfirmation(productId);
+    } else {
+      ref.read(subscriptionProvider.notifier).purchaseSubscription(productId);
+    }
+  }
+
+  void _showDowngradeConfirmation(String productId) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Downgrade Plan'),
+        content: const Text(
+          'Your plan will be downgraded at the end of your current billing period. '
+          'You will keep your current features until then.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() => _purchasingProductId = null);
+            },
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ref
+                  .read(subscriptionProvider.notifier)
+                  .purchaseSubscription(productId);
+            },
+            child: const Text('Confirm Downgrade'),
+          ),
+        ],
+      ),
+    );
   }
 }
 
+class _ButtonInfo {
+  final String text;
+  final IconData? icon;
+  final bool isDowngrade;
+
+  _ButtonInfo({
+    required this.text,
+    required this.icon,
+    required this.isDowngrade,
+  });
+}

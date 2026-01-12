@@ -29,6 +29,7 @@ class ApiConstants {
   static const String profile = '/user/profile';
   static const String updateProfile = '/user/profile';
   static const String usage = '/user/usage';
+  static const String settings = '/user/settings';
 
   // Subscription Endpoints
   static const String subscription = '/subscription';

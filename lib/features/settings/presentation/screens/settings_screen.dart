@@ -8,17 +8,35 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
+import '../providers/settings_provider.dart';
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(settingsProvider.notifier).loadSettings();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
     final user = ref.watch(currentUserProvider);
     final subscriptionState = ref.watch(subscriptionProvider);
+    final settingsState = ref.watch(settingsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Settings'),
       ),
@@ -33,9 +51,11 @@ class SettingsScreen extends ConsumerWidget {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceLight,
+                  color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.divider),
+                  border: Border.all(
+                    color: isDark ? AppColors.dividerDark : AppColors.divider,
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -66,25 +86,27 @@ class SettingsScreen extends ConsumerWidget {
                         children: [
                           Text(
                             user?.name ?? 'User',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
+                              color: colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             user?.email ?? '',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: AppColors.textSecondary,
+                              color: isDark
+                                  ? AppColors.textSecondaryDark
+                                  : AppColors.textSecondary,
                             ),
                           ),
                         ],
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Iconsax.edit_2, color: AppColors.primary),
+                      icon: Icon(Iconsax.edit_2, color: colorScheme.primary),
                       onPressed: () {
                         // Edit profile
                       },
@@ -112,11 +134,15 @@ class SettingsScreen extends ConsumerWidget {
                         : null,
                     color: subscriptionState.isPremium
                         ? null
-                        : AppColors.surfaceLight,
+                        : colorScheme.surface,
                     borderRadius: BorderRadius.circular(20),
                     border: subscriptionState.isPremium
                         ? null
-                        : Border.all(color: AppColors.divider),
+                        : Border.all(
+                            color: isDark
+                                ? AppColors.dividerDark
+                                : AppColors.divider,
+                          ),
                   ),
                   child: Row(
                     children: [
@@ -153,7 +179,7 @@ class SettingsScreen extends ConsumerWidget {
                                 fontWeight: FontWeight.w600,
                                 color: subscriptionState.isPremium
                                     ? Colors.white
-                                    : AppColors.textPrimary,
+                                    : colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -165,7 +191,9 @@ class SettingsScreen extends ConsumerWidget {
                                 fontSize: 13,
                                 color: subscriptionState.isPremium
                                     ? Colors.white70
-                                    : AppColors.textSecondary,
+                                    : isDark
+                                        ? AppColors.textSecondaryDark
+                                        : AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -175,7 +203,9 @@ class SettingsScreen extends ConsumerWidget {
                         Iconsax.arrow_right_3,
                         color: subscriptionState.isPremium
                             ? Colors.white
-                            : AppColors.textTertiary,
+                            : isDark
+                                ? AppColors.textTertiaryDark
+                                : AppColors.textTertiary,
                       ),
                     ],
                   ),
@@ -189,7 +219,7 @@ class SettingsScreen extends ConsumerWidget {
             FadeInUp(
               delay: const Duration(milliseconds: 200),
               duration: const Duration(milliseconds: 500),
-              child: _buildSectionTitle('Preferences'),
+              child: _buildSectionTitle('Preferences', isDark),
             ),
 
             const SizedBox(height: 12),
@@ -197,32 +227,45 @@ class SettingsScreen extends ConsumerWidget {
             FadeInUp(
               delay: const Duration(milliseconds: 300),
               duration: const Duration(milliseconds: 500),
-              child: _buildSettingsCard([
-                _SettingsTile(
-                  icon: Iconsax.notification,
-                  title: 'Notifications',
-                  trailing: Switch.adaptive(
-                    value: true,
-                    onChanged: (value) {},
-                    activeColor: AppColors.primary,
+              child: _buildSettingsCard(
+                isDark: isDark,
+                colorScheme: colorScheme,
+                tiles: [
+                  _SettingsTile(
+                    icon: Iconsax.notification,
+                    title: 'Notifications',
+                    trailing: Switch.adaptive(
+                      value: settingsState.notificationsEnabled,
+                      onChanged: (value) {
+                        ref
+                            .read(settingsProvider.notifier)
+                            .setNotificationsEnabled(value);
+                      },
+                      activeColor: colorScheme.primary,
+                    ),
                   ),
-                ),
-                _SettingsTile(
-                  icon: Iconsax.moon,
-                  title: 'Dark Mode',
-                  trailing: Switch.adaptive(
-                    value: false,
-                    onChanged: (value) {},
-                    activeColor: AppColors.primary,
+                  _SettingsTile(
+                    icon: Iconsax.moon,
+                    title: 'Dark Mode',
+                    trailing: Switch.adaptive(
+                      value: isDark,
+                      onChanged: (value) {
+                        ref
+                            .read(settingsProvider.notifier)
+                            .setDarkModeEnabled(value);
+                      },
+                      activeColor: colorScheme.primary,
+                    ),
                   ),
-                ),
-                _SettingsTile(
-                  icon: Iconsax.language_circle,
-                  title: 'Language',
-                  subtitle: 'English',
-                  onTap: () {},
-                ),
-              ]),
+                  _SettingsTile(
+                    icon: Iconsax.language_circle,
+                    title: 'Language',
+                    subtitle: _getLanguageName(settingsState.language),
+                    onTap: () => _showLanguageDialog(
+                        context, ref, settingsState.language, isDark),
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(height: 24),
@@ -230,7 +273,7 @@ class SettingsScreen extends ConsumerWidget {
             FadeInUp(
               delay: const Duration(milliseconds: 400),
               duration: const Duration(milliseconds: 500),
-              child: _buildSectionTitle('Support'),
+              child: _buildSectionTitle('Support', isDark),
             ),
 
             const SizedBox(height: 12),
@@ -238,28 +281,32 @@ class SettingsScreen extends ConsumerWidget {
             FadeInUp(
               delay: const Duration(milliseconds: 500),
               duration: const Duration(milliseconds: 500),
-              child: _buildSettingsCard([
-                _SettingsTile(
-                  icon: Iconsax.message_question,
-                  title: 'Help & FAQ',
-                  onTap: () {},
-                ),
-                _SettingsTile(
-                  icon: Iconsax.star,
-                  title: 'Rate App',
-                  onTap: () {},
-                ),
-                _SettingsTile(
-                  icon: Iconsax.document,
-                  title: 'Privacy Policy',
-                  onTap: () {},
-                ),
-                _SettingsTile(
-                  icon: Iconsax.document_text,
-                  title: 'Terms of Service',
-                  onTap: () {},
-                ),
-              ]),
+              child: _buildSettingsCard(
+                isDark: isDark,
+                colorScheme: colorScheme,
+                tiles: [
+                  _SettingsTile(
+                    icon: Iconsax.message_question,
+                    title: 'Help & FAQ',
+                    onTap: () {},
+                  ),
+                  _SettingsTile(
+                    icon: Iconsax.star,
+                    title: 'Rate App',
+                    onTap: () {},
+                  ),
+                  _SettingsTile(
+                    icon: Iconsax.document,
+                    title: 'Privacy Policy',
+                    onTap: () {},
+                  ),
+                  _SettingsTile(
+                    icon: Iconsax.document_text,
+                    title: 'Terms of Service',
+                    onTap: () {},
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(height: 24),
@@ -267,7 +314,7 @@ class SettingsScreen extends ConsumerWidget {
             FadeInUp(
               delay: const Duration(milliseconds: 600),
               duration: const Duration(milliseconds: 500),
-              child: _buildSectionTitle('Account'),
+              child: _buildSectionTitle('Account', isDark),
             ),
 
             const SizedBox(height: 12),
@@ -275,21 +322,27 @@ class SettingsScreen extends ConsumerWidget {
             FadeInUp(
               delay: const Duration(milliseconds: 700),
               duration: const Duration(milliseconds: 500),
-              child: _buildSettingsCard([
-                _SettingsTile(
-                  icon: Iconsax.refresh,
-                  title: 'Restore Purchases',
-                  onTap: () {
-                    ref.read(subscriptionProvider.notifier).restorePurchases();
-                  },
-                ),
-                _SettingsTile(
-                  icon: Iconsax.logout,
-                  title: 'Sign Out',
-                  titleColor: AppColors.error,
-                  onTap: () => _showLogoutDialog(context, ref),
-                ),
-              ]),
+              child: _buildSettingsCard(
+                isDark: isDark,
+                colorScheme: colorScheme,
+                tiles: [
+                  _SettingsTile(
+                    icon: Iconsax.refresh,
+                    title: 'Restore Purchases',
+                    onTap: () {
+                      ref
+                          .read(subscriptionProvider.notifier)
+                          .restorePurchases();
+                    },
+                  ),
+                  _SettingsTile(
+                    icon: Iconsax.logout,
+                    title: 'Sign Out',
+                    titleColor: AppColors.error,
+                    onTap: () => _showLogoutDialog(context, ref),
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(height: 32),
@@ -300,9 +353,11 @@ class SettingsScreen extends ConsumerWidget {
               child: Center(
                 child: Text(
                   'DocMind AI v${AppConstants.appVersion}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
-                    color: AppColors.textTertiary,
+                    color: isDark
+                        ? AppColors.textTertiaryDark
+                        : AppColors.textTertiary,
                   ),
                 ),
               ),
@@ -315,27 +370,33 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, bool isDark) {
     return Padding(
       padding: const EdgeInsets.only(left: 4),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: AppColors.textTertiary,
+          color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiary,
           letterSpacing: 0.5,
         ),
       ),
     );
   }
 
-  Widget _buildSettingsCard(List<_SettingsTile> tiles) {
+  Widget _buildSettingsCard({
+    required bool isDark,
+    required ColorScheme colorScheme,
+    required List<_SettingsTile> tiles,
+  }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(
+          color: isDark ? AppColors.dividerDark : AppColors.divider,
+        ),
       ),
       child: Column(
         children: tiles.asMap().entries.map((entry) {
@@ -349,12 +410,13 @@ class SettingsScreen extends ConsumerWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: (tile.titleColor ?? AppColors.primary).withOpacity(0.1),
+                    color: (tile.titleColor ?? colorScheme.primary)
+                        .withOpacity(0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
                     tile.icon,
-                    color: tile.titleColor ?? AppColors.primary,
+                    color: tile.titleColor ?? colorScheme.primary,
                     size: 20,
                   ),
                 ),
@@ -363,32 +425,36 @@ class SettingsScreen extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    color: tile.titleColor ?? AppColors.textPrimary,
+                    color: tile.titleColor ?? colorScheme.onSurface,
                   ),
                 ),
                 subtitle: tile.subtitle != null
                     ? Text(
                         tile.subtitle!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
-                          color: AppColors.textTertiary,
+                          color: isDark
+                              ? AppColors.textTertiaryDark
+                              : AppColors.textTertiary,
                         ),
                       )
                     : null,
                 trailing: tile.trailing ??
                     (tile.onTap != null
-                        ? const Icon(
+                        ? Icon(
                             Iconsax.arrow_right_3,
                             size: 18,
-                            color: AppColors.textTertiary,
+                            color: isDark
+                                ? AppColors.textTertiaryDark
+                                : AppColors.textTertiary,
                           )
                         : null),
               ),
               if (!isLast)
-                const Divider(
+                Divider(
                   height: 1,
                   indent: 68,
-                  color: AppColors.divider,
+                  color: isDark ? AppColors.dividerDark : AppColors.divider,
                 ),
             ],
           );
@@ -398,12 +464,21 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showLogoutDialog(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out?'),
+        title: Text(
+          'Sign Out',
+          style: TextStyle(color: theme.colorScheme.onSurface),
+        ),
+        content: Text(
+          'Are you sure you want to sign out?',
+          style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.8)),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -426,6 +501,68 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+
+  String _getLanguageName(String code) {
+    switch (code) {
+      case 'en':
+        return 'English';
+      case 'az':
+        return 'Azərbaycan';
+      case 'ru':
+        return 'Русский';
+      case 'tr':
+        return 'Türkçe';
+      default:
+        return 'English';
+    }
+  }
+
+  void _showLanguageDialog(BuildContext context, WidgetRef ref,
+      String currentLanguage, bool isDark) {
+    final theme = Theme.of(context);
+    final languages = [
+      ('en', 'English'),
+      ('az', 'Azərbaycan'),
+      ('ru', 'Русский'),
+      ('tr', 'Türkçe'),
+    ];
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          'Select Language',
+          style: TextStyle(color: theme.colorScheme.onSurface),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: languages.map((lang) {
+            final isSelected = lang.$1 == currentLanguage;
+            return ListTile(
+              title: Text(
+                lang.$2,
+                style: TextStyle(
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurface,
+                ),
+              ),
+              trailing: isSelected
+                  ? Icon(Iconsax.tick_circle5, color: theme.colorScheme.primary)
+                  : null,
+              onTap: () {
+                Navigator.pop(context);
+                ref.read(settingsProvider.notifier).setLanguage(lang.$1);
+              },
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
 }
 
 class _SettingsTile {
@@ -445,4 +582,3 @@ class _SettingsTile {
     this.onTap,
   });
 }
-

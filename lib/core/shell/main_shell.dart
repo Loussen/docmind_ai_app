@@ -34,30 +34,41 @@ class MainShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = _calculateSelectedIndex(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       body: child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
         onDestinationSelected: (index) => _onItemTapped(context, index),
-        backgroundColor: AppColors.surfaceLight,
-        indicatorColor: AppColors.primary.withOpacity(0.12),
+        backgroundColor: theme.colorScheme.surface,
+        indicatorColor: theme.colorScheme.primary.withOpacity(0.12),
         height: 65,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Iconsax.home_2),
-            selectedIcon: Icon(Iconsax.home_25, color: AppColors.primary),
+            icon: Icon(
+              Iconsax.home_2,
+              color: isDark ? AppColors.textTertiaryDark : null,
+            ),
+            selectedIcon: Icon(Iconsax.home_25, color: theme.colorScheme.primary),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Iconsax.clock),
-            selectedIcon: Icon(Iconsax.clock5, color: AppColors.primary),
+            icon: Icon(
+              Iconsax.clock,
+              color: isDark ? AppColors.textTertiaryDark : null,
+            ),
+            selectedIcon: Icon(Iconsax.clock5, color: theme.colorScheme.primary),
             label: 'History',
           ),
           NavigationDestination(
-            icon: Icon(Iconsax.setting_4),
-            selectedIcon: Icon(Iconsax.setting_45, color: AppColors.primary),
+            icon: Icon(
+              Iconsax.setting_4,
+              color: isDark ? AppColors.textTertiaryDark : null,
+            ),
+            selectedIcon: Icon(Iconsax.setting_45, color: theme.colorScheme.primary),
             label: 'Settings',
           ),
         ],
@@ -70,7 +81,7 @@ class MainShell extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.3),
+              color: AppColors.primary.withOpacity(isDark ? 0.4 : 0.3),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),

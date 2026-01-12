@@ -20,17 +20,22 @@ class QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.divider),
+          border: Border.all(
+            color: isDark ? AppColors.dividerDark : AppColors.divider,
+          ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.shadowLight,
+              color: isDark ? AppColors.shadowDark : AppColors.shadowLight,
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -55,18 +60,18 @@ class QuickActionCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: AppColors.textTertiary,
+                color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiary,
               ),
             ),
           ],
