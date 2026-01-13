@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Docmind Ai</string>
+	<string>DocMind AI</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -45,5 +45,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>DocMind AI needs access to your photo library to select images for document scanning and summarization.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>DocMind AI needs camera access to capture documents for scanning and summarization.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>DocMind AI needs permission to save scanned documents to your photo library.</string>
 </dict>
 </plist>

@@ -140,9 +140,13 @@ class _AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      // Token expired - clear storage and redirect to login
-      await _storage.deleteAll();
-      // Navigation will be handled by auth state listener
+      // Don't clear tokens for logout endpoint (it's expected to fail if token is already invalid)
+      final isLogoutRequest = err.requestOptions.path.contains('/logout');
+      if (!isLogoutRequest) {
+        // Token expired - clear storage and redirect to login
+        await _storage.deleteAll();
+        // Navigation will be handled by auth state listener
+      }
     }
     handler.next(err);
   }
@@ -208,7 +212,7 @@ class _ErrorInterceptor extends Interceptor {
       default:
         message = 'Something went wrong. Please try again.';
     }
-    
+
     return DioException(
       requestOptions: error.requestOptions,
       error: message,
@@ -240,4 +244,3 @@ class _ErrorInterceptor extends Interceptor {
     }
   }
 }
-

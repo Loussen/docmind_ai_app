@@ -23,6 +23,13 @@ enum SubscriptionStatus {
   pending,
 }
 
+enum BillingPeriod {
+  @JsonValue('monthly')
+  monthly,
+  @JsonValue('yearly')
+  yearly,
+}
+
 @freezed
 class SubscriptionModel with _$SubscriptionModel {
   const SubscriptionModel._();
@@ -32,11 +39,15 @@ class SubscriptionModel with _$SubscriptionModel {
     @JsonKey(name: 'user_id') required int userId,
     required SubscriptionPlan plan,
     required SubscriptionStatus status,
+    @JsonKey(name: 'billing_period')
+    @Default(BillingPeriod.monthly)
+    BillingPeriod billingPeriod,
     @JsonKey(name: 'start_date') required DateTime startDate,
     @JsonKey(name: 'end_date') DateTime? endDate,
     @JsonKey(name: 'apple_transaction_id') String? appleTransactionId,
     @JsonKey(name: 'apple_original_transaction_id')
     String? appleOriginalTransactionId,
+    @JsonKey(name: 'apple_product_id') String? appleProductId,
     @JsonKey(name: 'is_auto_renewing') required bool isAutoRenewing,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
@@ -50,6 +61,8 @@ class SubscriptionModel with _$SubscriptionModel {
       plan == SubscriptionPlan.pro || plan == SubscriptionPlan.proPlus;
   bool get isProPlus => plan == SubscriptionPlan.proPlus;
   bool get isFree => plan == SubscriptionPlan.free;
+  bool get isYearly => billingPeriod == BillingPeriod.yearly;
+  bool get isMonthly => billingPeriod == BillingPeriod.monthly;
 
   int get docsPerDay {
     switch (plan) {

@@ -3,7 +3,7 @@ class ApiConstants {
 
   // Base URL - Change this for production
   // Use your Mac's local IP for testing on physical devices
-  static const String baseUrl = 'http://172.20.10.4:8000/api';
+  static const String baseUrl = 'https://docsmind.app/api';
 
   // Auth Endpoints
   static const String login = '/auth/login';

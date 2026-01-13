@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -20,6 +21,15 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   String? _purchasingProductId;
 
   @override
+  void initState() {
+    super.initState();
+    // Reset any stale purchasing state when screen opens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(subscriptionProvider.notifier).clearPurchasingState();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -27,6 +37,50 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
     final subscriptionState = ref.watch(subscriptionProvider);
     final isPremium = subscriptionState.isPremium;
+
+    // Listen for error and success messages
+    ref.listen<SubscriptionState>(subscriptionProvider, (previous, next) {
+      if (next.errorMessage != null &&
+          next.errorMessage != previous?.errorMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Iconsax.close_circle, color: Colors.white, size: 20),
+                const SizedBox(width: 12),
+                Expanded(child: Text(next.errorMessage!)),
+              ],
+            ),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            margin: const EdgeInsets.all(16),
+          ),
+        );
+        ref.read(subscriptionProvider.notifier).clearError();
+      }
+      if (next.successMessage != null &&
+          next.successMessage != previous?.successMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Iconsax.tick_circle, color: Colors.white, size: 20),
+                const SizedBox(width: 12),
+                Expanded(child: Text(next.successMessage!)),
+              ],
+            ),
+            backgroundColor: AppColors.success,
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            margin: const EdgeInsets.all(16),
+          ),
+        );
+        ref.read(subscriptionProvider.notifier).clearSuccess();
+      }
+    });
 
     // Reset purchasing state when not purchasing
     if (!subscriptionState.isPurchasing && _purchasingProductId != null) {
@@ -250,7 +304,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   'Export to PDF',
                   'Email support',
                 ],
-                isPopular: !subscriptionState.isProPlus,
+                isPopular: true, // Pro is always the popular choice
                 productId: _isYearly
                     ? AppConstants.proYearlyProductId
                     : AppConstants.proMonthlyProductId,
@@ -276,7 +330,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   'Priority support',
                   'Early access to features',
                 ],
-                isPopular: subscriptionState.isProPlus,
+                isPopular: false, // Pro+ is premium, not "popular"
                 productId: _isYearly
                     ? AppConstants.proPlusYearlyProductId
                     : AppConstants.proPlusMonthlyProductId,
@@ -322,15 +376,46 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               delay: const Duration(milliseconds: 500),
               child: Center(
                 child: TextButton(
-                  onPressed: () {
-                    ref.read(subscriptionProvider.notifier).restorePurchases();
-                  },
-                  child: const Text(
-                    'Restore Purchases',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
+                  onPressed: subscriptionState.isRestoring
+                      ? null
+                      : () {
+                          ref
+                              .read(subscriptionProvider.notifier)
+                              .restorePurchases();
+                        },
+                  child: subscriptionState.isRestoring
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: isDark
+                                    ? AppColors.textSecondaryDark
+                                    : AppColors.textSecondary,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Restoring...',
+                              style: TextStyle(
+                                color: isDark
+                                    ? AppColors.textSecondaryDark
+                                    : AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Text(
+                          'Restore Purchases',
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondary,
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -345,7 +430,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   alignment: WrapAlignment.center,
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () =>
+                          _launchUrl(AppConstants.termsOfServiceUrl),
                       child: const Text(
                         'Terms of Service',
                         style: TextStyle(
@@ -359,7 +445,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                       style: TextStyle(color: AppColors.textTertiary),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () =>
+                          _launchUrl(AppConstants.privacyPolicyUrl),
                       child: const Text(
                         'Privacy Policy',
                         style: TextStyle(
@@ -806,6 +893,13 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }
 

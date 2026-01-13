@@ -13,7 +13,9 @@ class SubscriptionState {
   final List<SubscriptionPlanInfo> plans;
   final bool isLoading;
   final bool isPurchasing;
+  final bool isRestoring;
   final String? errorMessage;
+  final String? successMessage;
 
   const SubscriptionState({
     this.subscription,
@@ -21,7 +23,9 @@ class SubscriptionState {
     this.plans = const [],
     this.isLoading = false,
     this.isPurchasing = false,
+    this.isRestoring = false,
     this.errorMessage,
+    this.successMessage,
   });
 
   SubscriptionState copyWith({
@@ -30,7 +34,11 @@ class SubscriptionState {
     List<SubscriptionPlanInfo>? plans,
     bool? isLoading,
     bool? isPurchasing,
+    bool? isRestoring,
     String? errorMessage,
+    String? successMessage,
+    bool clearError = false,
+    bool clearSuccess = false,
   }) {
     return SubscriptionState(
       subscription: subscription ?? this.subscription,
@@ -38,7 +46,10 @@ class SubscriptionState {
       plans: plans ?? this.plans,
       isLoading: isLoading ?? this.isLoading,
       isPurchasing: isPurchasing ?? this.isPurchasing,
-      errorMessage: errorMessage ?? this.errorMessage,
+      isRestoring: isRestoring ?? this.isRestoring,
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      successMessage:
+          clearSuccess ? null : (successMessage ?? this.successMessage),
     );
   }
 
@@ -71,16 +82,19 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
   void _onPurchaseUpdate(List<PurchaseDetails> purchases) async {
     for (final purchase in purchases) {
+      final isRestore = purchase.status == PurchaseStatus.restored;
+
       if (purchase.status == PurchaseStatus.purchased ||
           purchase.status == PurchaseStatus.restored) {
-        await _verifyPurchase(purchase);
+        await _verifyPurchase(purchase, isRestore: isRestore);
       } else if (purchase.status == PurchaseStatus.error) {
         state = state.copyWith(
           isPurchasing: false,
+          isRestoring: false,
           errorMessage: purchase.error?.message ?? 'Purchase failed',
         );
       } else if (purchase.status == PurchaseStatus.canceled) {
-        state = state.copyWith(isPurchasing: false);
+        state = state.copyWith(isPurchasing: false, isRestoring: false);
       }
 
       if (purchase.pendingCompletePurchase) {
@@ -89,7 +103,8 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     }
   }
 
-  Future<void> _verifyPurchase(PurchaseDetails purchase) async {
+  Future<void> _verifyPurchase(PurchaseDetails purchase,
+      {bool isRestore = false}) async {
     final result = await _subscriptionRepository.verifyPurchase(
       productId: purchase.productID,
       transactionId: purchase.purchaseID ?? '',
@@ -100,6 +115,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
       (error) {
         state = state.copyWith(
           isPurchasing: false,
+          isRestoring: false,
           errorMessage: error,
         );
       },
@@ -108,10 +124,15 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
           state = state.copyWith(
             subscription: response.subscription,
             isPurchasing: false,
+            isRestoring: false,
+            successMessage: isRestore
+                ? 'Purchase restored successfully!'
+                : 'Purchase completed successfully!',
           );
         } else {
           state = state.copyWith(
             isPurchasing: false,
+            isRestoring: false,
             errorMessage: response.message ?? 'Verification failed',
           );
         }
@@ -181,12 +202,36 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   }
 
   Future<void> restorePurchases() async {
-    state = state.copyWith(isPurchasing: true);
+    state =
+        state.copyWith(isRestoring: true, clearError: true, clearSuccess: true);
     await _inAppPurchase.restorePurchases();
+
+    // Reset isRestoring after a short timeout in case no purchases are found
+    // (stream won't emit events if there's nothing to restore)
+    Future.delayed(const Duration(seconds: 2), () {
+      if (state.isRestoring) {
+        state = state.copyWith(
+          isRestoring: false,
+          successMessage: 'No purchases to restore',
+        );
+      }
+    });
   }
 
   void clearError() {
-    state = state.copyWith(errorMessage: null);
+    state = state.copyWith(clearError: true);
+  }
+
+  void clearSuccess() {
+    state = state.copyWith(clearSuccess: true);
+  }
+
+  void clearPurchasingState() {
+    state = state.copyWith(
+        isPurchasing: false,
+        isRestoring: false,
+        clearError: true,
+        clearSuccess: true);
   }
 
   @override
@@ -214,4 +259,3 @@ final remainingDocsProvider = Provider<int>((ref) {
   if (subscriptionState.isPremium) return -1;
   return subscriptionState.usage?.remainingDocs ?? AppConstants.freeDocsPerDay;
 });
-

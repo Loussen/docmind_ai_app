@@ -5,6 +5,15 @@ class AppConstants {
   static const String appName = 'DocMind AI';
   static const String appTagline = 'Smart Document Summarizer';
   static const String appVersion = '1.0.0';
+  static const String appStoreId = '6757693350';
+
+  // URLs
+  static const String appStoreUrl = 'https://apps.apple.com/app/id6757693350';
+  static const String appStoreReviewUrl =
+      'https://apps.apple.com/app/id6757693350?action=write-review';
+  static const String supportUrl = 'https://docsmind.app/support';
+  static const String privacyPolicyUrl = 'https://docsmind.app/privacy';
+  static const String termsOfServiceUrl = 'https://docsmind.app/terms';
 
   // Storage Keys
   static const String authTokenKey = 'auth_token';

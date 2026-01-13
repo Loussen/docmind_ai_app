@@ -107,13 +107,37 @@ class AuthRepository {
     }
   }
 
+  Future<Either<String, UserModel>> updateProfile({String? name}) async {
+    try {
+      final response = await _dioClient.put(
+        ApiConstants.updateProfile,
+        data: {
+          if (name != null) 'name': name,
+        },
+      );
+      return Right(UserModel.fromJson(response.data['user']));
+    } on DioException catch (e) {
+      return Left(e.error?.toString() ?? 'Failed to update profile');
+    } catch (e) {
+      return Left('An unexpected error occurred');
+    }
+  }
+
   Future<Either<String, void>> logout() async {
     try {
       await _dioClient.post(ApiConstants.logout);
       await _clearTokens();
       return const Right(null);
     } on DioException catch (e) {
+      // Always clear tokens on logout, even if API returns 401
+      // (401 means token is already invalid, so logout is effectively done)
       await _clearTokens();
+      
+      // If 401, consider logout successful (token was already invalid)
+      if (e.response?.statusCode == 401) {
+        return const Right(null);
+      }
+      
       return Left(e.error?.toString() ?? 'Logout failed');
     } catch (e) {
       await _clearTokens();

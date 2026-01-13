@@ -28,10 +28,14 @@ dependencies:
   file_picker: ^8.0.0
   path_provider: ^2.1.1
   url_launcher: ^6.2.2
+  share_plus: ^10.1.4
+  
+  # Device Info (required for privacy manifest)
+  device_info_plus: ^11.2.0
   
   # Document Processing
-  syncfusion_flutter_pdf: ^24.1.41
-  syncfusion_flutter_pdfviewer: ^24.1.41
+  syncfusion_flutter_pdf: ^28.1.38
+  syncfusion_flutter_pdfviewer: ^28.1.38
   
   # Authentication (Firebase removed - using backend API)
   sign_in_with_apple: ^6.0.0
