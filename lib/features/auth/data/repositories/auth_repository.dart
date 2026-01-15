@@ -145,6 +145,18 @@ class AuthRepository {
     }
   }
 
+  Future<Either<String, void>> deleteAccount() async {
+    try {
+      await _dioClient.delete(ApiConstants.deleteAccount);
+      await _clearTokens();
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(e.error?.toString() ?? 'Failed to delete account');
+    } catch (e) {
+      return Left('An unexpected error occurred');
+    }
+  }
+
   Future<bool> isLoggedIn() async {
     final token = await _storage.read(key: AppConstants.authTokenKey);
     return token != null;

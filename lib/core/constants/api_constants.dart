@@ -28,6 +28,7 @@ class ApiConstants {
   // User Endpoints
   static const String profile = '/user/profile';
   static const String updateProfile = '/user/profile';
+  static const String deleteAccount = '/user/account';
   static const String usage = '/user/usage';
   static const String settings = '/user/settings';
 
