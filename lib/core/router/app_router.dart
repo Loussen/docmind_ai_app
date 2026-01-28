@@ -11,6 +11,8 @@ import '../../features/summary/presentation/screens/summary_screen.dart';
 import '../../features/history/presentation/screens/history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/subscription/presentation/screens/subscription_screen.dart';
+import '../../features/guest/presentation/screens/guest_home_screen.dart';
+import '../../features/guest/presentation/screens/guest_summary_screen.dart';
 import '../shell/main_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -30,6 +32,39 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/login',
         name: 'login',
         builder: (context, state) => const LoginScreen(),
+      ),
+
+      // Guest Routes
+      GoRoute(
+        path: '/guest',
+        name: 'guest',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const GuestHomeScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      ),
+      GoRoute(
+        path: '/guest/summary',
+        name: 'guestSummary',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const GuestSummaryScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1, 0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+              )),
+              child: child,
+            );
+          },
+        ),
       ),
 
       // Main Shell with Bottom Navigation

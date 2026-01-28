@@ -19,17 +19,31 @@ class DocumentPreviewScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final documentAsync = ref.watch(documentProvider(documentId));
     final summaryState = ref.watch(summaryGenerationProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: AppBar(
+        backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
+          icon: Icon(
+            Iconsax.arrow_left,
+            color: isDark ? AppColors.textLight : AppColors.textPrimary,
+          ),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Document'),
+        title: Text(
+          'Document',
+          style: TextStyle(
+            color: isDark ? AppColors.textLight : AppColors.textPrimary,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.trash),
+            icon: Icon(
+              Iconsax.trash,
+              color: isDark ? AppColors.textLight : AppColors.textPrimary,
+            ),
             onPressed: () => _showDeleteDialog(context, ref),
           ),
         ],
@@ -68,9 +82,9 @@ class DocumentPreviewScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceLight,
+                    color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.divider),
+                    border: Border.all(color: isDark ? AppColors.dividerDark : AppColors.divider),
                   ),
                   child: Column(
                     children: [
@@ -78,7 +92,7 @@ class DocumentPreviewScreen extends ConsumerWidget {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1),
+                          color: AppColors.primary.withOpacity(isDark ? 0.2 : 0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Icon(
@@ -90,10 +104,10 @@ class DocumentPreviewScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
                       Text(
                         document.originalName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: isDark ? AppColors.textLight : AppColors.textPrimary,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -104,16 +118,19 @@ class DocumentPreviewScreen extends ConsumerWidget {
                           _buildInfoChip(
                             document.fileExtension,
                             AppColors.primary,
+                            isDark: isDark,
                           ),
                           const SizedBox(width: 8),
                           _buildInfoChip(
                             document.fileSizeFormatted,
-                            AppColors.textTertiary,
+                            isDark ? AppColors.textSecondaryDark : AppColors.textTertiary,
+                            isDark: isDark,
                           ),
                           const SizedBox(width: 8),
                           _buildInfoChip(
                             '${document.pageCount} pages',
-                            AppColors.textTertiary,
+                            isDark ? AppColors.textSecondaryDark : AppColors.textTertiary,
+                            isDark: isDark,
                           ),
                         ],
                       ),
@@ -125,28 +142,29 @@ class DocumentPreviewScreen extends ConsumerWidget {
 
                 // Extracted Text Section
                 if (document.extractedText != null) ...[
-                  const Text(
+                  Text(
                     'Extracted Text',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: isDark ? AppColors.textLight : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 12),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.inputBackground,
+                      color: isDark ? AppColors.cardDark : AppColors.inputBackground,
                       borderRadius: BorderRadius.circular(16),
+                      border: isDark ? Border.all(color: AppColors.dividerDark) : null,
                     ),
                     child: Text(
                       document.extractedText!.length > 500
                           ? '${document.extractedText!.substring(0, 500)}...'
                           : document.extractedText!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.textSecondary,
+                        color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                         height: 1.6,
                       ),
                     ),
@@ -201,11 +219,11 @@ class DocumentPreviewScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildInfoChip(String label, Color color) {
+  Widget _buildInfoChip(String label, Color color, {bool isDark = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withOpacity(isDark ? 0.2 : 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -213,7 +231,7 @@ class DocumentPreviewScreen extends ConsumerWidget {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: color,
+          color: isDark ? color.withOpacity(0.9) : color,
         ),
       ),
     );

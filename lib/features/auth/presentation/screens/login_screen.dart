@@ -6,6 +6,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../guest/presentation/providers/guest_provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/auth_text_field.dart';
 
@@ -61,9 +62,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  Future<void> _handleGuestMode() async {
+    await ref.read(guestProvider.notifier).enterGuestMode();
+    if (mounted) {
+      context.go('/guest');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: Container(
@@ -71,10 +80,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColors.backgroundLight,
-              AppColors.primary.withOpacity(0.05),
-            ],
+            colors: isDark
+                ? [AppColors.backgroundDark, const Color(0xFF1A1A2E)]
+                : [
+                    AppColors.backgroundLight,
+                    AppColors.primary.withOpacity(0.05)
+                  ],
           ),
         ),
         child: SafeArea(
@@ -84,7 +95,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 60),
-                
+
                 // Logo & Title
                 FadeInDown(
                   duration: const Duration(milliseconds: 600),
@@ -111,12 +122,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      const Text(
+                      Text(
                         'Welcome Back',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                          color: isDark
+                              ? AppColors.textLight
+                              : AppColors.textPrimary,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -125,17 +138,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         _isLogin
                             ? 'Sign in to continue to DocMind AI'
                             : 'Create your account to get started',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
-                          color: AppColors.textSecondary,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
                         ),
                       ),
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 48),
-                
+
                 // Form
                 FadeInUp(
                   delay: const Duration(milliseconds: 200),
@@ -192,7 +207,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                 ),
-                
+
                 if (authState.errorMessage != null) ...[
                   const SizedBox(height: 16),
                   FadeIn(
@@ -224,9 +239,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                 ],
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Submit Button
                 FadeInUp(
                   delay: const Duration(milliseconds: 400),
@@ -261,9 +276,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Divider
                 FadeInUp(
                   delay: const Duration(milliseconds: 500),
@@ -284,9 +299,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Apple Sign In
                 if (Platform.isIOS)
                   FadeInUp(
@@ -296,18 +311,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: OutlinedButton.icon(
                         onPressed:
                             authState.isLoading ? null : _handleAppleSignIn,
-                        icon: const Icon(Icons.apple, size: 24),
-                        label: const Text(
+                        icon: Icon(
+                          Icons.apple,
+                          size: 24,
+                          color: isDark ? Colors.white : AppColors.textPrimary,
+                        ),
+                        label: Text(
                           'Continue with Apple',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
+                            color:
+                                isDark ? Colors.white : AppColors.textPrimary,
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.textPrimary,
-                          side: const BorderSide(
-                            color: AppColors.divider,
+                          foregroundColor:
+                              isDark ? Colors.white : AppColors.textPrimary,
+                          side: BorderSide(
+                            color: isDark
+                                ? Colors.white.withOpacity(0.3)
+                                : AppColors.divider,
                             width: 1.5,
                           ),
                           shape: RoundedRectangleBorder(
@@ -317,9 +341,47 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                   ),
-                
-                const SizedBox(height: 32),
-                
+
+                const SizedBox(height: 16),
+
+                // Try Without Account Button
+                FadeInUp(
+                  delay: const Duration(milliseconds: 700),
+                  child: SizedBox(
+                    height: 56,
+                    child: TextButton(
+                      onPressed: authState.isLoading ? null : _handleGuestMode,
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        backgroundColor: AppColors.primary.withOpacity(0.08),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Iconsax.flash_1,
+                            size: 20,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Try Without Account',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
                 // Toggle Login/Register
                 FadeInUp(
                   delay: const Duration(milliseconds: 700),
@@ -354,7 +416,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 32),
               ],
             ),
@@ -364,4 +426,3 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
-

@@ -25,15 +25,25 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
     final uploadState = ref.watch(uploadProvider);
     final canUpload = ref.watch(canUploadProvider);
     final summaryState = ref.watch(summaryGenerationProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: AppBar(
+        backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
         leading: IconButton(
-          icon: const Icon(Iconsax.close_circle),
+          icon: Icon(
+            Iconsax.close_circle,
+            color: isDark ? AppColors.textLight : AppColors.textPrimary,
+          ),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Upload Document'),
+        title: Text(
+          'Upload Document',
+          style: TextStyle(
+            color: isDark ? AppColors.textLight : AppColors.textPrimary,
+          ),
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -45,7 +55,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
               Expanded(
                 child: FadeInUp(
                   duration: const Duration(milliseconds: 500),
-                  child: _buildUploadArea(uploadState, canUpload),
+                  child: _buildUploadArea(uploadState, canUpload, isDark),
                 ),
               ),
 
@@ -55,17 +65,17 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
               if (uploadState.hasFile)
                 FadeInUp(
                   duration: const Duration(milliseconds: 500),
-                  child: _buildFileInfo(uploadState),
+                  child: _buildFileInfo(uploadState, isDark),
                 ),
 
               if (uploadState.isUploading || uploadState.isProcessing)
                 FadeIn(
-                  child: _buildProgress(uploadState, summaryState),
+                  child: _buildProgress(uploadState, summaryState, isDark),
                 ),
 
               if (uploadState.errorMessage != null)
                 FadeIn(
-                  child: _buildError(uploadState.errorMessage!),
+                  child: _buildError(uploadState.errorMessage!, isDark),
                 ),
 
               const SizedBox(height: 24),
@@ -83,19 +93,19 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
     );
   }
 
-  Widget _buildUploadArea(UploadState uploadState, bool canUpload) {
+  Widget _buildUploadArea(UploadState uploadState, bool canUpload, bool isDark) {
     if (uploadState.hasFile) {
-      return _buildSelectedFileArea(uploadState);
+      return _buildSelectedFileArea(uploadState, isDark);
     }
 
     return GestureDetector(
       onTap: canUpload ? _pickFile : _showUpgradeDialog,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withOpacity(isDark ? 0.5 : 0.3),
             width: 2,
             strokeAlign: BorderSide.strokeAlignInside,
           ),
@@ -117,27 +127,27 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'Tap to upload a document',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: isDark ? AppColors.textLight : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'PDF, DOCX, JPG, PNG up to ${AppConstants.maxFileSizeFree}MB',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                color: AppColors.textSecondary,
+                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: AppColors.infoLight,
+                color: isDark ? AppColors.info.withOpacity(0.15) : AppColors.infoLight,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -167,12 +177,12 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
     );
   }
 
-  Widget _buildSelectedFileArea(UploadState uploadState) {
+  Widget _buildSelectedFileArea(UploadState uploadState, bool isDark) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: isDark ? AppColors.dividerDark : AppColors.divider),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -195,10 +205,10 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               uploadState.fileName ?? 'Document',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: isDark ? AppColors.textLight : AppColors.textPrimary,
               ),
               textAlign: TextAlign.center,
               maxLines: 2,
@@ -225,13 +235,13 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
     );
   }
 
-  Widget _buildFileInfo(UploadState uploadState) {
+  Widget _buildFileInfo(UploadState uploadState, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: isDark ? AppColors.dividerDark : AppColors.divider),
       ),
       child: Row(
         children: [
@@ -255,20 +265,20 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
               children: [
                 Text(
                   uploadState.fileName ?? 'Document',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: isDark ? AppColors.textLight : AppColors.textPrimary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
-                const Text(
+                Text(
                   'Selected file',
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textTertiary,
+                    color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiary,
                   ),
                 ),
               ],
@@ -284,7 +294,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
     );
   }
 
-  Widget _buildProgress(UploadState uploadState, SummaryGenerationState summaryState) {
+  Widget _buildProgress(UploadState uploadState, SummaryGenerationState summaryState, bool isDark) {
     String status;
     double progress;
 
@@ -358,12 +368,12 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
     );
   }
 
-  Widget _buildError(String message) {
+  Widget _buildError(String message, bool isDark) {
     return Container(
       margin: const EdgeInsets.only(top: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.errorLight,
+        color: isDark ? AppColors.error.withOpacity(0.15) : AppColors.errorLight,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(

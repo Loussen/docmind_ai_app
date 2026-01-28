@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../guest/presentation/providers/guest_provider.dart';
 import '../providers/auth_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -26,13 +28,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Future<void> _checkAuth() async {
     await Future.delayed(const Duration(milliseconds: 2000));
     
+    // First check if user was in guest mode
+    final prefs = await SharedPreferences.getInstance();
+    final wasGuestMode = prefs.getBool('is_guest_mode') ?? false;
+    
+    // Check auth status
     await ref.read(authProvider.notifier).checkAuthStatus();
     
     if (!mounted) return;
     
     final authState = ref.read(authProvider);
     if (authState.isAuthenticated) {
+      // Clear guest mode if user is authenticated
+      await prefs.setBool('is_guest_mode', false);
       context.go('/home');
+    } else if (wasGuestMode) {
+      // Restore guest mode
+      await ref.read(guestProvider.notifier).enterGuestMode();
+      if (mounted) {
+        context.go('/guest');
+      }
     } else {
       context.go('/login');
     }

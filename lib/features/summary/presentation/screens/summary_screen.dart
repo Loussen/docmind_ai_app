@@ -21,20 +21,33 @@ class SummaryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final summaryAsync = ref.watch(summaryProvider(summaryId));
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: AppBar(
+        backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
+          icon: Icon(
+            Iconsax.arrow_left,
+            color: isDark ? AppColors.textLight : AppColors.textPrimary,
+          ),
           onPressed: () => context.go('/home'),
         ),
-        title: const Text('Summary'),
+        title: Text(
+          'Summary',
+          style: TextStyle(
+            color: isDark ? AppColors.textLight : AppColors.textPrimary,
+          ),
+        ),
         actions: [
           summaryAsync.when(
             data: (summary) => summary != null
                 ? IconButton(
-                    icon: const Icon(Iconsax.share),
+                    icon: Icon(
+                      Iconsax.share,
+                      color: isDark ? AppColors.textLight : AppColors.textPrimary,
+                    ),
                     onPressed: () => _shareSummary(context, summary),
                   )
                 : const SizedBox.shrink(),
@@ -144,9 +157,9 @@ class SummaryScreen extends ConsumerWidget {
                     color: AppColors.primary,
                     child: Text(
                       summary.overview,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
-                        color: AppColors.textSecondary,
+                        color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                         height: 1.6,
                       ),
                     ),
@@ -166,7 +179,7 @@ class SummaryScreen extends ConsumerWidget {
                     color: AppColors.accent,
                     child: Column(
                       children: summary.keyPoints.asMap().entries.map((entry) {
-                        return _buildBulletPoint(entry.value, entry.key);
+                        return _buildBulletPoint(context, entry.value, entry.key);
                       }).toList(),
                     ),
                   ),
@@ -187,7 +200,7 @@ class SummaryScreen extends ConsumerWidget {
                       child: Column(
                         children:
                             summary.actionItems.asMap().entries.map((entry) {
-                          return _buildActionItem(entry.value, entry.key);
+                          return _buildActionItem(context, entry.value, entry.key);
                         }).toList(),
                       ),
                     ),
@@ -358,12 +371,14 @@ class SummaryScreen extends ConsumerWidget {
     required Color color,
     required Widget child,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: isDark ? AppColors.dividerDark : AppColors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,7 +389,7 @@ class SummaryScreen extends ConsumerWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withOpacity(isDark ? 0.2 : 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(icon, size: 18, color: color),
@@ -382,10 +397,10 @@ class SummaryScreen extends ConsumerWidget {
               const SizedBox(width: 12),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: isDark ? AppColors.textLight : AppColors.textPrimary,
                 ),
               ),
             ],
@@ -397,7 +412,9 @@ class SummaryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBulletPoint(String text, int index) {
+  Widget _buildBulletPoint(BuildContext context, String text, int index) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -416,9 +433,9 @@ class SummaryScreen extends ConsumerWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
-                color: AppColors.textSecondary,
+                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                 height: 1.5,
               ),
             ),
@@ -428,7 +445,9 @@ class SummaryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionItem(String text, int index) {
+  Widget _buildActionItem(BuildContext context, String text, int index) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -439,7 +458,7 @@ class SummaryScreen extends ConsumerWidget {
             width: 22,
             height: 22,
             decoration: BoxDecoration(
-              color: AppColors.secondary.withOpacity(0.1),
+              color: AppColors.secondary.withOpacity(isDark ? 0.2 : 0.1),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Center(
@@ -457,9 +476,9 @@ class SummaryScreen extends ConsumerWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
-                color: AppColors.textSecondary,
+                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                 height: 1.5,
               ),
             ),

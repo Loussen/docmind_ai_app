@@ -310,6 +310,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                     : AppConstants.proMonthlyProductId,
                 subscriptionState: subscriptionState,
                 planType: 'pro',
+                isDark: isDark,
               ),
             ),
 
@@ -336,6 +337,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                     : AppConstants.proPlusMonthlyProductId,
                 subscriptionState: subscriptionState,
                 planType: 'pro_plus',
+                isDark: isDark,
               ),
             ),
 
@@ -476,6 +478,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     required String productId,
     required SubscriptionState subscriptionState,
     required String planType, // 'pro' or 'pro_plus'
+    required bool isDark,
   }) {
     final price = _isYearly ? yearlyPrice : monthlyPrice;
     final period = _isYearly ? 'year' : 'month';
@@ -490,21 +493,21 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isCurrentPlan
               ? AppColors.success
               : isPopular
                   ? AppColors.primary
-                  : AppColors.divider,
+                  : (isDark ? AppColors.dividerDark : AppColors.divider),
           width: isCurrentPlan || isPopular ? 2 : 1,
         ),
         boxShadow: isPopular || isCurrentPlan
             ? [
                 BoxShadow(
                   color: (isCurrentPlan ? AppColors.success : AppColors.primary)
-                      .withOpacity(0.1),
+                      .withOpacity(isDark ? 0.2 : 0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -519,10 +522,10 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDark ? AppColors.textLight : AppColors.textPrimary,
                 ),
               ),
               if (isCurrentPlan)
@@ -571,19 +574,19 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             children: [
               Text(
                 '\$${price.toStringAsFixed(2)}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDark ? AppColors.textLight : AppColors.textPrimary,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 6, left: 4),
                 child: Text(
                   '/$period',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.textSecondary,
+                    color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                   ),
                 ),
               ),
@@ -610,7 +613,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                       width: 22,
                       height: 22,
                       decoration: BoxDecoration(
-                        color: AppColors.success.withOpacity(0.1),
+                        color: AppColors.success.withOpacity(isDark ? 0.2 : 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -623,9 +626,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                     Expanded(
                       child: Text(
                         feature,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.textSecondary,
+                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                         ),
                       ),
                     ),
@@ -642,19 +645,19 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   : () => _purchasePlan(productId, buttonInfo.isDowngrade),
               style: ElevatedButton.styleFrom(
                 backgroundColor: isCurrentPlan
-                    ? AppColors.success.withOpacity(0.1)
+                    ? AppColors.success.withOpacity(isDark ? 0.2 : 0.1)
                     : buttonInfo.isDowngrade
-                        ? AppColors.inputBackground
+                        ? (isDark ? AppColors.surfaceDark : AppColors.inputBackground)
                         : isPopular
                             ? AppColors.primary
-                            : AppColors.inputBackground,
+                            : (isDark ? AppColors.surfaceDark : AppColors.inputBackground),
                 foregroundColor: isCurrentPlan
                     ? AppColors.success
                     : buttonInfo.isDowngrade
-                        ? AppColors.textSecondary
+                        ? (isDark ? AppColors.textSecondaryDark : AppColors.textSecondary)
                         : isPopular
                             ? Colors.white
-                            : AppColors.textPrimary,
+                            : (isDark ? AppColors.textLight : AppColors.textPrimary),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
