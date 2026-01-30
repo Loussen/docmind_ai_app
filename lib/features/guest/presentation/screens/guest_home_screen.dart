@@ -454,7 +454,7 @@ class _GuestHomeScreenState extends ConsumerState<GuestHomeScreen> {
           _buildLimitationRow(
               Iconsax.tick_circle, 'Up to 5 pages per document', false, isDark),
           _buildLimitationRow(
-              Iconsax.tick_circle, '3 summaries per day', false, isDark),
+              Iconsax.tick_circle, '3 documents per day', false, isDark),
           _buildLimitationRow(
               Iconsax.tick_circle, 'History saved forever', false, isDark),
           _buildLimitationRow(

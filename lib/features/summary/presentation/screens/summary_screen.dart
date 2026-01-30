@@ -24,9 +24,11 @@ class SummaryScreen extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      backgroundColor:
+          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+        backgroundColor:
+            isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
         leading: IconButton(
           icon: Icon(
             Iconsax.arrow_left,
@@ -46,7 +48,8 @@ class SummaryScreen extends ConsumerWidget {
                 ? IconButton(
                     icon: Icon(
                       Iconsax.share,
-                      color: isDark ? AppColors.textLight : AppColors.textPrimary,
+                      color:
+                          isDark ? AppColors.textLight : AppColors.textPrimary,
                     ),
                     onPressed: () => _shareSummary(context, summary),
                   )
@@ -159,7 +162,9 @@ class SummaryScreen extends ConsumerWidget {
                       summary.overview,
                       style: TextStyle(
                         fontSize: 15,
-                        color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                        color: isDark
+                            ? AppColors.textSecondaryDark
+                            : AppColors.textSecondary,
                         height: 1.6,
                       ),
                     ),
@@ -179,7 +184,8 @@ class SummaryScreen extends ConsumerWidget {
                     color: AppColors.accent,
                     child: Column(
                       children: summary.keyPoints.asMap().entries.map((entry) {
-                        return _buildBulletPoint(context, entry.value, entry.key);
+                        return _buildBulletPoint(
+                            context, entry.value, entry.key);
                       }).toList(),
                     ),
                   ),
@@ -200,7 +206,8 @@ class SummaryScreen extends ConsumerWidget {
                       child: Column(
                         children:
                             summary.actionItems.asMap().entries.map((entry) {
-                          return _buildActionItem(context, entry.value, entry.key);
+                          return _buildActionItem(
+                              context, entry.value, entry.key);
                         }).toList(),
                       ),
                     ),
@@ -372,13 +379,14 @@ class SummaryScreen extends ConsumerWidget {
     required Widget child,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isDark ? AppColors.dividerDark : AppColors.divider),
+        border: Border.all(
+            color: isDark ? AppColors.dividerDark : AppColors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -414,7 +422,7 @@ class SummaryScreen extends ConsumerWidget {
 
   Widget _buildBulletPoint(BuildContext context, String text, int index) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -435,7 +443,9 @@ class SummaryScreen extends ConsumerWidget {
               text,
               style: TextStyle(
                 fontSize: 15,
-                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.textSecondaryDark
+                    : AppColors.textSecondary,
                 height: 1.5,
               ),
             ),
@@ -447,7 +457,7 @@ class SummaryScreen extends ConsumerWidget {
 
   Widget _buildActionItem(BuildContext context, String text, int index) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -478,7 +488,9 @@ class SummaryScreen extends ConsumerWidget {
               text,
               style: TextStyle(
                 fontSize: 15,
-                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.textSecondaryDark
+                    : AppColors.textSecondary,
                 height: 1.5,
               ),
             ),
@@ -502,19 +514,19 @@ class SummaryScreen extends ConsumerWidget {
 
   void _shareSummary(BuildContext context, SummaryModel summary) {
     final StringBuffer shareText = StringBuffer();
-    
+
     // Header
     shareText.writeln('📄 ${summary.title}');
     shareText.writeln('');
     shareText.writeln('Generated by DocMind AI');
     shareText.writeln('');
-    
+
     // Overview
     shareText.writeln('📋 OVERVIEW');
     shareText.writeln('─' * 40);
     shareText.writeln(summary.overview);
     shareText.writeln('');
-    
+
     // Key Points
     if (summary.keyPoints.isNotEmpty) {
       shareText.writeln('🔑 KEY POINTS');
@@ -524,7 +536,7 @@ class SummaryScreen extends ConsumerWidget {
       }
       shareText.writeln('');
     }
-    
+
     // Action Items
     if (summary.actionItems.isNotEmpty) {
       shareText.writeln('✅ ACTION ITEMS');
@@ -534,7 +546,7 @@ class SummaryScreen extends ConsumerWidget {
       }
       shareText.writeln('');
     }
-    
+
     // Important Facts
     if (summary.importantFacts != null && summary.importantFacts!.isNotEmpty) {
       shareText.writeln('💡 IMPORTANT FACTS');
@@ -542,7 +554,7 @@ class SummaryScreen extends ConsumerWidget {
       shareText.writeln(summary.importantFacts!);
       shareText.writeln('');
     }
-    
+
     // Obligations
     if (summary.obligations != null && summary.obligations!.isNotEmpty) {
       shareText.writeln('📜 OBLIGATIONS');
@@ -550,7 +562,7 @@ class SummaryScreen extends ConsumerWidget {
       shareText.writeln(summary.obligations!);
       shareText.writeln('');
     }
-    
+
     // Risks
     if (summary.risks != null && summary.risks!.isNotEmpty) {
       shareText.writeln('⚠️ RISKS');
@@ -558,7 +570,7 @@ class SummaryScreen extends ConsumerWidget {
       shareText.writeln(summary.risks!);
       shareText.writeln('');
     }
-    
+
     // Keywords
     if (summary.keywords.isNotEmpty) {
       shareText.writeln('🏷️ KEYWORDS');
@@ -566,21 +578,26 @@ class SummaryScreen extends ConsumerWidget {
       shareText.writeln(summary.keywords.join(', '));
       shareText.writeln('');
     }
-    
+
     // Footer
     shareText.writeln('─' * 40);
     shareText.writeln('Word count: ${summary.wordCount}');
-    shareText.writeln('Processing time: ${(summary.processingTimeMs / 1000).toStringAsFixed(1)}s');
+    shareText.writeln(
+        'Processing time: ${(summary.processingTimeMs / 1000).toStringAsFixed(1)}s');
     shareText.writeln('');
-    shareText.writeln('Generated on ${summary.createdAt.toString().split(' ')[0]}');
+    shareText
+        .writeln('Generated on ${summary.createdAt.toString().split(' ')[0]}');
     shareText.writeln('');
     shareText.writeln('📱 DocMind AI - Smart Document Summarizer');
-    
-    // Share
+
+    // Share - iPad requires sharePositionOrigin for the popover
+    final box = context.findRenderObject() as RenderBox?;
     Share.share(
       shareText.toString(),
       subject: summary.title,
+      sharePositionOrigin: box != null
+          ? box.localToGlobal(Offset.zero) & box.size
+          : const Rect.fromLTWH(0, 0, 100, 100),
     );
   }
 }
-
