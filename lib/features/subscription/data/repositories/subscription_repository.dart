@@ -58,6 +58,14 @@ class SubscriptionRepository {
 
       return Right(VerifyPurchaseResponse.fromJson(response.data));
     } on DioException catch (e) {
+      // Extract error message from response data if available
+      final responseData = e.response?.data;
+      if (responseData is Map<String, dynamic>) {
+        final message = responseData['message'] as String?;
+        if (message != null) {
+          return Left(message);
+        }
+      }
       return Left(e.error?.toString() ?? 'Purchase verification failed');
     } catch (e) {
       return Left('An unexpected error occurred');

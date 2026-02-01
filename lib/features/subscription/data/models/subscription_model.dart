@@ -144,7 +144,7 @@ class VerifyPurchaseRequest with _$VerifyPurchaseRequest {
 class VerifyPurchaseResponse with _$VerifyPurchaseResponse {
   const factory VerifyPurchaseResponse({
     required bool success,
-    required SubscriptionModel subscription,
+    SubscriptionModel? subscription, // Nullable - not present on errors
     String? message,
   }) = _VerifyPurchaseResponse;
 

@@ -6,11 +6,27 @@ import '../../../../core/constants/app_constants.dart';
 import '../../data/models/subscription_model.dart';
 import '../../data/repositories/subscription_repository.dart';
 
+// Product prices from StoreKit
+class ProductPrices {
+  final String? proMonthlyPrice;
+  final String? proYearlyPrice;
+  final String? proPlusMonthlyPrice;
+  final String? proPlusYearlyPrice;
+
+  const ProductPrices({
+    this.proMonthlyPrice,
+    this.proYearlyPrice,
+    this.proPlusMonthlyPrice,
+    this.proPlusYearlyPrice,
+  });
+}
+
 // Subscription state
 class SubscriptionState {
   final SubscriptionModel? subscription;
   final UsageModel? usage;
   final List<SubscriptionPlanInfo> plans;
+  final ProductPrices? productPrices;
   final bool isLoading;
   final bool isPurchasing;
   final bool isRestoring;
@@ -21,6 +37,7 @@ class SubscriptionState {
     this.subscription,
     this.usage,
     this.plans = const [],
+    this.productPrices,
     this.isLoading = false,
     this.isPurchasing = false,
     this.isRestoring = false,
@@ -32,6 +49,7 @@ class SubscriptionState {
     SubscriptionModel? subscription,
     UsageModel? usage,
     List<SubscriptionPlanInfo>? plans,
+    ProductPrices? productPrices,
     bool? isLoading,
     bool? isPurchasing,
     bool? isRestoring,
@@ -44,6 +62,7 @@ class SubscriptionState {
       subscription: subscription ?? this.subscription,
       usage: usage ?? this.usage,
       plans: plans ?? this.plans,
+      productPrices: productPrices ?? this.productPrices,
       isLoading: isLoading ?? this.isLoading,
       isPurchasing: isPurchasing ?? this.isPurchasing,
       isRestoring: isRestoring ?? this.isRestoring,
@@ -78,6 +97,54 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
     _purchaseSubscription =
         _inAppPurchase.purchaseStream.listen(_onPurchaseUpdate);
+
+    // Load product prices from StoreKit
+    await _loadProductPrices();
+  }
+
+  Future<void> _loadProductPrices() async {
+    try {
+      final productIds = {
+        AppConstants.proMonthlyProductId,
+        AppConstants.proYearlyProductId,
+        AppConstants.proPlusMonthlyProductId,
+        AppConstants.proPlusYearlyProductId,
+      };
+
+      final response = await _inAppPurchase.queryProductDetails(productIds);
+
+      if (response.productDetails.isNotEmpty) {
+        String? proMonthly, proYearly, proPlusMonthly, proPlusYearly;
+
+        for (final product in response.productDetails) {
+          switch (product.id) {
+            case AppConstants.proMonthlyProductId:
+              proMonthly = product.price;
+              break;
+            case AppConstants.proYearlyProductId:
+              proYearly = product.price;
+              break;
+            case AppConstants.proPlusMonthlyProductId:
+              proPlusMonthly = product.price;
+              break;
+            case AppConstants.proPlusYearlyProductId:
+              proPlusYearly = product.price;
+              break;
+          }
+        }
+
+        state = state.copyWith(
+          productPrices: ProductPrices(
+            proMonthlyPrice: proMonthly,
+            proYearlyPrice: proYearly,
+            proPlusMonthlyPrice: proPlusMonthly,
+            proPlusYearlyPrice: proPlusYearly,
+          ),
+        );
+      }
+    } catch (e) {
+      // Silently fail - will use fallback prices in UI
+    }
   }
 
   void _onPurchaseUpdate(List<PurchaseDetails> purchases) async {
@@ -120,7 +187,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         );
       },
       (response) {
-        if (response.success) {
+        if (response.success && response.subscription != null) {
           state = state.copyWith(
             subscription: response.subscription,
             isPurchasing: false,
@@ -198,7 +265,23 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
     final product = response.productDetails.first;
     final purchaseParam = PurchaseParam(productDetails: product);
-    await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
+
+    try {
+      await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
+    } catch (e) {
+      // Handle user cancellation or other errors
+      final errorMessage = e.toString().toLowerCase();
+      if (errorMessage.contains('cancelled') ||
+          errorMessage.contains('canceled')) {
+        // User cancelled - just reset state, no error message needed
+        state = state.copyWith(isPurchasing: false);
+      } else {
+        state = state.copyWith(
+          isPurchasing: false,
+          errorMessage: 'Purchase failed. Please try again.',
+        );
+      }
+    }
   }
 
   Future<void> restorePurchases() async {

@@ -295,8 +295,11 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               duration: const Duration(milliseconds: 500),
               child: _buildPlanCard(
                 title: 'Pro',
-                monthlyPrice: 4.99,
-                yearlyPrice: 35.99,
+                monthlyPrice:
+                    subscriptionState.productPrices?.proMonthlyPrice ??
+                        '\$5.99',
+                yearlyPrice: subscriptionState.productPrices?.proYearlyPrice ??
+                    '\$35.99',
                 features: [
                   'Unlimited documents',
                   'Unlimited summaries',
@@ -321,8 +324,12 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               duration: const Duration(milliseconds: 500),
               child: _buildPlanCard(
                 title: 'Pro+',
-                monthlyPrice: 9.99,
-                yearlyPrice: 71.99,
+                monthlyPrice:
+                    subscriptionState.productPrices?.proPlusMonthlyPrice ??
+                        '\$9.99',
+                yearlyPrice:
+                    subscriptionState.productPrices?.proPlusYearlyPrice ??
+                        '\$71.99',
                 features: [
                   'Everything in Pro',
                   'OCR for scanned documents',
@@ -471,8 +478,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
   Widget _buildPlanCard({
     required String title,
-    required double monthlyPrice,
-    required double yearlyPrice,
+    required String monthlyPrice,
+    required String yearlyPrice,
     required List<String> features,
     required bool isPopular,
     required String productId,
@@ -482,7 +489,6 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   }) {
     final price = _isYearly ? yearlyPrice : monthlyPrice;
     final period = _isYearly ? 'year' : 'month';
-    final perMonth = _isYearly ? (yearlyPrice / 12) : monthlyPrice;
 
     // Determine button state based on current subscription
     final currentPlan = subscriptionState.subscription?.plan;
@@ -573,7 +579,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '\$${price.toStringAsFixed(2)}',
+                price,
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -586,7 +592,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   '/$period',
                   style: TextStyle(
                     fontSize: 14,
-                    color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                    color: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondary,
                   ),
                 ),
               ),
@@ -596,7 +604,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text(
-                'That\'s only \$${perMonth.toStringAsFixed(2)}/month',
+                'Billed annually',
                 style: const TextStyle(
                   fontSize: 13,
                   color: AppColors.success,
@@ -613,7 +621,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                       width: 22,
                       height: 22,
                       decoration: BoxDecoration(
-                        color: AppColors.success.withOpacity(isDark ? 0.2 : 0.1),
+                        color:
+                            AppColors.success.withOpacity(isDark ? 0.2 : 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -628,7 +637,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                         feature,
                         style: TextStyle(
                           fontSize: 14,
-                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
                         ),
                       ),
                     ),
@@ -647,17 +658,25 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                 backgroundColor: isCurrentPlan
                     ? AppColors.success.withOpacity(isDark ? 0.2 : 0.1)
                     : buttonInfo.isDowngrade
-                        ? (isDark ? AppColors.surfaceDark : AppColors.inputBackground)
+                        ? (isDark
+                            ? AppColors.surfaceDark
+                            : AppColors.inputBackground)
                         : isPopular
                             ? AppColors.primary
-                            : (isDark ? AppColors.surfaceDark : AppColors.inputBackground),
+                            : (isDark
+                                ? AppColors.surfaceDark
+                                : AppColors.inputBackground),
                 foregroundColor: isCurrentPlan
                     ? AppColors.success
                     : buttonInfo.isDowngrade
-                        ? (isDark ? AppColors.textSecondaryDark : AppColors.textSecondary)
+                        ? (isDark
+                            ? AppColors.textSecondaryDark
+                            : AppColors.textSecondary)
                         : isPopular
                             ? Colors.white
-                            : (isDark ? AppColors.textLight : AppColors.textPrimary),
+                            : (isDark
+                                ? AppColors.textLight
+                                : AppColors.textPrimary),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
