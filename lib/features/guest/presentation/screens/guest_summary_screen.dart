@@ -67,7 +67,8 @@ class GuestSummaryScreen extends ConsumerWidget {
             FadeInDown(
               duration: const Duration(milliseconds: 300),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: AppColors.warning.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -145,7 +146,7 @@ class GuestSummaryScreen extends ConsumerWidget {
 
             const SizedBox(height: 16),
 
-            // Key Points
+            // Key Points - Only show first 2 for guests (from backend)
             if (summary['key_points'] != null &&
                 (summary['key_points'] as List).isNotEmpty)
               FadeInUp(
@@ -155,9 +156,18 @@ class GuestSummaryScreen extends ConsumerWidget {
                   iconColor: AppColors.success,
                   title: 'Key Points',
                   child: Column(
-                    children: (summary['key_points'] as List)
-                        .map<Widget>((point) => _buildBulletPoint(point.toString()))
-                        .toList(),
+                    children: [
+                      // Show visible key points (backend only sends first 2)
+                      ...(summary['key_points'] as List)
+                          .map<Widget>(
+                              (point) => _buildBulletPoint(point.toString()))
+                          .toList(),
+                      // Show blurred preview if there are more hidden on server
+                      if (guestState.hiddenKeyPoints > 0)
+                        _buildBlurredPreview(
+                          '${guestState.hiddenKeyPoints} more key points',
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -166,43 +176,33 @@ class GuestSummaryScreen extends ConsumerWidget {
                 (summary['key_points'] as List).isNotEmpty)
               const SizedBox(height: 16),
 
-            // Action Items
-            if (summary['action_items'] != null &&
-                (summary['action_items'] as List).isNotEmpty)
+            // Action Items - Fully locked for guests (count from server)
+            if (guestState.totalActionItems > 0)
               FadeInUp(
                 delay: const Duration(milliseconds: 400),
-                child: _buildSectionCard(
+                child: _buildLockedSection(
                   icon: Iconsax.task_square,
                   iconColor: AppColors.warning,
                   title: 'Action Items',
-                  child: Column(
-                    children: (summary['action_items'] as List)
-                        .map<Widget>((item) => _buildActionItem(item.toString()))
-                        .toList(),
-                  ),
+                  itemCount: guestState.totalActionItems,
+                  context: context,
+                  ref: ref,
                 ),
               ),
 
-            if (summary['action_items'] != null &&
-                (summary['action_items'] as List).isNotEmpty)
-              const SizedBox(height: 16),
+            if (guestState.totalActionItems > 0) const SizedBox(height: 16),
 
-            // Keywords
-            if (summary['keywords'] != null &&
-                (summary['keywords'] as List).isNotEmpty)
+            // Keywords - Fully locked for guests (count from server)
+            if (guestState.totalKeywords > 0)
               FadeInUp(
                 delay: const Duration(milliseconds: 500),
-                child: _buildSectionCard(
+                child: _buildLockedSection(
                   icon: Iconsax.tag,
                   iconColor: AppColors.secondary,
                   title: 'Keywords',
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: (summary['keywords'] as List)
-                        .map<Widget>((keyword) => _buildKeywordChip(keyword.toString()))
-                        .toList(),
-                  ),
+                  itemCount: guestState.totalKeywords,
+                  context: context,
+                  ref: ref,
                 ),
               ),
 
@@ -364,30 +364,33 @@ class GuestSummaryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionItem(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+  Widget _buildBlurredPreview(String text) {
+    return Container(
+      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      decoration: BoxDecoration(
+        color: AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.divider,
+          width: 1,
+        ),
+      ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 2),
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.warning, width: 2),
-              borderRadius: BorderRadius.circular(4),
-            ),
+          Icon(
+            Iconsax.lock,
+            size: 16,
+            color: AppColors.textTertiary,
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(
-                fontSize: 15,
-                color: AppColors.textSecondary,
-                height: 1.5,
-              ),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: AppColors.textTertiary,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -395,20 +398,129 @@ class GuestSummaryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildKeywordChip(String keyword) {
+  Widget _buildLockedSection({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required int itemCount,
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.secondary.withOpacity(0.1),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: Text(
-        keyword,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: AppColors.secondary,
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: iconColor, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  '$itemCount items',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Blurred content placeholder
+          Stack(
+            children: [
+              // Fake blurred content
+              Column(
+                children: List.generate(
+                  itemCount > 3 ? 3 : itemCount,
+                  (index) => Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: AppColors.divider.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    width: double.infinity,
+                  ),
+                ),
+              ),
+              // Gradient overlay
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white.withOpacity(0.3),
+                        Colors.white.withOpacity(0.9),
+                        Colors.white,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Unlock button
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                ref.read(guestProvider.notifier).exitGuestMode();
+                context.go('/login');
+              },
+              icon: const Icon(Iconsax.unlock, size: 18),
+              label: const Text('Create Free Account to Unlock'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(color: AppColors.primary, width: 1.5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -501,45 +613,48 @@ class GuestSummaryScreen extends ConsumerWidget {
     );
   }
 
-  void _shareSummary(BuildContext context, Map<String, dynamic> summary, Map<String, dynamic>? document) {
+  void _shareSummary(BuildContext context, Map<String, dynamic> summary,
+      Map<String, dynamic>? document) {
     final buffer = StringBuffer();
-    
+
     buffer.writeln('📄 ${summary['title'] ?? 'Document Summary'}');
     buffer.writeln();
-    
+
     if (document != null) {
       buffer.writeln('Document: ${document['original_name']}');
       buffer.writeln();
     }
-    
+
     buffer.writeln('📋 OVERVIEW');
     buffer.writeln(summary['overview'] ?? '');
     buffer.writeln();
-    
-    if (summary['key_points'] != null && (summary['key_points'] as List).isNotEmpty) {
+
+    if (summary['key_points'] != null &&
+        (summary['key_points'] as List).isNotEmpty) {
       buffer.writeln('🔑 KEY POINTS');
       for (final point in summary['key_points'] as List) {
         buffer.writeln('• $point');
       }
       buffer.writeln();
     }
-    
-    if (summary['action_items'] != null && (summary['action_items'] as List).isNotEmpty) {
+
+    if (summary['action_items'] != null &&
+        (summary['action_items'] as List).isNotEmpty) {
       buffer.writeln('✅ ACTION ITEMS');
       for (final item in summary['action_items'] as List) {
         buffer.writeln('☐ $item');
       }
       buffer.writeln();
     }
-    
+
     buffer.writeln('---');
     buffer.writeln('Generated by DocMind AI');
-    
+
     // Share - iPad requires sharePositionOrigin for the popover
     final box = context.findRenderObject() as RenderBox?;
     Share.share(
       buffer.toString(),
-      sharePositionOrigin: box != null 
+      sharePositionOrigin: box != null
           ? box.localToGlobal(Offset.zero) & box.size
           : const Rect.fromLTWH(0, 0, 100, 100),
     );

@@ -16,6 +16,7 @@ class GuestState {
   final String? errorMessage;
   final Map<String, dynamic>? lastSummary;
   final Map<String, dynamic>? lastDocument;
+  final Map<String, dynamic>? previewInfo;
   final String? successMessage;
 
   const GuestState({
@@ -28,10 +29,20 @@ class GuestState {
     this.errorMessage,
     this.lastSummary,
     this.lastDocument,
+    this.previewInfo,
     this.successMessage,
   });
 
   int get remainingTrials => maxTrials - usedTrials;
+
+  // Preview info helpers
+  int get hiddenKeyPoints => previewInfo?['hidden_key_points'] as int? ?? 0;
+  int get hiddenActionItems => previewInfo?['hidden_action_items'] as int? ?? 0;
+  int get hiddenKeywords => previewInfo?['hidden_keywords'] as int? ?? 0;
+  int get totalKeyPoints => previewInfo?['total_key_points'] as int? ?? 0;
+  int get totalActionItems => previewInfo?['total_action_items'] as int? ?? 0;
+  int get totalKeywords => previewInfo?['total_keywords'] as int? ?? 0;
+  bool get isPreview => previewInfo?['is_preview'] as bool? ?? true;
 
   GuestState copyWith({
     bool? isGuestMode,
@@ -43,6 +54,7 @@ class GuestState {
     String? errorMessage,
     Map<String, dynamic>? lastSummary,
     Map<String, dynamic>? lastDocument,
+    Map<String, dynamic>? previewInfo,
     String? successMessage,
   }) {
     return GuestState(
@@ -55,6 +67,7 @@ class GuestState {
       errorMessage: errorMessage,
       lastSummary: lastSummary ?? this.lastSummary,
       lastDocument: lastDocument ?? this.lastDocument,
+      previewInfo: previewInfo ?? this.previewInfo,
       successMessage: successMessage,
     );
   }
@@ -181,6 +194,7 @@ class GuestNotifier extends StateNotifier<GuestState> {
           final usage = data['usage'] as Map<String, dynamic>?;
           final document = data['document'] as Map<String, dynamic>?;
           final summary = data['summary'] as Map<String, dynamic>?;
+          final previewInfo = data['preview_info'] as Map<String, dynamic>?;
           final message = data['message'] as String?;
 
           state = state.copyWith(
@@ -190,6 +204,7 @@ class GuestNotifier extends StateNotifier<GuestState> {
             limitReached: (usage?['remaining'] as int? ?? 1) <= 0,
             lastDocument: document,
             lastSummary: summary,
+            previewInfo: previewInfo,
             successMessage: message,
           );
           return true;
@@ -218,6 +233,7 @@ class GuestNotifier extends StateNotifier<GuestState> {
       usedTrials: state.usedTrials,
       maxTrials: state.maxTrials,
       limitReached: state.limitReached,
+      // previewInfo cleared with lastSummary
     );
   }
 }
