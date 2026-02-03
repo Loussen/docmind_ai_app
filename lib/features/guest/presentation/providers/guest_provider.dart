@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/guest_repository.dart';
@@ -75,19 +76,34 @@ class GuestState {
 
 class GuestNotifier extends StateNotifier<GuestState> {
   final GuestRepository _repository;
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   String? _deviceId;
+  static const String _deviceIdKey = 'guest_device_id';
 
   GuestNotifier(this._repository) : super(const GuestState());
 
   Future<String> _getDeviceId() async {
     if (_deviceId != null) return _deviceId!;
 
+    // First, try to get device ID from Keychain (persists across app reinstalls)
+    try {
+      final storedDeviceId = await _secureStorage.read(key: _deviceIdKey);
+      if (storedDeviceId != null && storedDeviceId.isNotEmpty) {
+        _deviceId = storedDeviceId;
+        return _deviceId!;
+      }
+    } catch (e) {
+      // If Keychain read fails, continue to generate new ID
+    }
+
+    // If not in Keychain, generate new device ID based on platform
     final deviceInfo = DeviceInfoPlugin();
-    
+
     try {
       if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
-        _deviceId = iosInfo.identifierForVendor ?? 'unknown_ios_${DateTime.now().millisecondsSinceEpoch}';
+        _deviceId = iosInfo.identifierForVendor ??
+            'unknown_ios_${DateTime.now().millisecondsSinceEpoch}';
       } else if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         _deviceId = androidInfo.id;
@@ -96,6 +112,15 @@ class GuestNotifier extends StateNotifier<GuestState> {
       }
     } catch (e) {
       _deviceId = 'fallback_${DateTime.now().millisecondsSinceEpoch}';
+    }
+
+    // Store device ID in Keychain for persistence across app reinstalls
+    if (_deviceId != null) {
+      try {
+        await _secureStorage.write(key: _deviceIdKey, value: _deviceId!);
+      } catch (e) {
+        // If Keychain write fails, continue with in-memory ID
+      }
     }
 
     return _deviceId!;
@@ -107,10 +132,10 @@ class GuestNotifier extends StateNotifier<GuestState> {
     try {
       // Get device ID
       final deviceId = await _getDeviceId();
-      
+
       // Check usage from server
       final result = await _repository.checkUsage(deviceId: deviceId);
-      
+
       result.fold(
         (error) {
           // Even if check fails, let them try
@@ -123,7 +148,7 @@ class GuestNotifier extends StateNotifier<GuestState> {
           final used = data['used'] as int? ?? 0;
           final limit = data['limit'] as int? ?? 2;
           final limitReached = data['limit_reached'] as bool? ?? false;
-          
+
           state = state.copyWith(
             isGuestMode: true,
             isLoading: false,
@@ -147,7 +172,7 @@ class GuestNotifier extends StateNotifier<GuestState> {
 
   void exitGuestMode() async {
     state = const GuestState();
-    
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('is_guest_mode', false);
   }
@@ -155,7 +180,8 @@ class GuestNotifier extends StateNotifier<GuestState> {
   Future<bool> summarizeDocument(File file) async {
     if (state.limitReached) {
       state = state.copyWith(
-        errorMessage: 'You have used all your free trials. Create an account to continue.',
+        errorMessage:
+            'You have used all your free trials. Create an account to continue.',
       );
       return false;
     }
@@ -168,7 +194,7 @@ class GuestNotifier extends StateNotifier<GuestState> {
 
     try {
       final deviceId = await _getDeviceId();
-      
+
       final result = await _repository.summarizeDocument(
         file: file,
         deviceId: deviceId,
