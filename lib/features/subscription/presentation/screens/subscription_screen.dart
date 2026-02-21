@@ -108,7 +108,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             // Current Subscription Card (if premium)
             if (isPremium) ...[
               FadeInDown(
-                duration: const Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 300),
                 child: _buildCurrentPlanCard(subscriptionState),
               ),
               const SizedBox(height: 24),
@@ -116,7 +116,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
             // Hero Section
             FadeInDown(
-              duration: const Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 300),
               delay: Duration(milliseconds: isPremium ? 100 : 0),
               child: Column(
                 children: [
@@ -174,8 +174,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
             // Billing Toggle
             FadeInUp(
-              delay: const Duration(milliseconds: 100),
-              duration: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 50),
+              duration: const Duration(milliseconds: 300),
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
@@ -292,8 +292,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
             // Plans
             FadeInUp(
-              delay: Duration(milliseconds: isPremium ? 300 : 200),
-              duration: const Duration(milliseconds: 500),
+              delay: Duration(milliseconds: isPremium ? 150 : 100),
+              duration: const Duration(milliseconds: 300),
               child: _buildPlanCard(
                 title: 'Pro',
                 monthlyPrice:
@@ -321,8 +321,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             const SizedBox(height: 16),
 
             FadeInUp(
-              delay: Duration(milliseconds: isPremium ? 400 : 300),
-              duration: const Duration(milliseconds: 500),
+              delay: Duration(milliseconds: isPremium ? 200 : 150),
+              duration: const Duration(milliseconds: 300),
               child: _buildPlanCard(
                 title: 'Pro+',
                 monthlyPrice:
@@ -353,8 +353,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
             // Free Plan Info
             FadeInUp(
-              delay: const Duration(milliseconds: 400),
-              duration: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 50),
+              duration: const Duration(milliseconds: 300),
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -383,7 +383,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
             // Restore Purchases
             FadeIn(
-              delay: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 250),
               child: Center(
                 child: TextButton(
                   onPressed: subscriptionState.isRestoring
@@ -434,7 +434,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
             // Legal Links
             FadeIn(
-              delay: const Duration(milliseconds: 600),
+              delay: const Duration(milliseconds: 150),
               child: Center(
                 child: Wrap(
                   alignment: WrapAlignment.center,

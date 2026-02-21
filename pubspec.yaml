@@ -1,7 +1,7 @@
 name: docmind_ai
-description: DocMind AI — Smart Document Summarizer
+description: DoCMind AI — OCR, Doc & AI Summarizer
 publish_to: 'none'
-version: 1.0.6+7
+version: 1.0.7+8
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -88,11 +88,8 @@ flutter_icons:
 flutter:
   uses-material-design: true
   
-  # Uncomment and add your assets when ready
-  # assets:
-  #   - assets/images/
-  #   - assets/icons/
-  #   - assets/animations/
+  assets:
+    - assets/images/
   
   # Uncomment and add SF Pro Display fonts when available
   # fonts:

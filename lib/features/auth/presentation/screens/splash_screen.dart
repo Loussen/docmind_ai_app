@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:animate_do/animate_do.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../device/presentation/providers/device_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -23,7 +22,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   Future<void> _initDevice() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
+    await Future.delayed(const Duration(milliseconds: 800));
 
     await ref.read(deviceProvider.notifier).initializeDevice();
 
@@ -51,12 +50,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FadeInDown(
-                  duration: const Duration(milliseconds: 800),
+                  duration: const Duration(milliseconds: 500),
                   child: Container(
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                      color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
@@ -66,19 +64,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.auto_awesome,
-                      size: 60,
-                      color: AppColors.primary,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: Image.asset(
+                        'assets/images/app_icon.png',
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 32),
                 FadeInUp(
-                  delay: const Duration(milliseconds: 400),
-                  duration: const Duration(milliseconds: 800),
+                  delay: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 500),
                   child: const Text(
-                    'DocMind AI',
+                    'DoCMind AI',
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
@@ -89,10 +91,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 ),
                 const SizedBox(height: 8),
                 FadeInUp(
-                  delay: const Duration(milliseconds: 600),
-                  duration: const Duration(milliseconds: 800),
+                  delay: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 500),
                   child: Text(
-                    'Smart Document Summarizer',
+                    'OCR, Doc & AI Summarizer',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white.withOpacity(0.9),
@@ -102,7 +104,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 ),
                 const SizedBox(height: 64),
                 FadeIn(
-                  delay: const Duration(milliseconds: 1000),
+                  delay: const Duration(milliseconds: 500),
                   child: const SizedBox(
                     width: 32,
                     height: 32,

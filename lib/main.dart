@@ -21,13 +21,13 @@ void main() async {
 
   runApp(
     const ProviderScope(
-      child: DocMindApp(),
+      child: DoCMindApp(),
     ),
   );
 }
 
-class DocMindApp extends ConsumerWidget {
-  const DocMindApp({super.key});
+class DoCMindApp extends ConsumerWidget {
+  const DoCMindApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +35,7 @@ class DocMindApp extends ConsumerWidget {
     final themeState = ref.watch(themeProvider);
 
     return MaterialApp.router(
-      title: 'DocMind AI',
+      title: 'DoCMind AI',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

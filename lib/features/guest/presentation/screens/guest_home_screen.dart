@@ -123,7 +123,7 @@ class _GuestHomeScreenState extends ConsumerState<GuestHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Try DocMind AI',
+                'Try DoCMind AI',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -804,7 +804,7 @@ class _GuestHomeScreenState extends ConsumerState<GuestHomeScreen> {
           ],
         ),
         content: const Text(
-          'You have used all your free trials. Create an account to continue using DocMind AI with unlimited access.',
+          'You have used all your free trials. Create an account to continue using DoCMind AI with unlimited access.',
         ),
         actions: [
           TextButton(

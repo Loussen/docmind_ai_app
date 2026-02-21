@@ -59,7 +59,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               backgroundColor: theme.scaffoldBackgroundColor,
               flexibleSpace: FlexibleSpaceBar(
                 titlePadding: const EdgeInsets.only(left: 24, bottom: 16),
-                title: Column(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      margin: const EdgeInsets.only(bottom: 2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          'assets/images/app_icon.png',
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -75,7 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'DocMind AI',
+                      'DoCMind AI',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -83,6 +111,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         letterSpacing: -0.5,
                       ),
                     ),
+                  ],
+                ),
                   ],
                 ),
               ),
@@ -145,7 +175,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   children: [
                     // Usage Card
                     FadeInUp(
-                      duration: const Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 300),
                       child: UsageCard(
                         usage: subscriptionState.usage,
                         isPremium: subscriptionState.isPremium,
@@ -157,8 +187,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                     // Quick Actions
                     FadeInUp(
-                      delay: const Duration(milliseconds: 100),
-                      duration: const Duration(milliseconds: 500),
+                      delay: const Duration(milliseconds: 50),
+                      duration: const Duration(milliseconds: 300),
                       child: Text(
                         'Quick Actions',
                         style: TextStyle(
@@ -172,8 +202,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const SizedBox(height: 16),
 
                     FadeInUp(
-                      delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 500),
+                      delay: const Duration(milliseconds: 100),
+                      duration: const Duration(milliseconds: 300),
                       child: Row(
                         children: [
                           Expanded(
@@ -203,8 +233,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                     // Recent Documents
                     FadeInUp(
-                      delay: const Duration(milliseconds: 300),
-                      duration: const Duration(milliseconds: 500),
+                      delay: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 300),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -238,14 +268,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       )
                     else if (recentDocs.isEmpty)
                       FadeInUp(
-                        delay: const Duration(milliseconds: 400),
+                        delay: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 300),
                         child: _buildEmptyState(isDark, colorScheme),
                       )
                     else
                       ...recentDocs.asMap().entries.map((entry) {
                         return FadeInUp(
-                          delay: Duration(milliseconds: 400 + entry.key * 100),
-                          duration: const Duration(milliseconds: 500),
+                          delay: Duration(milliseconds: 200 + entry.key * 50),
+                          duration: const Duration(milliseconds: 300),
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 12),
                             child: DocumentCard(

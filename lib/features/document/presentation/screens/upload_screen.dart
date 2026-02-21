@@ -62,7 +62,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
               // Upload Area
               Expanded(
                 child: FadeInUp(
-                  duration: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 300),
                   child: _buildUploadArea(uploadState, canUpload, isDark),
                 ),
               ),
@@ -72,7 +72,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
               // Progress and Status
               if (uploadState.hasFile)
                 FadeInUp(
-                  duration: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 300),
                   child: _buildFileInfo(uploadState, isDark),
                 ),
 
@@ -90,8 +90,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
 
               // Action Button
               FadeInUp(
-                delay: const Duration(milliseconds: 200),
-                duration: const Duration(milliseconds: 500),
+                delay: const Duration(milliseconds: 100),
+                duration: const Duration(milliseconds: 300),
                 child: _buildActionButton(uploadState, summaryState, canUpload),
               ),
             ],

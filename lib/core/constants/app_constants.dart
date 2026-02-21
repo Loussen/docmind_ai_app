@@ -2,9 +2,9 @@ class AppConstants {
   AppConstants._();
 
   // App Info
-  static const String appName = 'DocMind AI';
-  static const String appTagline = 'Smart Document Summarizer';
-  static const String appVersion = '1.0.6';
+  static const String appName = 'DoCMind AI';
+  static const String appTagline = 'OCR, Doc & AI Summarizer';
+  static const String appVersion = '1.0.7';
   static const String appStoreId = '6757693350';
 
   // URLs

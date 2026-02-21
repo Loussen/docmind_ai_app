@@ -157,8 +157,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
                   final document = documentsState.documents[index];
                   return FadeInUp(
-                    delay: Duration(milliseconds: index * 50),
-                    duration: const Duration(milliseconds: 400),
+                    delay: Duration(milliseconds: (index < 5 ? index * 30 : 0)),
+                    duration: const Duration(milliseconds: 250),
                     child: Dismissible(
                       key: Key(document.id),
                       direction: DismissDirection.endToStart,
@@ -236,7 +236,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             ),
             const SizedBox(height: 24),
             FadeInUp(
-              delay: const Duration(milliseconds: 200),
+              delay: const Duration(milliseconds: 100),
               child: Text(
                 hasFilter
                     ? 'No ${documentsState.filterType.label.toLowerCase()}'
@@ -250,7 +250,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             ),
             const SizedBox(height: 8),
             FadeInUp(
-              delay: const Duration(milliseconds: 300),
+              delay: const Duration(milliseconds: 150),
               child: Text(
                 hasFilter
                     ? 'Try removing filters or uploading\nnew documents'
@@ -267,7 +267,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             ),
             const SizedBox(height: 32),
             FadeInUp(
-              delay: const Duration(milliseconds: 400),
+              delay: const Duration(milliseconds: 200),
               child: hasFilter
                   ? OutlinedButton.icon(
                       onPressed: () {

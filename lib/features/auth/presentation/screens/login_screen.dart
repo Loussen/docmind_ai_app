@@ -136,7 +136,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       const SizedBox(height: 8),
                       Text(
                         _isLogin
-                            ? 'Sign in to continue to DocMind AI'
+                            ? 'Sign in to continue to DoCMind AI'
                             : 'Create your account to get started',
                         style: TextStyle(
                           fontSize: 16,

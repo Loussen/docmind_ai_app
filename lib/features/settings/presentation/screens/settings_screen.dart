@@ -89,7 +89,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           children: [
             // Subscription Card
             FadeInDown(
-              duration: const Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 300),
               child: GestureDetector(
                 onTap: () => context.push('/subscription'),
                 child: Container(
@@ -185,16 +185,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
             // Preferences
             FadeInUp(
-              delay: const Duration(milliseconds: 100),
-              duration: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 50),
+              duration: const Duration(milliseconds: 300),
               child: _buildSectionTitle('Preferences', isDark),
             ),
 
             const SizedBox(height: 12),
 
             FadeInUp(
-              delay: const Duration(milliseconds: 200),
-              duration: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 100),
+              duration: const Duration(milliseconds: 300),
               child: _buildSettingsCard(
                 isDark: isDark,
                 colorScheme: colorScheme,
@@ -240,16 +240,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
             // Support
             FadeInUp(
-              delay: const Duration(milliseconds: 300),
-              duration: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 150),
+              duration: const Duration(milliseconds: 300),
               child: _buildSectionTitle('Support', isDark),
             ),
 
             const SizedBox(height: 12),
 
             FadeInUp(
-              delay: const Duration(milliseconds: 400),
-              duration: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 300),
               child: _buildSettingsCard(
                 isDark: isDark,
                 colorScheme: colorScheme,
@@ -262,7 +262,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   _SettingsTile(
                     icon: Iconsax.star,
                     title: 'Rate App',
-                    subtitle: 'Love DocMind AI? Rate us!',
+                    subtitle: 'Love DoCMind AI? Rate us!',
                     onTap: () => _launchUrl(AppConstants.appStoreReviewUrl),
                   ),
                   _SettingsTile(
@@ -283,16 +283,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
             // Account
             FadeInUp(
-              delay: const Duration(milliseconds: 500),
-              duration: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 250),
+              duration: const Duration(milliseconds: 300),
               child: _buildSectionTitle('Account', isDark),
             ),
 
             const SizedBox(height: 12),
 
             FadeInUp(
-              delay: const Duration(milliseconds: 600),
-              duration: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               child: _buildSettingsCard(
                 isDark: isDark,
                 colorScheme: colorScheme,
@@ -327,10 +327,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 32),
 
             FadeIn(
-              delay: const Duration(milliseconds: 700),
+              delay: const Duration(milliseconds: 350),
               child: Center(
                 child: Text(
-                  'DocMind AI v${AppConstants.appVersion}',
+                  'DoCMind AI v${AppConstants.appVersion}',
                   style: TextStyle(
                     fontSize: 13,
                     color: isDark
