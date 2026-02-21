@@ -83,6 +83,32 @@ class SubscriptionRepository {
     }
   }
 
+  Future<Either<String, VerifyPurchaseResponse>> restorePurchase({
+    required String receiptData,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        ApiConstants.restorePurchase,
+        data: {
+          'receipt_data': receiptData,
+        },
+      );
+
+      return Right(VerifyPurchaseResponse.fromJson(response.data));
+    } on DioException catch (e) {
+      final responseData = e.response?.data;
+      if (responseData is Map<String, dynamic>) {
+        final message = responseData['message'] as String?;
+        if (message != null) {
+          return Left(message);
+        }
+      }
+      return Left(e.error?.toString() ?? 'Restore failed');
+    } catch (e) {
+      return Left('An unexpected error occurred');
+    }
+  }
+
   Future<Either<String, void>> cancelSubscription() async {
     try {
       await _dioClient.post('${ApiConstants.subscription}/cancel');

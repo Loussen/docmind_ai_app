@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../constants/api_constants.dart';
+import '../constants/app_constants.dart';
 
 final dioClientProvider = Provider<DioClient>((ref) {
   return DioClient();
@@ -27,7 +28,7 @@ class DioClient {
     );
 
     _dio.interceptors.addAll([
-      _AuthInterceptor(_storage),
+      _DeviceInterceptor(_storage),
       _LoggingInterceptor(),
       _ErrorInterceptor(),
     ]);
@@ -35,7 +36,6 @@ class DioClient {
 
   Dio get dio => _dio;
 
-  // GET request
   Future<Response<T>> get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
@@ -50,7 +50,6 @@ class DioClient {
     );
   }
 
-  // POST request
   Future<Response<T>> post<T>(
     String path, {
     dynamic data,
@@ -67,7 +66,6 @@ class DioClient {
     );
   }
 
-  // PUT request
   Future<Response<T>> put<T>(
     String path, {
     dynamic data,
@@ -84,7 +82,6 @@ class DioClient {
     );
   }
 
-  // DELETE request
   Future<Response<T>> delete<T>(
     String path, {
     dynamic data,
@@ -101,7 +98,6 @@ class DioClient {
     );
   }
 
-  // Multipart file upload
   Future<Response<T>> uploadFile<T>(
     String path, {
     required FormData formData,
@@ -120,35 +116,21 @@ class DioClient {
   }
 }
 
-class _AuthInterceptor extends Interceptor {
+class _DeviceInterceptor extends Interceptor {
   final FlutterSecureStorage _storage;
 
-  _AuthInterceptor(this._storage);
+  _DeviceInterceptor(this._storage);
 
   @override
   void onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token = await _storage.read(key: 'auth_token');
-    if (token != null) {
-      options.headers['Authorization'] = 'Bearer $token';
+    final deviceId = await _storage.read(key: AppConstants.deviceIdKey);
+    if (deviceId != null) {
+      options.headers['X-Device-ID'] = deviceId;
     }
     handler.next(options);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401) {
-      // Don't clear tokens for logout endpoint (it's expected to fail if token is already invalid)
-      final isLogoutRequest = err.requestOptions.path.contains('/logout');
-      if (!isLogoutRequest) {
-        // Token expired - clear storage and redirect to login
-        await _storage.deleteAll();
-        // Navigation will be handled by auth state listener
-      }
-    }
-    handler.next(err);
   }
 }
 
@@ -226,7 +208,7 @@ class _ErrorInterceptor extends Interceptor {
       case 400:
         return 'Bad request. Please check your input.';
       case 401:
-        return 'Session expired. Please login again.';
+        return 'Device not registered. Please restart the app.';
       case 403:
         return 'Access denied.';
       case 404:

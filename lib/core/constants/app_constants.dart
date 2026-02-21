@@ -4,7 +4,7 @@ class AppConstants {
   // App Info
   static const String appName = 'DocMind AI';
   static const String appTagline = 'Smart Document Summarizer';
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '1.0.6';
   static const String appStoreId = '6757693350';
 
   // URLs
@@ -16,19 +16,14 @@ class AppConstants {
   static const String termsOfServiceUrl = 'https://docsmind.app/terms';
 
   // Storage Keys
-  static const String authTokenKey = 'auth_token';
-  static const String refreshTokenKey = 'refresh_token';
-  static const String userDataKey = 'user_data';
+  static const String deviceIdKey = 'device_id';
   static const String onboardingCompleteKey = 'onboarding_complete';
   static const String themeKey = 'app_theme';
 
   // Document Limits
-  static const int freeDocsPerDay = 3;
+  static const int freeDocsTotal = 2;
   static const int freePagesPerDoc = 5;
-  static const int proDocsPerDay = -1; // Unlimited
   static const int proPagesPerDoc = -1; // Unlimited
-  static const int proPlusDocsPerDay = -1; // Unlimited
-  static const int proPlusPagesPerDoc = -1; // Unlimited
 
   // File Size Limits (in MB)
   static const int maxFileSizeFree = 10;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/document/presentation/screens/upload_screen.dart';
@@ -11,8 +10,6 @@ import '../../features/summary/presentation/screens/summary_screen.dart';
 import '../../features/history/presentation/screens/history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/subscription/presentation/screens/subscription_screen.dart';
-import '../../features/guest/presentation/screens/guest_home_screen.dart';
-import '../../features/guest/presentation/screens/guest_summary_screen.dart';
 import '../shell/main_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -20,51 +17,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     debugLogDiagnostics: true,
     routes: [
-      // Splash Screen
       GoRoute(
         path: '/',
         name: 'splash',
         builder: (context, state) => const SplashScreen(),
-      ),
-
-      // Auth Routes
-      GoRoute(
-        path: '/login',
-        name: 'login',
-        builder: (context, state) => const LoginScreen(),
-      ),
-
-      // Guest Routes
-      GoRoute(
-        path: '/guest',
-        name: 'guest',
-        pageBuilder: (context, state) => CustomTransitionPage(
-          key: state.pageKey,
-          child: const GuestHomeScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-        ),
-      ),
-      GoRoute(
-        path: '/guest/summary',
-        name: 'guestSummary',
-        pageBuilder: (context, state) => CustomTransitionPage(
-          key: state.pageKey,
-          child: const GuestSummaryScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(1, 0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeOutCubic,
-              )),
-              child: child,
-            );
-          },
-        ),
       ),
 
       // Main Shell with Bottom Navigation
@@ -110,7 +66,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
-      // Document Routes (outside shell for full-screen experience)
       GoRoute(
         path: '/upload',
         name: 'upload',

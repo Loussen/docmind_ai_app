@@ -77,7 +77,7 @@ class SubscriptionState {
   bool get isProPlus =>
       subscription?.isProPlus == true && subscription?.isActive == true;
   bool get canUploadDocument =>
-      isPremium || (usage?.hasReachedDailyLimit != true);
+      isPremium || (usage?.hasReachedFreeLimit != true);
 }
 
 class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
@@ -149,11 +149,13 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
   void _onPurchaseUpdate(List<PurchaseDetails> purchases) async {
     for (final purchase in purchases) {
-      final isRestore = purchase.status == PurchaseStatus.restored;
+      // Use our own state to determine if this was a user-initiated restore,
+      // not Apple's PurchaseStatus (sandbox re-purchases come as "restored")
+      final userInitiatedRestore = state.isRestoring;
 
       if (purchase.status == PurchaseStatus.purchased ||
           purchase.status == PurchaseStatus.restored) {
-        await _verifyPurchase(purchase, isRestore: isRestore);
+        await _verifyPurchase(purchase, isRestore: userInitiatedRestore);
       } else if (purchase.status == PurchaseStatus.error) {
         state = state.copyWith(
           isPurchasing: false,
@@ -172,11 +174,19 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
   Future<void> _verifyPurchase(PurchaseDetails purchase,
       {bool isRestore = false}) async {
-    final result = await _subscriptionRepository.verifyPurchase(
-      productId: purchase.productID,
-      transactionId: purchase.purchaseID ?? '',
-      receiptData: purchase.verificationData.serverVerificationData,
-    );
+    final receiptData = purchase.verificationData.serverVerificationData;
+
+    // Always use verify endpoint - it handles both new and re-purchases.
+    // Only use restore endpoint when user explicitly tapped "Restore Purchases".
+    final result = isRestore
+        ? await _subscriptionRepository.restorePurchase(
+            receiptData: receiptData,
+          )
+        : await _subscriptionRepository.verifyPurchase(
+            productId: purchase.productID,
+            transactionId: purchase.purchaseID ?? '',
+            receiptData: receiptData,
+          );
 
     result.fold(
       (error) {
@@ -194,7 +204,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
             isRestoring: false,
             successMessage: isRestore
                 ? 'Purchase restored successfully!'
-                : 'Purchase completed successfully!',
+                : 'Subscription activated successfully!',
           );
         } else {
           state = state.copyWith(
@@ -340,5 +350,5 @@ final canUploadProvider = Provider<bool>((ref) {
 final remainingDocsProvider = Provider<int>((ref) {
   final subscriptionState = ref.watch(subscriptionProvider);
   if (subscriptionState.isPremium) return -1;
-  return subscriptionState.usage?.remainingDocs ?? AppConstants.freeDocsPerDay;
+  return subscriptionState.usage?.remainingFree ?? AppConstants.freeDocsTotal;
 });

@@ -1,17 +1,11 @@
 class ApiConstants {
   ApiConstants._();
 
-  // Base URL - Change this for production
-  // Use your Mac's local IP for testing on physical devices
   static const String baseUrl = 'https://docsmind.app/api';
 
-  // Auth Endpoints
-  static const String login = '/auth/login';
-  static const String register = '/auth/register';
-  static const String logout = '/auth/logout';
-  static const String refreshToken = '/auth/refresh';
-  static const String appleAuth = '/auth/apple';
-  static const String me = '/auth/me';
+  // Device Endpoints
+  static const String deviceRegister = '/device/register';
+  static const String deviceSync = '/device/sync';
 
   // Document Endpoints
   static const String documents = '/documents';
@@ -26,15 +20,13 @@ class ApiConstants {
       '/documents/$documentId/summarize';
 
   // User Endpoints
-  static const String profile = '/user/profile';
-  static const String updateProfile = '/user/profile';
-  static const String deleteAccount = '/user/account';
   static const String usage = '/user/usage';
   static const String settings = '/user/settings';
 
   // Subscription Endpoints
   static const String subscription = '/subscription';
   static const String verifyPurchase = '/subscription/verify';
+  static const String restorePurchase = '/subscription/restore';
   static const String plans = '/subscription/plans';
 
   // History

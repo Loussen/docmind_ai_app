@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../data/models/subscription_model.dart';
 import '../providers/subscription_provider.dart';
 
 class SubscriptionScreen extends ConsumerStatefulWidget {
@@ -366,7 +367,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Free plan includes 3 documents per day with up to 5 pages each.',
+                        'Free plan includes 2 documents with up to 5 pages each.',
                         style: TextStyle(
                           fontSize: 13,
                           color: AppColors.info,
@@ -491,9 +492,11 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     final period = _isYearly ? 'year' : 'month';
 
     // Determine button state based on current subscription
-    final currentPlan = subscriptionState.subscription?.plan;
-    final isCurrentPlan = _isCurrentPlan(currentPlan, planType, _isYearly);
-    final buttonInfo = _getButtonInfo(currentPlan, planType, title);
+    final subscription = subscriptionState.subscription;
+    final currentPlan = subscription?.plan;
+    final currentBillingIsYearly = subscription?.isYearly ?? false;
+    final isCurrentPlan = _isCurrentPlan(currentPlan, planType, _isYearly, currentBillingIsYearly);
+    final buttonInfo = _getButtonInfo(currentPlan, planType, title, _isYearly, currentBillingIsYearly);
     final isThisButtonPurchasing = _purchasingProductId == productId;
 
     return Container(
@@ -822,33 +825,48 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 
-  bool _isCurrentPlan(dynamic currentPlan, String planType, bool isYearly) {
+  bool _isCurrentPlan(dynamic currentPlan, String planType, bool tabIsYearly, bool currentBillingIsYearly) {
     if (currentPlan == null) return false;
+    if (tabIsYearly != currentBillingIsYearly) return false;
 
-    // Check if plan type matches (pro or pro_plus)
-    final currentPlanStr = currentPlan.toString().toLowerCase();
+    String currentPlanStr;
+    if (currentPlan is SubscriptionPlan) {
+      currentPlanStr = currentPlan.name;
+    } else {
+      currentPlanStr = currentPlan.toString().toLowerCase();
+    }
+
     if (planType == 'pro' && currentPlanStr == 'pro') return true;
     if (planType == 'pro_plus' &&
-        (currentPlanStr == 'pro_plus' || currentPlanStr == 'proplus'))
+        (currentPlanStr == 'pro_plus' || currentPlanStr == 'proPlus'))
       return true;
 
     return false;
   }
 
   _ButtonInfo _getButtonInfo(
-      dynamic currentPlan, String planType, String title) {
-    if (currentPlan == null) {
+      dynamic currentPlan, String planType, String title, bool tabIsYearly, bool currentBillingIsYearly) {
+    if (currentPlan == null || _getPlanLevel(_planStr(currentPlan)) == 0) {
       return _ButtonInfo(text: 'Get $title', icon: null, isDowngrade: false);
     }
 
-    final currentPlanStr = currentPlan.toString().toLowerCase();
+    final currentPlanStr = _planStr(currentPlan);
     final currentLevel = _getPlanLevel(currentPlanStr);
     final targetLevel = _getPlanLevel(planType);
 
-    if (currentLevel == targetLevel) {
+    // Exact same plan AND same billing period = current plan
+    if (currentLevel == targetLevel && tabIsYearly == currentBillingIsYearly) {
       return _ButtonInfo(
-          text: 'Current Plan', icon: Iconsax.tick_circle5, isDowngrade: false);
-    } else if (targetLevel > currentLevel) {
+          text: ' Current Plan', icon: Iconsax.tick_circle5, isDowngrade: false);
+    }
+
+    // Same plan type but different billing period = switch billing
+    if (currentLevel == targetLevel && tabIsYearly != currentBillingIsYearly) {
+      final label = tabIsYearly ? 'Switch to Yearly' : 'Switch to Monthly';
+      return _ButtonInfo(text: label, icon: Iconsax.refresh, isDowngrade: false);
+    }
+
+    if (targetLevel > currentLevel) {
       return _ButtonInfo(
           text: 'Upgrade to $title',
           icon: Iconsax.arrow_up_2,
@@ -861,18 +879,16 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     }
   }
 
+  String _planStr(dynamic plan) {
+    if (plan is SubscriptionPlan) return plan.name;
+    return plan.toString().toLowerCase();
+  }
+
   int _getPlanLevel(String plan) {
-    switch (plan.toLowerCase()) {
-      case 'free':
-        return 0;
-      case 'pro':
-        return 1;
-      case 'pro_plus':
-      case 'proplus':
-        return 2;
-      default:
-        return 0;
-    }
+    final p = plan.toLowerCase();
+    if (p == 'pro') return 1;
+    if (p == 'pro_plus' || p == 'proplus') return 2;
+    return 0;
   }
 
   void _purchasePlan(String productId, bool isDowngrade) {

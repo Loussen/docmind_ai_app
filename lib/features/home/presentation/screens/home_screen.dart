@@ -5,7 +5,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../document/presentation/providers/document_provider.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../widgets/document_card.dart';
@@ -42,7 +41,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
     
-    final user = ref.watch(currentUserProvider);
     final documentsState = ref.watch(documentsProvider);
     final subscriptionState = ref.watch(subscriptionProvider);
     final recentDocs = ref.watch(recentDocumentsProvider);
@@ -66,7 +64,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hello, ${user?.name ?? 'there'}',
+                      'Hello, there',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,

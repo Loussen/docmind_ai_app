@@ -36,7 +36,8 @@ class SubscriptionModel with _$SubscriptionModel {
 
   const factory SubscriptionModel({
     required String id,
-    @JsonKey(name: 'user_id') required int userId,
+    @JsonKey(name: 'user_id') int? userId,
+    @JsonKey(name: 'device_id') String? deviceId,
     required SubscriptionPlan plan,
     required SubscriptionStatus status,
     @JsonKey(name: 'billing_period')
@@ -63,16 +64,6 @@ class SubscriptionModel with _$SubscriptionModel {
   bool get isFree => plan == SubscriptionPlan.free;
   bool get isYearly => billingPeriod == BillingPeriod.yearly;
   bool get isMonthly => billingPeriod == BillingPeriod.monthly;
-
-  int get docsPerDay {
-    switch (plan) {
-      case SubscriptionPlan.free:
-        return 3;
-      case SubscriptionPlan.pro:
-      case SubscriptionPlan.proPlus:
-        return -1; // Unlimited
-    }
-  }
 
   int get pagesPerDoc {
     switch (plan) {
@@ -107,25 +98,24 @@ class UsageModel with _$UsageModel {
   const UsageModel._();
 
   const factory UsageModel({
-    @JsonKey(name: 'daily_docs_used') required int dailyDocsUsed,
-    @JsonKey(name: 'daily_docs_limit') required int dailyDocsLimit,
+    @JsonKey(name: 'total_used') required int totalUsed,
+    @JsonKey(name: 'free_limit') required int freeLimit,
+    @JsonKey(name: 'is_premium') required bool isPremium,
     @JsonKey(name: 'total_docs_processed') required int totalDocsProcessed,
     @JsonKey(name: 'total_summaries_generated')
     required int totalSummariesGenerated,
-    @JsonKey(name: 'last_reset_date') required DateTime lastResetDate,
   }) = _UsageModel;
 
   factory UsageModel.fromJson(Map<String, dynamic> json) =>
       _$UsageModelFromJson(json);
 
-  bool get hasReachedDailyLimit =>
-      dailyDocsLimit > 0 && dailyDocsUsed >= dailyDocsLimit;
+  bool get hasReachedFreeLimit => !isPremium && totalUsed >= freeLimit;
 
-  int get remainingDocs =>
-      dailyDocsLimit > 0 ? dailyDocsLimit - dailyDocsUsed : -1;
+  int get remainingFree =>
+      isPremium ? -1 : (freeLimit - totalUsed).clamp(0, freeLimit);
 
   double get usagePercentage =>
-      dailyDocsLimit > 0 ? dailyDocsUsed / dailyDocsLimit : 0;
+      freeLimit > 0 ? (totalUsed / freeLimit).clamp(0.0, 1.0) : 0;
 }
 
 @freezed

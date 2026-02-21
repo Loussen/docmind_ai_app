@@ -21,6 +21,14 @@ class UploadScreen extends ConsumerStatefulWidget {
 
 class _UploadScreenState extends ConsumerState<UploadScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(uploadProvider.notifier).reset();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final uploadState = ref.watch(uploadProvider);
     final canUpload = ref.watch(canUploadProvider);
@@ -162,7 +170,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                   Text(
                     canUpload
                         ? 'AI will extract and summarize content'
-                        : 'Daily limit reached. Upgrade to continue',
+                        : 'Free limit reached. Upgrade to continue',
                     style: const TextStyle(
                       fontSize: 13,
                       color: AppColors.info,
@@ -506,11 +514,11 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
           children: [
             Icon(Iconsax.crown5, color: AppColors.secondary),
             SizedBox(width: 8),
-            Text('Daily Limit Reached'),
+            Text('Free Limit Reached'),
           ],
         ),
         content: const Text(
-          'You\'ve used all your free documents for today. Upgrade to Pro for unlimited access!',
+          'You\'ve used all your free documents. Upgrade to Pro for unlimited access!',
         ),
         actions: [
           TextButton(

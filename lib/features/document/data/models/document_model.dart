@@ -31,7 +31,8 @@ class DocumentModel with _$DocumentModel {
 
   const factory DocumentModel({
     required String id,
-    @JsonKey(name: 'user_id') required int userId,
+    @JsonKey(name: 'user_id') int? userId,
+    @JsonKey(name: 'device_id') String? deviceId,
     @JsonKey(name: 'file_name') required String fileName,
     @JsonKey(name: 'original_name') required String originalName,
     required DocumentType type,

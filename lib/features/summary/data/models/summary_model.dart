@@ -10,7 +10,8 @@ class SummaryModel with _$SummaryModel {
   const factory SummaryModel({
     required String id,
     @JsonKey(name: 'document_id') required String documentId,
-    @JsonKey(name: 'user_id') required int userId,
+    @JsonKey(name: 'user_id') int? userId,
+    @JsonKey(name: 'device_id') String? deviceId,
     required String title,
     required String overview,
     @JsonKey(name: 'key_points') required List<String> keyPoints,

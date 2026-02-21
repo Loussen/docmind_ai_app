@@ -100,10 +100,11 @@ class UsageCard extends StatelessWidget {
   }
 
   Widget _buildFreeCard(ThemeData theme, bool isDark) {
-    final used = usage?.dailyDocsUsed ?? 0;
-    final limit = usage?.dailyDocsLimit ?? AppConstants.freeDocsPerDay;
+    final used = usage?.totalUsed ?? 0;
+    final limit = usage?.freeLimit ?? AppConstants.freeDocsTotal;
     final remaining = (limit - used).clamp(0, limit);
     final progress = limit > 0 ? (used / limit).clamp(0.0, 1.0) : 0.0;
+    final limitReached = remaining <= 0;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -128,7 +129,7 @@ class UsageCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Daily Usage',
+                'Free Plan',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -141,17 +142,17 @@ class UsageCard extends StatelessWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: remaining > 0
+                  color: !limitReached
                       ? AppColors.successLight
                       : AppColors.errorLight,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  '$remaining left',
+                  limitReached ? 'No free docs left' : '$remaining free left',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: remaining > 0
+                    color: !limitReached
                         ? AppColors.success
                         : AppColors.error,
                   ),
@@ -161,7 +162,6 @@ class UsageCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           
-          // Progress Bar
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: LinearProgressIndicator(
@@ -169,7 +169,7 @@ class UsageCard extends StatelessWidget {
               minHeight: 8,
               backgroundColor: isDark ? AppColors.dividerDark : AppColors.divider,
               valueColor: AlwaysStoppedAnimation<Color>(
-                progress >= 1.0 ? AppColors.error : theme.colorScheme.primary,
+                limitReached ? AppColors.error : theme.colorScheme.primary,
               ),
             ),
           ),
@@ -179,7 +179,9 @@ class UsageCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '$used of $limit documents used today',
+                limitReached
+                    ? 'Upgrade for unlimited access'
+                    : '$used of $limit free documents used',
                 style: TextStyle(
                   fontSize: 13,
                   color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,

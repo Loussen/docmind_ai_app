@@ -7,8 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../auth/data/models/user_model.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../providers/settings_provider.dart';
 
@@ -34,11 +32,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
 
-    final user = ref.watch(currentUserProvider);
     final subscriptionState = ref.watch(subscriptionProvider);
     final settingsState = ref.watch(settingsProvider);
 
-    // Listen for subscription state changes (restore purchases, etc.)
     ref.listen<SubscriptionState>(subscriptionProvider, (previous, next) {
       if (next.errorMessage != null &&
           next.errorMessage != previous?.errorMessage) {
@@ -91,99 +87,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Profile Card
-            FadeInDown(
-              duration: const Duration(milliseconds: 500),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                decoration: BoxDecoration(
-                  color: colorScheme.surface,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isDark ? AppColors.dividerDark : AppColors.divider,
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        gradient: AppColors.primaryGradient,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Center(
-                        child: Text(
-                          user?.name?.isNotEmpty == true
-                              ? user!.name![0].toUpperCase()
-                              : user?.email[0].toUpperCase() ?? 'U',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            user?.name ?? 'User',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: colorScheme.onSurface,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            user?.email ?? '',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: isDark
-                                  ? AppColors.textSecondaryDark
-                                  : AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () => _showEditProfileDialog(context, ref, user),
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          constraints: const BoxConstraints(
-                            minWidth: 40,
-                            minHeight: 40,
-                          ),
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Iconsax.edit_2,
-                            color: colorScheme.primary,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
             // Subscription Card
-            FadeInUp(
-              delay: const Duration(milliseconds: 100),
+            FadeInDown(
               duration: const Duration(milliseconds: 500),
               child: GestureDetector(
                 onTap: () => context.push('/subscription'),
@@ -278,9 +183,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
             const SizedBox(height: 32),
 
-            // Settings Sections
+            // Preferences
             FadeInUp(
-              delay: const Duration(milliseconds: 200),
+              delay: const Duration(milliseconds: 100),
               duration: const Duration(milliseconds: 500),
               child: _buildSectionTitle('Preferences', isDark),
             ),
@@ -288,7 +193,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 12),
 
             FadeInUp(
-              delay: const Duration(milliseconds: 300),
+              delay: const Duration(milliseconds: 200),
               duration: const Duration(milliseconds: 500),
               child: _buildSettingsCard(
                 isDark: isDark,
@@ -333,8 +238,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
             const SizedBox(height: 24),
 
+            // Support
             FadeInUp(
-              delay: const Duration(milliseconds: 400),
+              delay: const Duration(milliseconds: 300),
               duration: const Duration(milliseconds: 500),
               child: _buildSectionTitle('Support', isDark),
             ),
@@ -342,7 +248,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 12),
 
             FadeInUp(
-              delay: const Duration(milliseconds: 500),
+              delay: const Duration(milliseconds: 400),
               duration: const Duration(milliseconds: 500),
               child: _buildSettingsCard(
                 isDark: isDark,
@@ -375,8 +281,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
             const SizedBox(height: 24),
 
+            // Account
             FadeInUp(
-              delay: const Duration(milliseconds: 600),
+              delay: const Duration(milliseconds: 500),
               duration: const Duration(milliseconds: 500),
               child: _buildSectionTitle('Account', isDark),
             ),
@@ -384,7 +291,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 12),
 
             FadeInUp(
-              delay: const Duration(milliseconds: 700),
+              delay: const Duration(milliseconds: 600),
               duration: const Duration(milliseconds: 500),
               child: _buildSettingsCard(
                 isDark: isDark,
@@ -413,27 +320,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                 .restorePurchases();
                           },
                   ),
-                  _SettingsTile(
-                    icon: Iconsax.logout,
-                    title: 'Sign Out',
-                    titleColor: AppColors.error,
-                    onTap: () => _showLogoutDialog(context, ref),
-                  ),
-                  _SettingsTile(
-                    icon: Iconsax.trash,
-                    title: 'Delete Account',
-                    titleColor: AppColors.error,
-                    onTap: () => _showDeleteAccountDialog(context, ref),
-                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 32),
 
-            // App Version
             FadeIn(
-              delay: const Duration(milliseconds: 800),
+              delay: const Duration(milliseconds: 700),
               child: Center(
                 child: Text(
                   'DocMind AI v${AppConstants.appVersion}',
@@ -557,782 +451,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
-
-  void _showEditProfileDialog(
-      BuildContext context, WidgetRef ref, UserModel? user) {
-    if (user == null) return;
-
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final nameController = TextEditingController(text: user.name ?? '');
-    final parentContext = context; // Store parent context for snackbar
-
-    showDialog(
-      context: context,
-      barrierColor: Colors.black.withOpacity(0.5),
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          bool isSaving = false;
-
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.all(24),
-            child: Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Header
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: isDark
-                              ? AppColors.dividerDark
-                              : AppColors.divider,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Iconsax.profile_circle,
-                            color: AppColors.primary,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Edit Profile',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Update your personal information',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: isDark
-                                      ? AppColors.textTertiaryDark
-                                      : AppColors.textTertiary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Iconsax.close_circle),
-                          color: isDark
-                              ? AppColors.textTertiaryDark
-                              : AppColors.textTertiary,
-                          onPressed: () => Navigator.pop(dialogContext),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Content
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Email Field (Read-only)
-                        Text(
-                          'Email',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? AppColors.inputBackgroundDark
-                                : AppColors.inputBackground,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Iconsax.sms,
-                                size: 18,
-                                color: AppColors.textTertiary,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  user.email,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: isDark
-                                        ? AppColors.textTertiaryDark
-                                        : AppColors.textTertiary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Name Field
-                        Text(
-                          'Name',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        TextField(
-                          controller: nameController,
-                          enabled: !isSaving,
-                          decoration: InputDecoration(
-                            hintText: 'Enter your name',
-                            prefixIcon: const Icon(
-                              Iconsax.user,
-                              size: 18,
-                            ),
-                            filled: true,
-                            fillColor: isDark
-                                ? AppColors.inputBackgroundDark
-                                : AppColors.inputBackground,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide(
-                                color: AppColors.primary,
-                                width: 2,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 14,
-                            ),
-                          ),
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                          maxLength: 50,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Email cannot be changed',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: isDark
-                                ? AppColors.textTertiaryDark
-                                : AppColors.textTertiary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Actions
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: isDark
-                              ? AppColors.dividerDark
-                              : AppColors.divider,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: isSaving
-                                ? null
-                                : () => Navigator.pop(dialogContext),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              side: BorderSide(
-                                color: isDark
-                                    ? AppColors.dividerDark
-                                    : AppColors.divider,
-                              ),
-                            ),
-                            child: const Text('Cancel'),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          flex: 2,
-                          child: ElevatedButton(
-                            onPressed: isSaving
-                                ? null
-                                : () async {
-                                    final newName = nameController.text.trim();
-
-                                    if (newName == (user.name ?? '')) {
-                                      Navigator.pop(dialogContext);
-                                      return;
-                                    }
-
-                                    setDialogState(() => isSaving = true);
-
-                                    final success = await ref
-                                        .read(authProvider.notifier)
-                                        .updateProfile(
-                                          name:
-                                              newName.isEmpty ? null : newName,
-                                        );
-
-                                    if (dialogContext.mounted) {
-                                      Navigator.pop(dialogContext);
-                                    }
-
-                                    if (parentContext.mounted) {
-                                      ScaffoldMessenger.of(parentContext)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Row(
-                                            children: [
-                                              Icon(
-                                                success
-                                                    ? Iconsax.tick_circle
-                                                    : Iconsax.close_circle,
-                                                color: Colors.white,
-                                                size: 20,
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Expanded(
-                                                child: Text(
-                                                  success
-                                                      ? 'Profile updated successfully'
-                                                      : 'Failed to update profile',
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          backgroundColor: success
-                                              ? AppColors.success
-                                              : AppColors.error,
-                                          behavior: SnackBarBehavior.floating,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          margin: const EdgeInsets.all(16),
-                                          duration: const Duration(seconds: 3),
-                                        ),
-                                      );
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                            child: isSaving
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                : const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Iconsax.tick_circle, size: 18),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        'Save Changes',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final parentContext = context; // Store settings screen context
-
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        backgroundColor: theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(
-          'Sign Out',
-          style: TextStyle(color: theme.colorScheme.onSurface),
-        ),
-        content: Text(
-          'Are you sure you want to sign out?',
-          style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.8)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(dialogContext);
-              await ref.read(authProvider.notifier).logout();
-              if (parentContext.mounted) {
-                parentContext.go('/login');
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-            ),
-            child: const Text('Sign Out'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final parentContext = context;
-
-    showDialog(
-      context: context,
-      barrierColor: Colors.black.withOpacity(0.5),
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          bool isDeleting = false;
-
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.all(24),
-            child: Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Header with warning icon
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: AppColors.error.withOpacity(0.1),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: AppColors.error.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: const Icon(
-                            Iconsax.warning_2,
-                            color: AppColors.error,
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Delete Account',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.error,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'This action cannot be undone',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: isDark
-                                      ? AppColors.textTertiaryDark
-                                      : AppColors.textTertiary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Iconsax.close_circle),
-                          color: isDark
-                              ? AppColors.textTertiaryDark
-                              : AppColors.textTertiary,
-                          onPressed: isDeleting
-                              ? null
-                              : () => Navigator.pop(dialogContext),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Content
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Are you sure you want to delete your account?',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'By deleting your account, you will:',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: isDark
-                                ? AppColors.textSecondaryDark
-                                : AppColors.textSecondary,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildDeleteWarningItem(
-                          'Permanently lose all your documents',
-                          isDark,
-                        ),
-                        _buildDeleteWarningItem(
-                          'Lose all saved summaries',
-                          isDark,
-                        ),
-                        _buildDeleteWarningItem(
-                          'Cancel any active subscription',
-                          isDark,
-                        ),
-                        _buildDeleteWarningItem(
-                          'Lose access to your account forever',
-                          isDark,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Actions
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color:
-                              isDark ? AppColors.dividerDark : AppColors.divider,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: isDeleting
-                                ? null
-                                : () => Navigator.pop(dialogContext),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              side: BorderSide(
-                                color: isDark
-                                    ? AppColors.dividerDark
-                                    : AppColors.divider,
-                              ),
-                            ),
-                            child: const Text('Cancel'),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          flex: 2,
-                          child: ElevatedButton(
-                            onPressed: isDeleting
-                                ? null
-                                : () async {
-                                    setDialogState(() => isDeleting = true);
-
-                                    final success = await ref
-                                        .read(authProvider.notifier)
-                                        .deleteAccount();
-
-                                    if (dialogContext.mounted) {
-                                      Navigator.pop(dialogContext);
-                                    }
-
-                                    if (parentContext.mounted) {
-                                      if (success) {
-                                        parentContext.go('/login');
-                                        ScaffoldMessenger.of(parentContext)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: const Row(
-                                              children: [
-                                                Icon(Iconsax.tick_circle,
-                                                    color: Colors.white,
-                                                    size: 20),
-                                                SizedBox(width: 12),
-                                                Expanded(
-                                                  child: Text(
-                                                      'Account deleted successfully'),
-                                                ),
-                                              ],
-                                            ),
-                                            backgroundColor: AppColors.success,
-                                            behavior: SnackBarBehavior.floating,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            margin: const EdgeInsets.all(16),
-                                          ),
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(parentContext)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: const Row(
-                                              children: [
-                                                Icon(Iconsax.close_circle,
-                                                    color: Colors.white,
-                                                    size: 20),
-                                                SizedBox(width: 12),
-                                                Expanded(
-                                                  child: Text(
-                                                      'Failed to delete account'),
-                                                ),
-                                              ],
-                                            ),
-                                            backgroundColor: AppColors.error,
-                                            behavior: SnackBarBehavior.floating,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            margin: const EdgeInsets.all(16),
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.error,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                            child: isDeleting
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                : const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Iconsax.trash, size: 18),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        'Delete Account',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildDeleteWarningItem(String text, bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          Icon(
-            Iconsax.close_circle,
-            size: 16,
-            color: AppColors.error.withOpacity(0.7),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                color: isDark
-                    ? AppColors.textSecondaryDark
-                    : AppColors.textSecondary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // TODO: Uncomment when language feature is ready
-  // String _getLanguageName(String code) {
-  //   switch (code) {
-  //     case 'en':
-  //       return 'English';
-  //     case 'az':
-  //       return 'Azərbaycan';
-  //     case 'ru':
-  //       return 'Русский';
-  //     case 'tr':
-  //       return 'Türkçe';
-  //     default:
-  //       return 'English';
-  //   }
-  // }
-
-  // void _showLanguageDialog(BuildContext context, WidgetRef ref,
-  //     String currentLanguage, bool isDark) {
-  //   final theme = Theme.of(context);
-  //   final languages = [
-  //     ('en', 'English'),
-  //     ('az', 'Azərbaycan'),
-  //     ('ru', 'Русский'),
-  //     ('tr', 'Türkçe'),
-  //   ];
-
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       backgroundColor: theme.colorScheme.surface,
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-  //       title: Text(
-  //         'Select Language',
-  //         style: TextStyle(color: theme.colorScheme.onSurface),
-  //       ),
-  //       content: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: languages.map((lang) {
-  //           final isSelected = lang.$1 == currentLanguage;
-  //           return ListTile(
-  //             title: Text(
-  //               lang.$2,
-  //               style: TextStyle(
-  //                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-  //                 color: isSelected
-  //                     ? theme.colorScheme.primary
-  //                     : theme.colorScheme.onSurface,
-  //               ),
-  //             ),
-  //             trailing: isSelected
-  //                 ? Icon(Iconsax.tick_circle5, color: theme.colorScheme.primary)
-  //                 : null,
-  //             onTap: () {
-  //               Navigator.pop(context);
-  //               ref.read(settingsProvider.notifier).setLanguage(lang.$1);
-  //             },
-  //           );
-  //         }).toList(),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
 
 class _SettingsTile {
