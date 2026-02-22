@@ -34,6 +34,6 @@ class ApiConstants {
 
   // Timeout durations
   static const Duration connectionTimeout = Duration(seconds: 30);
-  static const Duration receiveTimeout = Duration(seconds: 30);
+  static const Duration receiveTimeout = Duration(seconds: 120);
   static const Duration uploadTimeout = Duration(seconds: 120);
 }
