@@ -4,8 +4,18 @@ class AppConstants {
   // App Info
   static const String appName = 'DoCMind AI';
   static const String appTagline = 'OCR, Doc & AI Summarizer';
-  static const String appVersion = '1.0.7';
+  static const String appVersion = '1.0.8';
   static const String appStoreId = '6757693350';
+
+  /// What's New text for 1.0.8 (App Store / in-app release notes)
+  static const String whatsNew1_0_8 = '''
+• Document preview — View your original PDFs and images right in the app. Open any item from History to see the full document.
+• Faster summaries — AI responses are quicker thanks to improved backend processing.
+• Clearer loading — Step-by-step progress (Upload → Extract → Analyze) so you know exactly what’s happening while your document is processed.
+• History thumbnails — PDF and image previews in the list so you can spot the right file at a glance.
+• Delete feedback — Confirmation and success message when you delete a document.
+• General performance and stability improvements.
+''';
 
   // URLs
   static const String appStoreUrl = 'https://apps.apple.com/app/id6757693350';

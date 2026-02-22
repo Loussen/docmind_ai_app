@@ -328,14 +328,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
             FadeIn(
               delay: const Duration(milliseconds: 350),
-              child: Center(
-                child: Text(
-                  'DoCMind AI v${AppConstants.appVersion}',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: isDark
-                        ? AppColors.textTertiaryDark
-                        : AppColors.textTertiary,
+              child: GestureDetector(
+                onTap: () => _showWhatsNewDialog(context, isDark),
+                child: Center(
+                  child: Text(
+                    'DoCMind AI v${AppConstants.appVersion}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark
+                          ? AppColors.textTertiaryDark
+                          : AppColors.textTertiary,
+                    ),
                   ),
                 ),
               ),
@@ -441,6 +444,35 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ],
           );
         }).toList(),
+      ),
+    );
+  }
+
+  void _showWhatsNewDialog(BuildContext context, bool isDark) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          'What\'s New in v${AppConstants.appVersion}',
+          style: TextStyle(color: isDark ? AppColors.textLight : AppColors.textPrimary),
+        ),
+        content: SingleChildScrollView(
+          child: Text(
+            AppConstants.whatsNew1_0_8.trim(),
+            style: TextStyle(
+              fontSize: 14,
+              height: 1.5,
+              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
       ),
     );
   }

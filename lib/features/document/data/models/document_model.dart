@@ -42,6 +42,8 @@ class DocumentModel with _$DocumentModel {
     @JsonKey(name: 'file_path') String? filePath,
     @JsonKey(name: 'extracted_text') String? extractedText,
     @JsonKey(name: 'thumbnail_url') String? thumbnailUrl,
+    @JsonKey(name: 'preview_url') String? previewUrl,
+    @JsonKey(name: 'file_url') String? fileUrl,
     @JsonKey(name: 'summary_id') String? summaryId,
     @JsonKey(name: 'error_message') String? errorMessage,
     @JsonKey(name: 'created_at') required DateTime createdAt,

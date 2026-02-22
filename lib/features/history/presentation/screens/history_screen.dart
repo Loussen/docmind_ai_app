@@ -182,6 +182,16 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         ref
                             .read(documentsProvider.notifier)
                             .deleteDocument(document.id);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Document deleted'),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            backgroundColor: AppColors.success,
+                          ),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 12),

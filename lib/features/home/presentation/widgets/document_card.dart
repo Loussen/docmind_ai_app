@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../document/data/models/document_model.dart';
 
-class DocumentCard extends StatelessWidget {
+final _deviceIdProvider = FutureProvider<String?>((ref) async {
+  const storage = FlutterSecureStorage();
+  return storage.read(key: AppConstants.deviceIdKey);
+});
+
+class DocumentCard extends ConsumerWidget {
   final DocumentModel document;
   final VoidCallback onTap;
   final VoidCallback? onDelete;
@@ -18,14 +27,14 @@ class DocumentCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        constraints: const BoxConstraints(minHeight: 88),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
@@ -40,111 +49,170 @@ class DocumentCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          children: [
-            // File Type Icon
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: _getTypeColor().withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                _getTypeIcon(),
-                color: _getTypeColor(),
-                size: 24,
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              _buildPreview(isDark, ref),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      document.originalName,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        _buildTypeBadge(),
+                        const SizedBox(width: 8),
+                        Text(
+                          document.fileSizeFormatted,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: isDark
+                                ? AppColors.textTertiaryDark
+                                : AppColors.textTertiary,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${document.pageCount} pg',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: isDark
+                                ? AppColors.textTertiaryDark
+                                : AppColors.textTertiary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _formatDate(document.createdAt),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: isDark
+                            ? AppColors.textTertiaryDark
+                            : AppColors.textTertiary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(width: 14),
-            
-            // Document Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    document.originalName,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Text(
-                        document.fileExtension,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: _getTypeColor(),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        width: 4,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? AppColors.textTertiaryDark
-                              : AppColors.textTertiary,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        document.fileSizeFormatted,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: isDark
-                              ? AppColors.textTertiaryDark
-                              : AppColors.textTertiary,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        width: 4,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? AppColors.textTertiaryDark
-                              : AppColors.textTertiary,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${document.pageCount} pages',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: isDark
-                              ? AppColors.textTertiaryDark
-                              : AppColors.textTertiary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _formatDate(document.createdAt),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDark
-                          ? AppColors.textTertiaryDark
-                          : AppColors.textTertiary,
-                    ),
-                  ),
-                ],
-              ),
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: _buildStatusIndicator(isDark, theme.colorScheme),
             ),
-            
-            // Status or Arrow
-            _buildStatusIndicator(isDark, theme.colorScheme),
           ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPreview(bool isDark, WidgetRef ref) {
+    final hasPreview = document.previewUrl != null && document.previewUrl!.isNotEmpty;
+    final isImage = document.type == DocumentType.image;
+
+    if (hasPreview && (isImage || document.type == DocumentType.pdf)) {
+      final deviceId = ref.watch(_deviceIdProvider).valueOrNull;
+
+      return ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(15),
+          bottomLeft: Radius.circular(15),
+        ),
+        child: SizedBox(
+          width: 72,
+          child: CachedNetworkImage(
+            imageUrl: document.previewUrl!,
+            httpHeaders: {
+              if (deviceId != null) 'X-Device-ID': deviceId,
+            },
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Container(
+              color: _getTypeColor().withOpacity(0.08),
+              child: Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      _getTypeColor().withOpacity(0.5),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            errorWidget: (context, url, error) =>
+                _buildFallbackPreview(isDark),
+          ),
+        ),
+      );
+    }
+
+    return _buildFallbackPreview(isDark);
+  }
+
+  Widget _buildFallbackPreview(bool isDark) {
+    return Container(
+      width: 72,
+      decoration: BoxDecoration(
+        color: _getTypeColor().withOpacity(isDark ? 0.15 : 0.08),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(15),
+          bottomLeft: Radius.circular(15),
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            _getTypeIcon(),
+            color: _getTypeColor(),
+            size: 28,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            document.fileExtension,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: _getTypeColor(),
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTypeBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: _getTypeColor().withOpacity(0.1),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        document.fileExtension,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
+          color: _getTypeColor(),
         ),
       ),
     );
@@ -182,7 +250,7 @@ class DocumentCard extends StatelessWidget {
 
     if (document.hasSummary) {
       return Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           color: AppColors.successLight,
           borderRadius: BorderRadius.circular(8),
@@ -190,7 +258,7 @@ class DocumentCard extends StatelessWidget {
         child: const Icon(
           Iconsax.tick_circle5,
           color: AppColors.success,
-          size: 18,
+          size: 16,
         ),
       );
     }
@@ -244,4 +312,3 @@ class DocumentCard extends StatelessWidget {
     return DateFormat('MMM d, yyyy').format(date);
   }
 }
-

@@ -321,14 +321,43 @@ class SummaryScreen extends ConsumerWidget {
                   ),
                 ],
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
+
+                // View Original Document Button
+                FadeInUp(
+                  delay: const Duration(milliseconds: 350),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton.icon(
+                      onPressed: () =>
+                          context.push('/document/${summary.documentId}'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      icon: const Icon(Iconsax.eye),
+                      label: const Text(
+                        'View Original Document',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
 
                 // Copy to Clipboard Button
                 FadeInUp(
                   delay: const Duration(milliseconds: 400),
                   child: SizedBox(
                     width: double.infinity,
-                    height: 56,
+                    height: 52,
                     child: OutlinedButton.icon(
                       onPressed: () => _copySummary(context, summary.overview),
                       icon: const Icon(Iconsax.copy),

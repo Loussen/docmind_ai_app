@@ -4,8 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/document_model.dart';
 import '../../data/repositories/document_repository.dart';
 
-// Upload state
-enum UploadStatus { idle, selecting, uploading, processing, success, error }
+enum UploadStatus { idle, selecting, uploading, processing, analyzing, success, error }
+
+enum ProcessingStep { upload, extractText, analyze, complete }
 
 class UploadState {
   final UploadStatus status;
@@ -14,6 +15,7 @@ class UploadState {
   final double uploadProgress;
   final DocumentModel? uploadedDocument;
   final String? errorMessage;
+  final ProcessingStep currentStep;
 
   const UploadState({
     this.status = UploadStatus.idle,
@@ -22,6 +24,7 @@ class UploadState {
     this.uploadProgress = 0,
     this.uploadedDocument,
     this.errorMessage,
+    this.currentStep = ProcessingStep.upload,
   });
 
   UploadState copyWith({
@@ -31,6 +34,7 @@ class UploadState {
     double? uploadProgress,
     DocumentModel? uploadedDocument,
     String? errorMessage,
+    ProcessingStep? currentStep,
   }) {
     return UploadState(
       status: status ?? this.status,
@@ -39,11 +43,13 @@ class UploadState {
       uploadProgress: uploadProgress ?? this.uploadProgress,
       uploadedDocument: uploadedDocument ?? this.uploadedDocument,
       errorMessage: errorMessage ?? this.errorMessage,
+      currentStep: currentStep ?? this.currentStep,
     );
   }
 
   bool get isUploading => status == UploadStatus.uploading;
-  bool get isProcessing => status == UploadStatus.processing;
+  bool get isProcessing => status == UploadStatus.processing || status == UploadStatus.analyzing;
+  bool get isWorking => isUploading || isProcessing;
   bool get hasFile => selectedFile != null;
 }
 
@@ -63,7 +69,11 @@ class UploadNotifier extends StateNotifier<UploadState> {
   Future<DocumentModel?> uploadDocument() async {
     if (state.selectedFile == null) return null;
 
-    state = state.copyWith(status: UploadStatus.uploading, uploadProgress: 0);
+    state = state.copyWith(
+      status: UploadStatus.uploading,
+      uploadProgress: 0,
+      currentStep: ProcessingStep.upload,
+    );
 
     final result = await _documentRepository.uploadDocument(
       file: state.selectedFile!,
@@ -83,11 +93,26 @@ class UploadNotifier extends StateNotifier<UploadState> {
       },
       (document) {
         state = state.copyWith(
-          status: UploadStatus.success,
+          status: UploadStatus.processing,
           uploadedDocument: document,
+          currentStep: ProcessingStep.extractText,
         );
         return document;
       },
+    );
+  }
+
+  void setAnalyzing() {
+    state = state.copyWith(
+      status: UploadStatus.analyzing,
+      currentStep: ProcessingStep.analyze,
+    );
+  }
+
+  void setComplete() {
+    state = state.copyWith(
+      status: UploadStatus.success,
+      currentStep: ProcessingStep.complete,
     );
   }
 
