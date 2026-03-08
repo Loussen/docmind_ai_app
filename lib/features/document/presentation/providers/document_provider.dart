@@ -123,6 +123,13 @@ class UploadNotifier extends StateNotifier<UploadState> {
   void clearError() {
     state = state.copyWith(errorMessage: null, status: UploadStatus.idle);
   }
+
+  void setError(String message) {
+    state = state.copyWith(
+      status: UploadStatus.error,
+      errorMessage: message,
+    );
+  }
 }
 
 final uploadProvider = StateNotifierProvider<UploadNotifier, UploadState>((ref) {

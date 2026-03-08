@@ -19,6 +19,15 @@ class ApiConstants {
   static String generateSummary(String documentId) =>
       '/documents/$documentId/summarize';
 
+  // Auth Endpoints
+  static const String login = '/auth/login';
+  static const String register = '/auth/register';
+  static const String appleAuth = '/auth/apple';
+  static const String me = '/auth/me';
+  static const String updateProfile = '/auth/profile';
+  static const String logout = '/auth/logout';
+  static const String deleteAccount = '/auth/account';
+
   // User Endpoints
   static const String usage = '/user/usage';
   static const String settings = '/user/settings';

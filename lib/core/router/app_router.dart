@@ -69,22 +69,30 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/upload',
         name: 'upload',
-        pageBuilder: (context, state) => CustomTransitionPage(
-          key: state.pageKey,
-          child: const UploadScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 1),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeOutCubic,
-              )),
-              child: child,
-            );
-          },
-        ),
+        pageBuilder: (context, state) {
+          final extra = state.extra is Map ? state.extra as Map : null;
+          final initialFilePath = extra?['path'] as String?;
+          final initialFileName = extra?['fileName'] as String?;
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: UploadScreen(
+              initialFilePath: initialFilePath,
+              initialFileName: initialFileName,
+            ),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 1),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeOutCubic,
+                )),
+                child: child,
+              );
+            },
+          );
+        },
       ),
 
       GoRoute(

@@ -14,7 +14,14 @@ import '../../../summary/presentation/providers/summary_provider.dart';
 import '../providers/document_provider.dart';
 
 class UploadScreen extends ConsumerStatefulWidget {
-  const UploadScreen({super.key});
+  final String? initialFilePath;
+  final String? initialFileName;
+
+  const UploadScreen({
+    super.key,
+    this.initialFilePath,
+    this.initialFileName,
+  });
 
   @override
   ConsumerState<UploadScreen> createState() => _UploadScreenState();
@@ -37,7 +44,18 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(uploadProvider.notifier).reset();
+      final notifier = ref.read(uploadProvider.notifier);
+      notifier.reset();
+      if (widget.initialFilePath != null && widget.initialFileName != null) {
+        final file = File(widget.initialFilePath!);
+        if (file.existsSync()) {
+          notifier.selectFile(file, widget.initialFileName!);
+          // Auto-start upload + summary when coming from Gallery or Camera
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _processDocument();
+          });
+        }
+      }
     });
   }
 
@@ -67,6 +85,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
   Widget build(BuildContext context) {
     final uploadState = ref.watch(uploadProvider);
     final canUpload = ref.watch(canUploadProvider);
+    final maxFileSizeMb = ref.watch(maxFileSizeMbProvider);
     final summaryState = ref.watch(summaryGenerationProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isWorking = uploadState.isWorking || summaryState.isGenerating;
@@ -97,7 +116,9 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
       body: SafeArea(
         child: isWorking
             ? _buildProcessingView(uploadState, summaryState, isDark)
-            : _buildNormalView(uploadState, canUpload, summaryState, isDark),
+            : _buildNormalView(
+                uploadState, canUpload, summaryState, isDark, maxFileSizeMb,
+              ),
       ),
     );
   }
@@ -107,6 +128,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     bool canUpload,
     SummaryGenerationState summaryState,
     bool isDark,
+    int maxFileSizeMb,
   ) {
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -116,7 +138,9 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
           Expanded(
             child: FadeInUp(
               duration: const Duration(milliseconds: 300),
-              child: _buildUploadArea(uploadState, canUpload, isDark),
+              child: _buildUploadArea(
+                uploadState, canUpload, isDark, maxFileSizeMb,
+              ),
             ),
           ),
           const SizedBox(height: 24),
@@ -477,7 +501,11 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
   }
 
   Widget _buildUploadArea(
-      UploadState uploadState, bool canUpload, bool isDark) {
+    UploadState uploadState,
+    bool canUpload,
+    bool isDark,
+    int maxFileSizeMb,
+  ) {
     if (uploadState.hasFile) {
       return _buildSelectedFileArea(uploadState, isDark);
     }
@@ -521,7 +549,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              'PDF, DOCX, JPG, PNG up to ${AppConstants.maxFileSizeFree}MB',
+              'PDF, DOCX, JPG, PNG up to ${maxFileSizeMb}MB',
               style: TextStyle(
                 fontSize: 14,
                 color: isDark
@@ -772,6 +800,18 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
 
   Future<void> _processDocument() async {
     final uploadNotifier = ref.read(uploadProvider.notifier);
+    final uploadState = ref.read(uploadProvider);
+    final maxFileSizeMb = ref.read(maxFileSizeMbProvider);
+    final maxBytes = maxFileSizeMb * 1024 * 1024;
+
+    final file = uploadState.selectedFile;
+    if (file != null && file.existsSync() && file.lengthSync() > maxBytes) {
+      uploadNotifier.setError(
+        'File size exceeds your plan limit (max ${maxFileSizeMb}MB). Upgrade for larger files.',
+      );
+      return;
+    }
+
     final summaryNotifier = ref.read(summaryGenerationProvider.notifier);
     final documentsNotifier = ref.read(documentsProvider.notifier);
 

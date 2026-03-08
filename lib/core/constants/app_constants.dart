@@ -29,6 +29,9 @@ class AppConstants {
   static const String deviceIdKey = 'device_id';
   static const String onboardingCompleteKey = 'onboarding_complete';
   static const String themeKey = 'app_theme';
+  static const String authTokenKey = 'auth_token';
+  static const String refreshTokenKey = 'refresh_token';
+  static const String userDataKey = 'user_data';
 
   // Document Limits
   static const int freeDocsTotal = 2;

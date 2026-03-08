@@ -352,3 +352,11 @@ final remainingDocsProvider = Provider<int>((ref) {
   if (subscriptionState.isPremium) return -1;
   return subscriptionState.usage?.remainingFree ?? AppConstants.freeDocsTotal;
 });
+
+/// Max file size in MB for current plan. Used for upload validation and UI.
+final maxFileSizeMbProvider = Provider<int>((ref) {
+  final subscriptionState = ref.watch(subscriptionProvider);
+  if (subscriptionState.isProPlus) return AppConstants.maxFileSizeProPlus;
+  if (subscriptionState.isPremium) return AppConstants.maxFileSizePro;
+  return AppConstants.maxFileSizeFree;
+});

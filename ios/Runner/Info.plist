@@ -53,5 +53,11 @@
 	<string>DoCMind AI needs camera access to capture documents for scanning and summarization.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>DoCMind AI needs permission to save scanned documents to your photo library.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>DoCMind AI uses the local network for debugging (hot reload, DevTools) when running from your computer.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
 </dict>
 </plist>
