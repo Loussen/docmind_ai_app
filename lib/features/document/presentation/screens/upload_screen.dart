@@ -96,9 +96,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
       appBar: isWorking
           ? null
           : AppBar(
-              backgroundColor: isDark
-                  ? AppColors.backgroundDark
-                  : AppColors.backgroundLight,
+              backgroundColor:
+                  isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
               leading: IconButton(
                 icon: Icon(
                   Iconsax.close_circle,
@@ -117,7 +116,11 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
         child: isWorking
             ? _buildProcessingView(uploadState, summaryState, isDark)
             : _buildNormalView(
-                uploadState, canUpload, summaryState, isDark, maxFileSizeMb,
+                uploadState,
+                canUpload,
+                summaryState,
+                isDark,
+                maxFileSizeMb,
               ),
       ),
     );
@@ -139,7 +142,10 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
             child: FadeInUp(
               duration: const Duration(milliseconds: 300),
               child: _buildUploadArea(
-                uploadState, canUpload, isDark, maxFileSizeMb,
+                uploadState,
+                canUpload,
+                isDark,
+                maxFileSizeMb,
               ),
             ),
           ),
@@ -183,7 +189,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
             child: _buildStepIndicator(uploadState, summaryState, isDark),
           ),
           const SizedBox(height: 32),
-          if (summaryState.isGenerating || uploadState.status == UploadStatus.analyzing)
+          if (summaryState.isGenerating ||
+              uploadState.status == UploadStatus.analyzing)
             FadeIn(
               child: _buildRotatingTip(isDark),
             ),
@@ -262,7 +269,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
         label: 'Uploading',
         isActive: uploadState.currentStep == ProcessingStep.upload &&
             uploadState.isUploading,
-        isCompleted: uploadState.currentStep.index > ProcessingStep.upload.index,
+        isCompleted:
+            uploadState.currentStep.index > ProcessingStep.upload.index,
       ),
       _StepData(
         icon: Iconsax.document_text,
@@ -276,8 +284,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
         label: 'AI Analyzing',
         isActive: uploadState.currentStep == ProcessingStep.analyze ||
             summaryState.isGenerating,
-        isCompleted:
-            uploadState.currentStep == ProcessingStep.complete,
+        isCompleted: uploadState.currentStep == ProcessingStep.complete,
       ),
     ];
 
@@ -315,8 +322,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight:
-                      step.isActive ? FontWeight.w600 : FontWeight.w400,
+                  fontWeight: step.isActive ? FontWeight.w600 : FontWeight.w400,
                   color: step.isActive
                       ? AppColors.primary
                       : step.isCompleted
@@ -343,7 +349,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     if (step.isCompleted) {
       bgColor = AppColors.success;
       iconColor = Colors.white;
-      iconWidget = const Icon(Icons.check_rounded, size: 18, color: Colors.white);
+      iconWidget =
+          const Icon(Icons.check_rounded, size: 18, color: Colors.white);
     } else if (step.isActive) {
       bgColor = AppColors.primary;
       iconColor = Colors.white;
@@ -658,8 +665,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
       decoration: BoxDecoration(
         color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(16),
-        border:
-            Border.all(color: isDark ? AppColors.dividerDark : AppColors.divider),
+        border: Border.all(
+            color: isDark ? AppColors.dividerDark : AppColors.divider),
       ),
       child: Row(
         children: [
@@ -719,7 +726,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
       margin: const EdgeInsets.only(top: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.error.withOpacity(0.15) : AppColors.errorLight,
+        color:
+            isDark ? AppColors.error.withOpacity(0.15) : AppColors.errorLight,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -758,8 +766,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     return SizedBox(
       height: 56,
       child: ElevatedButton(
-        onPressed:
-            isLoading || !uploadState.hasFile ? null : _processDocument,
+        onPressed: isLoading || !uploadState.hasFile ? null : _processDocument,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           disabledBackgroundColor: AppColors.primary.withOpacity(0.5),
@@ -843,8 +850,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Row(
           children: [
             Icon(Iconsax.crown5, color: AppColors.secondary),

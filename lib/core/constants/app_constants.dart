@@ -4,7 +4,7 @@ class AppConstants {
   // App Info
   static const String appName = 'DoCMind AI';
   static const String appTagline = 'OCR, Doc & AI Summarizer';
-  static const String appVersion = '1.0.8';
+  static const String appVersion = '1.0.9';
   static const String appStoreId = '6757693350';
 
   /// What's New text for 1.0.8 (App Store / in-app release notes)
