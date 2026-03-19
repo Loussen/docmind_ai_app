@@ -28,12 +28,19 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  use_frameworks!
+  # Avoid building pods as dynamic frameworks when possible.
+  # This mitigates some Objective-C duplicate-class runtime warnings
+  # (e.g. `FileUtils` from file picker).
+  use_frameworks! :linkage => :static
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do
     inherit! :search_paths
   end
+end
+
+target 'DoCMind AI' do
+  use_frameworks! :linkage => :static
 end
 
 post_install do |installer|

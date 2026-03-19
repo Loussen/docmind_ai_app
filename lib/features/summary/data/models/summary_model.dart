@@ -12,6 +12,7 @@ class SummaryModel with _$SummaryModel {
     @JsonKey(name: 'document_id') required String documentId,
     @JsonKey(name: 'user_id') int? userId,
     @JsonKey(name: 'device_id') String? deviceId,
+    @Default('en') String language,
     required String title,
     required String overview,
     @JsonKey(name: 'key_points') required List<String> keyPoints,

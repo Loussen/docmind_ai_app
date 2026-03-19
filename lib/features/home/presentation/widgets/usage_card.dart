@@ -3,6 +3,7 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../subscription/data/models/subscription_model.dart';
 
 class UsageCard extends StatelessWidget {
@@ -23,13 +24,13 @@ class UsageCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     
     if (isPremium) {
-      return _buildPremiumCard(isDark);
+      return _buildPremiumCard(context, isDark);
     }
 
-    return _buildFreeCard(theme, isDark);
+    return _buildFreeCard(context, theme, isDark);
   }
 
-  Widget _buildPremiumCard(bool isDark) {
+  Widget _buildPremiumCard(BuildContext context, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -66,21 +67,21 @@ class UsageCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Premium Active',
+                  S.of(context)!.premiumActive,
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  'Unlimited documents & summaries',
+                  S.of(context)!.unlimitedDocsSummaries,
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.white70,
@@ -99,7 +100,7 @@ class UsageCard extends StatelessWidget {
     );
   }
 
-  Widget _buildFreeCard(ThemeData theme, bool isDark) {
+  Widget _buildFreeCard(BuildContext context, ThemeData theme, bool isDark) {
     final used = usage?.totalUsed ?? 0;
     final limit = usage?.freeLimit ?? AppConstants.freeDocsTotal;
     final remaining = (limit - used).clamp(0, limit);
@@ -126,35 +127,41 @@ class UsageCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Free Plan',
+                S.of(context)!.freePlan,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: !limitReached
-                      ? AppColors.successLight
-                      : AppColors.errorLight,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  limitReached ? 'No free docs left' : '$remaining free left',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+              const SizedBox(width: 8),
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
                     color: !limitReached
-                        ? AppColors.success
-                        : AppColors.error,
+                        ? AppColors.successLight
+                        : AppColors.errorLight,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    limitReached
+                        ? S.of(context)!.noFreeDocsLeft
+                        : S.of(context)!.freeLeftCount(remaining),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: !limitReached
+                          ? AppColors.success
+                          : AppColors.error,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -176,30 +183,35 @@ class UsageCard extends StatelessWidget {
           const SizedBox(height: 12),
           
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                limitReached
-                    ? 'Upgrade for unlimited access'
-                    : '$used of $limit free documents used',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+              Expanded(
+                child: Text(
+                  limitReached
+                      ? S.of(context)!.upgradeForUnlimited
+                      : S.of(context)!.freeDocsUsed(used, limit),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
+              const SizedBox(width: 8),
               GestureDetector(
                 onTap: onUpgrade,
-                child: const Row(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    const Icon(
                       Iconsax.crown,
                       size: 16,
                       color: AppColors.secondary,
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Text(
-                      'Upgrade',
-                      style: TextStyle(
+                      S.of(context)!.upgrade,
+                      style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: AppColors.secondary,

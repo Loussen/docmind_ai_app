@@ -5,6 +5,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../document/presentation/providers/document_provider.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../widgets/document_card.dart';
@@ -43,6 +44,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     
     final documentsState = ref.watch(documentsProvider);
     final subscriptionState = ref.watch(subscriptionProvider);
+    final isPremium = ref.watch(effectiveIsPremiumProvider);
+    final isProPlus = ref.watch(effectiveIsProPlusProvider);
     final recentDocs = ref.watch(recentDocumentsProvider);
 
     return Scaffold(
@@ -92,7 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hello, there',
+                      S.of(context)!.greeting,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -127,7 +130,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: subscriptionState.isPremium
+                        color: isPremium
                             ? AppColors.accent.withOpacity(0.1)
                             : colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
@@ -135,25 +138,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Row(
                         children: [
                           Icon(
-                            subscriptionState.isPremium
+                            isPremium
                                 ? Iconsax.crown5
                                 : Iconsax.crown,
                             size: 18,
-                            color: subscriptionState.isPremium
+                            color: isPremium
                                 ? AppColors.accent
                                 : colorScheme.primary,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            subscriptionState.isProPlus 
-                                ? 'Pro+' 
-                                : subscriptionState.isPremium 
-                                    ? 'Pro' 
-                                    : 'Free',
+                            isProPlus 
+                                ? S.of(context)!.planProPlus 
+                                : isPremium 
+                                    ? S.of(context)!.planPro 
+                                    : S.of(context)!.planFree,
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: subscriptionState.isPremium
+                              color: isPremium
                                   ? AppColors.accent
                                   : colorScheme.primary,
                             ),
@@ -178,7 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       duration: const Duration(milliseconds: 300),
                       child: UsageCard(
                         usage: subscriptionState.usage,
-                        isPremium: subscriptionState.isPremium,
+                        isPremium: isPremium,
                         onUpgrade: () => context.push('/subscription'),
                       ),
                     ),
@@ -190,7 +193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       delay: const Duration(milliseconds: 50),
                       duration: const Duration(milliseconds: 300),
                       child: Text(
-                        'Quick Actions',
+                        S.of(context)!.quickActions,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -209,8 +212,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Expanded(
                             child: QuickActionCard(
                               icon: Iconsax.document_upload,
-                              title: 'Upload',
-                              subtitle: 'PDF, DOCX, Image',
+                              title: S.of(context)!.upload,
+                              subtitle: S.of(context)!.uploadFormats,
                               color: AppColors.primary,
                               onTap: () => context.push('/upload'),
                             ),
@@ -219,8 +222,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Expanded(
                             child: QuickActionCard(
                               icon: Iconsax.clock,
-                              title: 'History',
-                              subtitle: 'View all docs',
+                              title: S.of(context)!.history,
+                              subtitle: S.of(context)!.viewAllDocs,
                               color: AppColors.secondary,
                               onTap: () => context.go('/history'),
                             ),
@@ -239,7 +242,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Recent Documents',
+                            S.of(context)!.recentDocuments,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -249,7 +252,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           if (documentsState.documents.isNotEmpty)
                             TextButton(
                               onPressed: () => context.go('/history'),
-                              child: const Text('See All'),
+                              child: Text(S.of(context)!.seeAll),
                             ),
                         ],
                       ),
@@ -335,7 +338,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           const SizedBox(height: 20),
           Text(
-            'No documents yet',
+            S.of(context)!.noDocumentsYet,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -344,7 +347,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Upload your first document and let AI summarize it for you',
+            S.of(context)!.uploadFirstDoc,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
@@ -355,7 +358,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ElevatedButton.icon(
             onPressed: () => context.push('/upload'),
             icon: const Icon(Iconsax.add),
-            label: const Text('Upload Document'),
+            label: Text(S.of(context)!.uploadDocument),
           ),
         ],
       ),

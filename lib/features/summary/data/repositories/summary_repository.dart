@@ -94,4 +94,23 @@ class SummaryRepository {
       return Left('An unexpected error occurred');
     }
   }
+
+  Future<Either<String, SummaryModel>> translateSummary({
+    required String summaryId,
+    required String targetLanguage,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        '${ApiConstants.summaryById(summaryId)}/translate',
+        data: {
+          'target_language': targetLanguage,
+        },
+      );
+      return Right(SummaryModel.fromJson(response.data['summary']));
+    } on DioException catch (e) {
+      return Left(e.error?.toString() ?? 'Failed to translate summary');
+    } catch (e) {
+      return Left('An unexpected error occurred');
+    }
+  }
 }

@@ -30,7 +30,8 @@ class SettingsRepository {
   Future<Either<String, SettingsModel>> updateSettings({
     bool? notificationsEnabled,
     bool? darkModeEnabled,
-    String? language,
+    String? uiLanguage,
+    String? outputLanguage,
   }) async {
     try {
       final data = <String, dynamic>{};
@@ -40,8 +41,13 @@ class SettingsRepository {
       if (darkModeEnabled != null) {
         data['dark_mode_enabled'] = darkModeEnabled;
       }
-      if (language != null) {
-        data['language'] = language;
+      if (uiLanguage != null) {
+        data['ui_language'] = uiLanguage;
+        // Back-compat: keep sending old key for older backends.
+        data['language'] = uiLanguage;
+      }
+      if (outputLanguage != null) {
+        data['output_language'] = outputLanguage;
       }
 
       final response = await _dioClient.put(

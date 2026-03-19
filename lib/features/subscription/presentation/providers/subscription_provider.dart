@@ -342,12 +342,20 @@ final subscriptionProvider =
 
 // Usage check provider
 final canUploadProvider = Provider<bool>((ref) {
+  if (ref.watch(debugFreeModProvider)) {
+    final usage = ref.watch(subscriptionProvider).usage;
+    return usage == null || !usage.hasReachedFreeLimit;
+  }
   final subscriptionState = ref.watch(subscriptionProvider);
   return subscriptionState.canUploadDocument;
 });
 
 // Remaining docs provider
 final remainingDocsProvider = Provider<int>((ref) {
+  if (ref.watch(debugFreeModProvider)) {
+    final usage = ref.watch(subscriptionProvider).usage;
+    return usage?.remainingFree ?? AppConstants.freeDocsTotal;
+  }
   final subscriptionState = ref.watch(subscriptionProvider);
   if (subscriptionState.isPremium) return -1;
   return subscriptionState.usage?.remainingFree ?? AppConstants.freeDocsTotal;
@@ -355,8 +363,24 @@ final remainingDocsProvider = Provider<int>((ref) {
 
 /// Max file size in MB for current plan. Used for upload validation and UI.
 final maxFileSizeMbProvider = Provider<int>((ref) {
+  if (ref.watch(debugFreeModProvider)) return AppConstants.maxFileSizeFree;
   final subscriptionState = ref.watch(subscriptionProvider);
   if (subscriptionState.isProPlus) return AppConstants.maxFileSizeProPlus;
   if (subscriptionState.isPremium) return AppConstants.maxFileSizePro;
   return AppConstants.maxFileSizeFree;
+});
+
+/// Debug: simulate Free plan to test limits. Only visible in debug builds.
+final debugFreeModProvider = StateProvider<bool>((ref) => false);
+
+/// Effective premium check — respects debug free mode.
+final effectiveIsPremiumProvider = Provider<bool>((ref) {
+  if (ref.watch(debugFreeModProvider)) return false;
+  return ref.watch(subscriptionProvider).isPremium;
+});
+
+/// Effective Pro+ check — respects debug free mode.
+final effectiveIsProPlusProvider = Provider<bool>((ref) {
+  if (ref.watch(debugFreeModProvider)) return false;
+  return ref.watch(subscriptionProvider).isProPlus;
 });

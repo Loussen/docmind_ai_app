@@ -3,12 +3,38 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../l10n/app_localizations.dart';
+import '../services/update_service.dart';
 import '../theme/app_colors.dart';
+import '../widgets/force_update_dialog.dart';
 
-class MainShell extends StatelessWidget {
+class MainShell extends StatefulWidget {
   final Widget child;
 
   const MainShell({super.key, required this.child});
+
+  @override
+  State<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends State<MainShell> {
+  bool _updateChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkForUpdate();
+  }
+
+  Future<void> _checkForUpdate() async {
+    if (_updateChecked) return;
+    _updateChecked = true;
+
+    final needsUpdate = await UpdateService.isUpdateRequired();
+    if (needsUpdate && mounted) {
+      showForceUpdateDialog(context);
+    }
+  }
 
   int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.path;
@@ -39,7 +65,7 @@ class MainShell extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      body: child,
+      body: widget.child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
         onDestinationSelected: (index) => _onItemTapped(context, index),
@@ -54,7 +80,7 @@ class MainShell extends StatelessWidget {
               color: isDark ? AppColors.textTertiaryDark : null,
             ),
             selectedIcon: Icon(Iconsax.home_25, color: theme.colorScheme.primary),
-            label: 'Home',
+            label: S.of(context)!.navHome,
           ),
           NavigationDestination(
             icon: Icon(
@@ -62,7 +88,7 @@ class MainShell extends StatelessWidget {
               color: isDark ? AppColors.textTertiaryDark : null,
             ),
             selectedIcon: Icon(Iconsax.clock5, color: theme.colorScheme.primary),
-            label: 'History',
+            label: S.of(context)!.navHistory,
           ),
           NavigationDestination(
             icon: Icon(
@@ -70,7 +96,7 @@ class MainShell extends StatelessWidget {
               color: isDark ? AppColors.textTertiaryDark : null,
             ),
             selectedIcon: Icon(Iconsax.setting_45, color: theme.colorScheme.primary),
-            label: 'Settings',
+            label: S.of(context)!.navSettings,
           ),
         ],
       ),
@@ -122,7 +148,7 @@ class MainShell extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Add document',
+                S.of(context)!.addDocument,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -132,8 +158,8 @@ class MainShell extends StatelessWidget {
               const SizedBox(height: 20),
               _AddOptionTile(
                 icon: Iconsax.document_text,
-                label: 'Document',
-                subtitle: 'PDF, Word, or other files',
+                label: S.of(context)!.optionDocument,
+                subtitle: S.of(context)!.optionDocumentSub,
                 isDark: isDark,
                 onTap: () {
                   Navigator.pop(modalContext);
@@ -142,8 +168,8 @@ class MainShell extends StatelessWidget {
               ),
               _AddOptionTile(
                 icon: Iconsax.gallery,
-                label: 'Gallery',
-                subtitle: 'Choose from photo library',
+                label: S.of(context)!.optionGallery,
+                subtitle: S.of(context)!.optionGallerySub,
                 isDark: isDark,
                 onTap: () async {
                   Navigator.pop(modalContext);
@@ -152,8 +178,8 @@ class MainShell extends StatelessWidget {
               ),
               _AddOptionTile(
                 icon: Iconsax.camera,
-                label: 'Camera',
-                subtitle: 'Take a photo',
+                label: S.of(context)!.optionCamera,
+                subtitle: S.of(context)!.optionCameraSub,
                 isDark: isDark,
                 onTap: () async {
                   Navigator.pop(modalContext);

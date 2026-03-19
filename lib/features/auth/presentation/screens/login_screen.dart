@@ -6,6 +6,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../guest/presentation/providers/guest_provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/auth_text_field.dart';
@@ -123,7 +124,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'Welcome Back',
+                        S.of(context)!.welcomeBack,
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -136,8 +137,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       const SizedBox(height: 8),
                       Text(
                         _isLogin
-                            ? 'Sign in to continue to DoCMind AI'
-                            : 'Create your account to get started',
+                            ? S.of(context)!.signInContinue
+                            : S.of(context)!.createAccountToStart,
                         style: TextStyle(
                           fontSize: 16,
                           color: isDark
@@ -161,15 +162,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         AuthTextField(
                           controller: _emailController,
-                          hintText: 'Email address',
+                          hintText: S.of(context)!.emailAddress,
                           prefixIcon: Iconsax.sms,
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
+                              return S.of(context)!.enterEmail;
                             }
                             if (!value.contains('@')) {
-                              return 'Please enter a valid email';
+                              return S.of(context)!.validEmail;
                             }
                             return null;
                           },
@@ -177,7 +178,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const SizedBox(height: 16),
                         AuthTextField(
                           controller: _passwordController,
-                          hintText: 'Password',
+                          hintText: S.of(context)!.password,
                           prefixIcon: Iconsax.lock,
                           obscureText: _obscurePassword,
                           suffixIcon: IconButton(
@@ -195,10 +196,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
+                              return S.of(context)!.enterPassword;
                             }
                             if (value.length < 8) {
-                              return 'Password must be at least 8 characters';
+                              return S.of(context)!.passwordMinLength;
                             }
                             return null;
                           },
@@ -267,7 +268,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             )
                           : Text(
-                              _isLogin ? 'Sign In' : 'Create Account',
+                              _isLogin ? S.of(context)!.signIn : S.of(context)!.createAccount,
                               style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w600,
@@ -288,7 +289,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          'or continue with',
+                          S.of(context)!.orContinueWith,
                           style: TextStyle(
                             color: AppColors.textTertiary,
                             fontSize: 14,
@@ -317,7 +318,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           color: isDark ? Colors.white : AppColors.textPrimary,
                         ),
                         label: Text(
-                          'Continue with Apple',
+                          S.of(context)!.continueWithApple,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -367,8 +368,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             color: AppColors.primary,
                           ),
                           const SizedBox(width: 8),
-                          const Text(
-                            'Try Without Account',
+                          Text(
+                            S.of(context)!.tryWithoutAccount,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -390,8 +391,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       Text(
                         _isLogin
-                            ? "Don't have an account? "
-                            : 'Already have an account? ',
+                            ? S.of(context)!.noAccount
+                            : S.of(context)!.haveAccount,
                         style: const TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 15,
@@ -405,7 +406,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ref.read(authProvider.notifier).clearError();
                         },
                         child: Text(
-                          _isLogin ? 'Sign Up' : 'Sign In',
+                          _isLogin ? S.of(context)!.signUp : S.of(context)!.signIn,
                           style: const TextStyle(
                             color: AppColors.primary,
                             fontSize: 15,

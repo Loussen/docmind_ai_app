@@ -9,6 +9,9 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../core/i18n/language_options.dart';
+import '../../../settings/presentation/providers/settings_provider.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../../../summary/presentation/providers/summary_provider.dart';
 import '../providers/document_provider.dart';
@@ -31,18 +34,20 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     with TickerProviderStateMixin {
   Timer? _tipTimer;
   int _currentTipIndex = 0;
+  late String _selectedOutputLanguage;
 
-  static const _tips = [
-    'AI is reading through your document...',
-    'Extracting key information...',
-    'Identifying important sections...',
-    'Building a structured summary...',
-    'Almost there, finalizing results...',
-  ];
+  List<String> _getTips(BuildContext context) => [
+        S.of(context)!.tipReading,
+        S.of(context)!.tipExtracting,
+        S.of(context)!.tipIdentifying,
+        S.of(context)!.tipBuilding,
+        S.of(context)!.tipFinalizing,
+      ];
 
   @override
   void initState() {
     super.initState();
+    _selectedOutputLanguage = ref.read(settingsProvider).outputLanguage;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notifier = ref.read(uploadProvider.notifier);
       notifier.reset();
@@ -50,10 +55,6 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
         final file = File(widget.initialFilePath!);
         if (file.existsSync()) {
           notifier.selectFile(file, widget.initialFileName!);
-          // Auto-start upload + summary when coming from Gallery or Camera
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) _processDocument();
-          });
         }
       }
     });
@@ -71,7 +72,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     _tipTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (mounted) {
         setState(() {
-          _currentTipIndex = (_currentTipIndex + 1) % _tips.length;
+          _currentTipIndex =
+              (_currentTipIndex + 1) % _getTips(context).length;
         });
       }
     });
@@ -98,6 +100,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
           : AppBar(
               backgroundColor:
                   isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+              surfaceTintColor: Colors.transparent,
               leading: IconButton(
                 icon: Icon(
                   Iconsax.close_circle,
@@ -106,7 +109,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
                 onPressed: () => context.pop(),
               ),
               title: Text(
-                'Upload Document',
+                S.of(context)!.uploadDocumentTitle,
                 style: TextStyle(
                   color: isDark ? AppColors.textLight : AppColors.textPrimary,
                 ),
@@ -114,8 +117,9 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
             ),
       body: SafeArea(
         child: isWorking
-            ? _buildProcessingView(uploadState, summaryState, isDark)
+            ? _buildProcessingView(context, uploadState, summaryState, isDark)
             : _buildNormalView(
+                context,
                 uploadState,
                 canUpload,
                 summaryState,
@@ -127,6 +131,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
   }
 
   Widget _buildNormalView(
+    BuildContext context,
     UploadState uploadState,
     bool canUpload,
     SummaryGenerationState summaryState,
@@ -142,6 +147,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
             child: FadeInUp(
               duration: const Duration(milliseconds: 300),
               child: _buildUploadArea(
+                context,
                 uploadState,
                 canUpload,
                 isDark,
@@ -153,8 +159,15 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
           if (uploadState.hasFile)
             FadeInUp(
               duration: const Duration(milliseconds: 300),
-              child: _buildFileInfo(uploadState, isDark),
+              child: _buildFileInfo(context, uploadState, isDark),
             ),
+          if (uploadState.hasFile) ...[
+            const SizedBox(height: 12),
+            FadeInUp(
+              duration: const Duration(milliseconds: 300),
+              child: _buildOutputLanguagePicker(context, isDark),
+            ),
+          ],
           if (uploadState.errorMessage != null)
             FadeIn(
               child: _buildError(uploadState.errorMessage!, isDark),
@@ -163,14 +176,145 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
           FadeInUp(
             delay: const Duration(milliseconds: 100),
             duration: const Duration(milliseconds: 300),
-            child: _buildActionButton(uploadState, summaryState, canUpload),
+            child: _buildActionButton(context, uploadState, summaryState, canUpload),
           ),
         ],
       ),
     );
   }
 
+  Widget _buildOutputLanguagePicker(BuildContext context, bool isDark) {
+    final current = _selectedOutputLanguage;
+    final currentName = languageName(current);
+    final currentFlag = languageFlag(current);
+
+    return GestureDetector(
+      onTap: () => _showLanguageSheet(context, isDark, current),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isDark ? AppColors.dividerDark : AppColors.divider,
+          ),
+        ),
+        child: Row(
+          children: [
+            Text(currentFlag, style: const TextStyle(fontSize: 28)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    S.of(context)!.summaryLang,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    currentName,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? AppColors.textLight : AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Iconsax.arrow_down_1,
+              size: 18,
+              color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiary,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showLanguageSheet(BuildContext context, bool isDark, String current) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: isDark ? AppColors.cardDark : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.dividerDark : AppColors.divider,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                S.of(context)!.summaryLang,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: isDark ? AppColors.textLight : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: outputLanguages.length,
+                  itemBuilder: (_, i) {
+                    final lang = outputLanguages[i];
+                    final isSelected = lang.code == current;
+                    return ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      tileColor: isSelected
+                          ? AppColors.primary.withValues(alpha: isDark ? 0.15 : 0.08)
+                          : null,
+                      leading: Text(
+                        lang.flag,
+                        style: const TextStyle(fontSize: 28),
+                      ),
+                      title: Text(
+                        lang.name,
+                        style: TextStyle(
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                          color: isDark ? AppColors.textLight : AppColors.textPrimary,
+                        ),
+                      ),
+                      trailing: isSelected
+                          ? const Icon(Iconsax.tick_circle5, color: AppColors.primary, size: 22)
+                          : null,
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        setState(() => _selectedOutputLanguage = lang.code);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildProcessingView(
+    BuildContext context,
     UploadState uploadState,
     SummaryGenerationState summaryState,
     bool isDark,
@@ -186,13 +330,13 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
           const SizedBox(height: 40),
           FadeInUp(
             delay: const Duration(milliseconds: 200),
-            child: _buildStepIndicator(uploadState, summaryState, isDark),
+            child: _buildStepIndicator(context, uploadState, summaryState, isDark),
           ),
           const SizedBox(height: 32),
           if (summaryState.isGenerating ||
               uploadState.status == UploadStatus.analyzing)
             FadeIn(
-              child: _buildRotatingTip(isDark),
+              child: _buildRotatingTip(context, isDark),
             ),
           const Spacer(flex: 3),
         ],
@@ -259,6 +403,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
   }
 
   Widget _buildStepIndicator(
+    BuildContext context,
     UploadState uploadState,
     SummaryGenerationState summaryState,
     bool isDark,
@@ -266,7 +411,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     final steps = [
       _StepData(
         icon: Iconsax.document_upload,
-        label: 'Uploading',
+        label: S.of(context)!.stepUploading,
         isActive: uploadState.currentStep == ProcessingStep.upload &&
             uploadState.isUploading,
         isCompleted:
@@ -274,14 +419,14 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
       ),
       _StepData(
         icon: Iconsax.document_text,
-        label: 'Extracting Text',
+        label: S.of(context)!.stepExtractingText,
         isActive: uploadState.currentStep == ProcessingStep.extractText,
         isCompleted:
             uploadState.currentStep.index > ProcessingStep.extractText.index,
       ),
       _StepData(
         icon: Iconsax.cpu,
-        label: 'AI Analyzing',
+        label: S.of(context)!.stepAiAnalyzing,
         isActive: uploadState.currentStep == ProcessingStep.analyze ||
             summaryState.isGenerating,
         isCompleted: uploadState.currentStep == ProcessingStep.complete,
@@ -336,7 +481,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
           }).toList(),
         ),
         const SizedBox(height: 20),
-        _buildCurrentStepMessage(uploadState, summaryState, isDark),
+        _buildCurrentStepMessage(context, uploadState, summaryState, isDark),
       ],
     );
   }
@@ -399,6 +544,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
   }
 
   Widget _buildCurrentStepMessage(
+    BuildContext context,
     UploadState uploadState,
     SummaryGenerationState summaryState,
     bool isDark,
@@ -408,17 +554,17 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
 
     if (uploadState.isUploading) {
       final pct = (uploadState.uploadProgress * 100).toInt();
-      message = 'Uploading your document... $pct%';
+      message = S.of(context)!.uploadingProgress(pct);
       progress = uploadState.uploadProgress;
     } else if (uploadState.currentStep == ProcessingStep.extractText) {
-      message = 'Extracting text from your document...';
+      message = S.of(context)!.extractingText;
       progress = null;
     } else if (summaryState.isGenerating ||
         uploadState.currentStep == ProcessingStep.analyze) {
-      message = 'AI is analyzing and summarizing...';
+      message = S.of(context)!.aiAnalyzing;
       progress = null;
     } else {
-      message = 'Preparing...';
+      message = S.of(context)!.preparing;
       progress = null;
     }
 
@@ -457,7 +603,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     );
   }
 
-  Widget _buildRotatingTip(bool isDark) {
+  Widget _buildRotatingTip(BuildContext context, bool isDark) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: BoxDecoration(
@@ -491,7 +637,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
                 );
               },
               child: Text(
-                _tips[_currentTipIndex],
+                _getTips(context)[_currentTipIndex],
                 key: ValueKey(_currentTipIndex),
                 style: TextStyle(
                   fontSize: 13,
@@ -508,13 +654,14 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
   }
 
   Widget _buildUploadArea(
+    BuildContext context,
     UploadState uploadState,
     bool canUpload,
     bool isDark,
     int maxFileSizeMb,
   ) {
     if (uploadState.hasFile) {
-      return _buildSelectedFileArea(uploadState, isDark);
+      return _buildSelectedFileArea(context, uploadState, isDark);
     }
 
     return GestureDetector(
@@ -529,78 +676,86 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
             strokeAlign: BorderSide.strokeAlignInside,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                shape: BoxShape.circle,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Iconsax.document_upload,
+                  size: 48,
+                  color: AppColors.primary,
+                ),
               ),
-              child: const Icon(
-                Iconsax.document_upload,
-                size: 48,
-                color: AppColors.primary,
+              const SizedBox(height: 24),
+              Text(
+                S.of(context)!.tapToUpload,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? AppColors.textLight : AppColors.textPrimary,
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Tap to upload a document',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: isDark ? AppColors.textLight : AppColors.textPrimary,
+              const SizedBox(height: 8),
+              Text(
+                S.of(context)!.supportedFormats(maxFileSizeMb),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isDark
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondary,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'PDF, DOCX, JPG, PNG up to ${maxFileSizeMb}MB',
-              style: TextStyle(
-                fontSize: 14,
-                color: isDark
-                    ? AppColors.textSecondaryDark
-                    : AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? AppColors.info.withOpacity(0.15)
-                    : AppColors.infoLight,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Iconsax.info_circle,
-                    size: 18,
-                    color: AppColors.info,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    canUpload
-                        ? 'AI will extract and summarize content'
-                        : 'Free limit reached. Upgrade to continue',
-                    style: const TextStyle(
-                      fontSize: 13,
+              const SizedBox(height: 24),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? AppColors.info.withOpacity(0.15)
+                      : AppColors.infoLight,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Iconsax.info_circle,
+                      size: 18,
                       color: AppColors.info,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        canUpload
+                            ? S.of(context)!.aiWillExtract
+                            : S.of(context)!.freeLimitReached,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.info,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildSelectedFileArea(UploadState uploadState, bool isDark) {
+  Widget _buildSelectedFileArea(
+      BuildContext context, UploadState uploadState, bool isDark) {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
@@ -640,9 +795,9 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Ready to process',
-            style: TextStyle(
+          Text(
+            S.of(context)!.readyToProcess,
+            style: const TextStyle(
               fontSize: 14,
               color: AppColors.success,
               fontWeight: FontWeight.w500,
@@ -652,14 +807,15 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
           TextButton.icon(
             onPressed: _pickFile,
             icon: const Icon(Iconsax.refresh),
-            label: const Text('Choose Different File'),
+            label: Text(S.of(context)!.chooseDifferentFile),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFileInfo(UploadState uploadState, bool isDark) {
+  Widget _buildFileInfo(
+      BuildContext context, UploadState uploadState, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -700,7 +856,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Selected file',
+                  S.of(context)!.selectedFile,
                   style: TextStyle(
                     fontSize: 12,
                     color: isDark
@@ -757,6 +913,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
   }
 
   Widget _buildActionButton(
+    BuildContext context,
     UploadState uploadState,
     SummaryGenerationState summaryState,
     bool canUpload,
@@ -774,14 +931,14 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Iconsax.magic_star),
-            SizedBox(width: 8),
+            const Icon(Iconsax.magic_star),
+            const SizedBox(width: 8),
             Text(
-              'Generate Summary',
-              style: TextStyle(
+              S.of(context)!.generateSummary,
+              style: const TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
               ),
@@ -809,12 +966,17 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
     final uploadNotifier = ref.read(uploadProvider.notifier);
     final uploadState = ref.read(uploadProvider);
     final maxFileSizeMb = ref.read(maxFileSizeMbProvider);
+    final isPremium = ref.read(effectiveIsPremiumProvider);
+    final isProPlus = ref.read(effectiveIsProPlusProvider);
     final maxBytes = maxFileSizeMb * 1024 * 1024;
 
     final file = uploadState.selectedFile;
     if (file != null && file.existsSync() && file.lengthSync() > maxBytes) {
+      final isFree = !isPremium && !isProPlus;
       uploadNotifier.setError(
-        'File size exceeds your plan limit (max ${maxFileSizeMb}MB). Upgrade for larger files.',
+        isFree
+            ? S.of(context)!.freePlanFileLimit(maxFileSizeMb)
+            : S.of(context)!.fileSizeExceeded(maxFileSizeMb),
       );
       return;
     }
@@ -832,6 +994,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
 
     final summary = await summaryNotifier.generateSummary(
       documentId: document.id,
+      language: _selectedOutputLanguage,
     );
 
     _stopTipRotation();
@@ -851,27 +1014,25 @@ class _UploadScreenState extends ConsumerState<UploadScreen>
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Iconsax.crown5, color: AppColors.secondary),
-            SizedBox(width: 8),
-            Text('Free Limit Reached'),
+            const Icon(Iconsax.crown5, color: AppColors.secondary),
+            const SizedBox(width: 8),
+            Text(S.of(context)!.freeLimitReachedTitle),
           ],
         ),
-        content: const Text(
-          'You\'ve used all your free documents. Upgrade to Pro for unlimited access!',
-        ),
+        content: Text(S.of(context)!.freeLimitReachedMsg),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Maybe Later'),
+            child: Text(S.of(context)!.maybeLater),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               context.push('/subscription');
             },
-            child: const Text('Upgrade Now'),
+            child: Text(S.of(context)!.upgradeNow),
           ),
         ],
       ),

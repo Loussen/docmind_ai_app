@@ -5,6 +5,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../document/presentation/providers/document_provider.dart';
 import '../../../home/presentation/widgets/document_card.dart';
 
@@ -55,13 +56,15 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        surfaceTintColor: Colors.transparent,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('History'),
+            Text(S.of(context)!.navHistory),
             if (documentsState.filterType != DocumentFilterType.all)
               Text(
-                documentsState.filterType.label,
+                documentsState.filterType.label(context),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.normal,
@@ -79,7 +82,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
               onPressed: () {
                 ref.read(documentsProvider.notifier).clearFilters();
               },
-              tooltip: 'Clear filters',
+              tooltip: S.of(context)!.clearFilters,
             ),
           PopupMenuButton<DocumentFilterType>(
             icon: Icon(
@@ -112,7 +115,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      type.label,
+                      type.label(context),
                       style: TextStyle(
                         color: isSelected
                             ? colorScheme.primary
@@ -184,7 +187,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                             .deleteDocument(document.id);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text('Document deleted'),
+                            content: Text(S.of(context)!.documentDeleted),
                             behavior: SnackBarBehavior.floating,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -249,8 +252,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
               delay: const Duration(milliseconds: 100),
               child: Text(
                 hasFilter
-                    ? 'No ${documentsState.filterType.label.toLowerCase()}'
-                    : 'No documents yet',
+                    ? S.of(context)!.noDocumentsFiltered
+                    : S.of(context)!.noDocumentsYet,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
@@ -263,8 +266,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
               delay: const Duration(milliseconds: 150),
               child: Text(
                 hasFilter
-                    ? 'Try removing filters or uploading\nnew documents'
-                    : 'Upload your first document and start\ngetting AI-powered summaries',
+                    ? S.of(context)!.tryRemovingFilters
+                    : S.of(context)!.uploadFirstDoc,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
@@ -284,12 +287,12 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         ref.read(documentsProvider.notifier).clearFilters();
                       },
                       icon: const Icon(Iconsax.filter_remove),
-                      label: const Text('Clear Filters'),
+                      label: Text(S.of(context)!.clearFiltersButton),
                     )
                   : ElevatedButton.icon(
                       onPressed: () => context.push('/upload'),
                       icon: const Icon(Iconsax.add),
-                      label: const Text('Upload Document'),
+                      label: Text(S.of(context)!.uploadDocument),
                     ),
             ),
           ],
@@ -307,24 +310,24 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         backgroundColor: theme.colorScheme.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          'Delete Document',
+          S.of(context)!.deleteDocument,
           style: TextStyle(color: theme.colorScheme.onSurface),
         ),
         content: Text(
-          'Are you sure you want to delete this document?',
+          S.of(context)!.deleteDocumentConfirm,
           style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.8)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(S.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
             ),
-            child: const Text('Delete'),
+            child: Text(S.of(context)!.delete),
           ),
         ],
       ),

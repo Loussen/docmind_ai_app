@@ -1,0 +1,451 @@
+{
+  "@@locale": "zh",
+
+  "appName": "DoCMind AI",
+  "appTagline": "OCR、文档与 AI 智能摘要",
+
+  "navHome": "首页",
+  "navHistory": "历史",
+  "navSettings": "设置",
+
+  "addDocument": "添加文档",
+  "optionDocument": "文档",
+  "optionDocumentSub": "PDF、Word 或其他文件",
+  "optionGallery": "相册",
+  "optionGallerySub": "从照片库选择",
+  "optionCamera": "相机",
+  "optionCameraSub": "拍照",
+
+  "greeting": "你好",
+  "planPro": "Pro",
+  "planProPlus": "Pro+",
+  "planFree": "免费",
+  "quickActions": "快捷操作",
+  "recentDocuments": "最近文档",
+  "upload": "上传",
+  "uploadFormats": "PDF、DOCX、图片",
+  "history": "历史",
+  "viewAllDocs": "查看全部文档",
+  "seeAll": "查看全部",
+  "noDocumentsYet": "暂无文档",
+  "uploadFirstDoc": "上传您的第一份文档，让 AI 为您生成摘要",
+  "uploadDocument": "上传文档",
+
+  "premiumActive": "高级会员已激活",
+  "unlimitedDocsSummaries": "无限文档与摘要",
+  "freePlan": "免费版",
+  "noFreeDocsLeft": "免费额度已用完",
+  "freeLeftCount": "剩余 {count} 次免费",
+  "@freeLeftCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeForUnlimited": "升级获取无限使用",
+  "freeDocsUsed": "已使用 {used}/{limit} 个免费文档",
+  "@freeDocsUsed": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "upgrade": "升级",
+
+  "failed": "失败",
+  "minAgo": "{count} 分钟前",
+  "@minAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count} 小时前",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yesterday": "昨天",
+  "daysAgo": "{count} 天前",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "clearFilters": "清除筛选",
+  "documentDeleted": "文档已删除",
+  "noDocumentsFiltered": "未找到文档",
+  "tryRemovingFilters": "请尝试移除筛选条件或\n上传新文档",
+  "clearFiltersButton": "清除筛选",
+  "deleteDocument": "删除文档",
+  "deleteDocumentConfirm": "确定要删除此文档吗？",
+  "deleteDocumentConfirmFull": "确定要删除此文档吗？此操作无法撤销。",
+  "cancel": "取消",
+  "delete": "删除",
+
+  "allDocuments": "全部文档",
+  "pdfOnly": "仅 PDF",
+  "wordOnly": "仅 Word",
+  "imagesOnly": "仅图片",
+
+  "settings": "设置",
+  "proMember": "Pro 会员",
+  "proPlusMember": "Pro+ 会员",
+  "unlimitedAccess": "无限使用",
+  "upgradeForMoreFeatures": "升级获取更多功能",
+  "preferences": "偏好设置",
+  "support": "支持",
+  "account": "账户",
+  "notifications": "通知",
+  "darkMode": "深色模式",
+  "appLanguage": "应用语言",
+  "summaryLanguage": "摘要语言",
+  "helpFaq": "帮助与常见问题",
+  "rateApp": "为应用评分",
+  "rateAppSub": "喜欢 DoCMind AI？给我们评分吧！",
+  "privacyPolicy": "隐私政策",
+  "termsOfService": "服务条款",
+  "restorePurchases": "恢复购买",
+  "signOut": "退出登录",
+  "deleteAccount": "删除账户",
+  "deleteAccountConfirm": "确定要删除您的账户吗？此操作无法撤销。",
+  "deleteAccountTitle": "删除账户？",
+  "appVersion": "DoCMind AI v{version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "whatsNew": "v{version} 更新内容",
+  "@whatsNew": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "确定",
+
+  "document": "文档",
+  "failedToLoadDocument": "加载文档失败",
+  "tryAgain": "重试",
+  "documentNotFound": "未找到文档",
+  "loadingPdf": "正在加载 PDF...",
+  "loadingPreview": "正在加载文档预览...",
+  "showingPage": "第 1 页，共 {count} 页",
+  "@showingPage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "documentContent": "文档内容",
+  "noContentExtracted": "尚未提取内容",
+  "previewNotAvailable": "预览不可用",
+  "viewSummary": "查看摘要",
+  "generating": "生成中...",
+  "generateAiSummary": "生成 AI 摘要",
+  "pagesCount": "{count} 页",
+  "@pagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "uploadDocumentTitle": "上传文档",
+  "tipReading": "AI 正在阅读您的文档...",
+  "tipExtracting": "正在提取关键信息...",
+  "tipIdentifying": "正在识别重要段落...",
+  "tipBuilding": "正在生成结构化摘要...",
+  "tipFinalizing": "即将完成，正在处理...",
+  "stepUploading": "上传中",
+  "stepExtractingText": "提取文字",
+  "stepAiAnalyzing": "AI 分析中",
+  "summaryLang": "摘要语言",
+  "uploadingProgress": "正在上传文档... {percent}%",
+  "@uploadingProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "extractingText": "正在从文档中提取文字...",
+  "aiAnalyzing": "AI 正在分析与摘要...",
+  "preparing": "准备中...",
+  "tapToUpload": "点击上传文档",
+  "supportedFormats": "支持 PDF、DOCX、JPG、PNG，最大 {size}MB",
+  "@supportedFormats": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "aiWillExtract": "AI 将提取并摘要内容",
+  "freeLimitReached": "已达免费上限，升级后可继续使用",
+  "readyToProcess": "准备处理",
+  "chooseDifferentFile": "选择其他文件",
+  "selectedFile": "已选文件",
+  "generateSummary": "生成摘要",
+  "freePlanFileLimit": "免费版限制：单文件最大 {size}MB。升级后可上传更大文档。",
+  "@freePlanFileLimit": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "fileSizeExceeded": "文件大小超出您的方案限制（最大 {size}MB）。升级后可上传更大文件。",
+  "@fileSizeExceeded": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "freeLimitReachedTitle": "已达免费上限",
+  "freeLimitReachedMsg": "您已用完所有免费文档额度。升级至 Pro 获取无限使用！",
+  "maybeLater": "稍后再说",
+  "upgradeNow": "立即升级",
+
+  "summary": "摘要",
+  "failedToLoadSummary": "加载摘要失败",
+  "summaryNotFound": "未找到摘要",
+  "overview": "概述",
+  "keyPoints": "要点",
+  "actionItems": "待办事项",
+  "keywords": "关键词",
+  "importantFacts": "重要事实",
+  "obligations": "义务",
+  "risks": "风险",
+  "findings": "发现",
+  "wordsCount": "{count} 字",
+  "@wordsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingTime": "{seconds} 秒",
+  "@processingTime": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "viewOriginalDocument": "查看原文档",
+  "copySummary": "复制摘要",
+  "summaryCopied": "摘要已复制到剪贴板",
+  "generatedBy": "由 DoCMind AI 生成",
+  "wordCountLabel": "字数：{count}",
+  "@wordCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingTimeLabel": "处理时间：{seconds} 秒",
+  "@processingTimeLabel": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeRequired": "需要升级",
+  "translateProOnly": "翻译功能仅限 Pro 方案。升级后可翻译摘要。",
+  "notNow": "暂不",
+
+  "manageSubscription": "管理订阅",
+  "changeYourPlan": "更改方案",
+  "unlockPremium": "解锁高级版",
+  "upgradeOrSwitch": "升级或切换至其他方案",
+  "getUnlimitedAccess": "获取全部功能的无限使用",
+  "monthly": "月付",
+  "yearly": "年付",
+  "save40": "省 40%",
+  "unlimitedDocuments": "无限文档",
+  "unlimitedSummaries": "无限摘要",
+  "priorityAiProcessing": "优先 AI 处理",
+  "exportToPdf": "导出为 PDF",
+  "emailSupport": "邮件支持",
+  "everythingInPro": "Pro 全部功能",
+  "ocrScannedDocs": "扫描文档 OCR",
+  "longDocSupport": "长文档支持（100+ 页）",
+  "advancedAiAnalysis": "高级 AI 分析",
+  "prioritySupport": "优先支持",
+  "earlyAccess": "新功能抢先体验",
+  "freePlanInfo": "免费版包含 2 份文档，每份最多 5 页。",
+  "restoring": "恢复中...",
+  "current": "当前",
+  "popular": "热门",
+  "perYear": "/年",
+  "perMonth": "/月",
+  "billedAnnually": "按年计费",
+  "thatsOnly": "相当于每月仅 {price}",
+  "@thatsOnly": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "getPro": "获取 Pro",
+  "getProPlus": "获取 Pro+",
+  "currentPlan": "当前方案",
+  "switchToYearly": "切换至年付",
+  "switchToMonthly": "切换至月付",
+  "upgradeToPro": "升级至 Pro",
+  "upgradeToProPlus": "升级至 Pro+",
+  "downgradeToPro": "降级至 Pro",
+  "downgradeToProPlus": "降级至 Pro+",
+  "changesAtEnd": "变更在计费周期结束时生效",
+  "autoRenews": "将于 {date} 自动续订",
+  "@autoRenews": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "expires": "将于 {date} 到期",
+  "@expires": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "soon": "即将",
+  "active": "已激活",
+  "downgradePlan": "降级方案",
+  "downgradeConfirm": "您的方案将在当前计费周期结束时降级。在此之前您仍可继续使用现有功能。",
+  "confirmDowngrade": "确认降级",
+
+  "welcomeBack": "欢迎回来",
+  "signInContinue": "登录以继续使用 DoCMind AI",
+  "createAccountToStart": "创建账户即可开始使用",
+  "emailAddress": "电子邮箱",
+  "password": "密码",
+  "enterEmail": "请输入邮箱",
+  "validEmail": "请输入有效的邮箱地址",
+  "enterPassword": "请输入密码",
+  "passwordMinLength": "密码至少需要 8 个字符",
+  "signIn": "登录",
+  "createAccount": "创建账户",
+  "orContinueWith": "或使用以下方式继续",
+  "continueWithApple": "使用 Apple 继续",
+  "tryWithoutAccount": "无需账户试用",
+  "noAccount": "还没有账户？",
+  "haveAccount": "已有账户？",
+  "signUp": "注册",
+
+  "tryDoCMindAi": "试用 DoCMind AI",
+  "trialsLeft": "剩余 {count} 次试用",
+  "@trialsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noTrialsRemaining": "试用次数已用完",
+  "summarizeNow": "立即摘要",
+  "analyzingDocument": "正在分析您的文档...",
+  "thisMayTakeAMoment": "请稍候",
+  "guestModeLimitations": "访客模式限制",
+  "maxPagesGuest": "每份文档最多 2 页",
+  "twoTrialsOnly": "仅 2 次试用（不可重置）",
+  "notSavedToHistory": "摘要不会保存到历史",
+  "noCloudSync": "无云端同步",
+  "withFreeAccount": "免费账户可享：",
+  "upToFivePages": "每份文档最多 5 页",
+  "threeDocsPerDay": "每天 3 份文档",
+  "historySavedForever": "历史永久保存",
+  "cloudSyncDevices": "多设备云端同步",
+  "wantUnlimitedAccess": "想要无限使用？",
+  "createFreeForMore": "创建免费账户获取更多功能",
+  "createFreeAccount": "创建免费账户",
+  "selectDocSource": "选择文档来源",
+  "browseFiles": "浏览文件",
+  "pdfWordDocs": "PDF、Word 文档",
+  "takePhoto": "拍照",
+  "captureDocCamera": "使用相机拍摄文档",
+  "photoLibrary": "照片库",
+  "selectFromGallery": "从相册选择",
+  "fileTooLargeGuest": "文件过大。访客模式最大 5MB。",
+  "failedPickFile": "选择文件失败",
+  "failedCapturePhoto": "拍照失败",
+  "failedPickImage": "选择图片失败",
+  "trialLimitReached": "已达试用上限",
+  "trialLimitMsg": "您已用完所有免费试用次数。创建账户即可继续使用 DoCMind AI，享受无限使用。",
+
+  "noSummaryAvailable": "暂无摘要",
+  "summaryNotSaved": "此摘要将不会保存。创建账户即可保存！",
+  "documentSummary": "文档摘要",
+  "noOverviewAvailable": "暂无概述",
+  "moreKeyPoints": "还有 {count} 个要点",
+  "@moreKeyPoints": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsCount": "{count} 项",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createFreeToUnlock": "创建免费账户以解锁",
+  "trialsRemaining": "剩余 {count} 次试用",
+  "@trialsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createAccountContinue": "创建账户以继续使用 DoCMind AI",
+  "createAccountUnlimited": "创建账户获取无限摘要",
+  "close": "关闭",
+
+  "processingFailed": "文档处理失败，请重试。",
+  "processingTakingLong": "处理时间超出预期，请在历史记录中查看状态。",
+
+  "translating": "翻译中",
+  "aiTranslatingYourSummary": "AI正在翻译您的摘要",
+  "translationComplete": "翻译完成",
+  "translatedTo": "已翻译为{language}",
+  "originalLanguage": "原文: {language}",
+  "generatedOn": "生成于 {date}",
+  "pleaseWait": "请稍候",
+
+  "updateRequired": "需要更新",
+  "updateRequiredMsg": "DoCMind AI 有新版本可用。请更新以继续使用该应用。",
+  "updateNow": "立即更新"
+}

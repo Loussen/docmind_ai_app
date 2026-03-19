@@ -23,12 +23,13 @@ class AppTheme {
       // Using system font; add 'SF Pro Display' when fonts are available
       textTheme: _textTheme,
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.backgroundLight,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColors.textPrimary),
         titleTextStyle: TextStyle(
-          // Using system font; add 'SF Pro Display' when fonts are available
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: AppColors.textPrimary,
@@ -142,12 +143,13 @@ class AppTheme {
       // Using system font; add 'SF Pro Display' when fonts are available
       textTheme: _textThemeDark,
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.backgroundDark,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColors.textLight),
         titleTextStyle: TextStyle(
-          // Using system font; add 'SF Pro Display' when fonts are available
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: AppColors.textLight,

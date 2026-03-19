@@ -13,9 +13,11 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		886C11025DCF99B19DF63B5A /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB9B4575F4BA8A3B9FBAAC42 /* Pods_RunnerTests.framework */; };
+		94F011ABAE3791AFC60448A4 /* Pods_DoCMind_AI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E969343576AB56B5C0B316B4 /* Pods_DoCMind_AI.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		F91C9C0F2F6AD0700065F6E7 /* DoCMind AI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F91C9C052F6AD0700065F6E7 /* DoCMind AI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F9B5E2F22F14E3A00026FD11 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B5E2F12F14E3A00026FD11 /* StoreKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +28,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
+		};
+		F91C9C0D2F6AD0700065F6E7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F91C9C042F6AD0700065F6E7;
+			remoteInfo = "DoCMind AI";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -40,6 +49,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F91C9C102F6AD0700065F6E7 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F91C9C0F2F6AD0700065F6E7 /* DoCMind AI.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -51,8 +71,10 @@
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A95AADED8D3CFC9647F74B1 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		5905A9B67A36E392A306F56B /* Pods-DoCMind AI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DoCMind AI.debug.xcconfig"; path = "Target Support Files/Pods-DoCMind AI/Pods-DoCMind AI.debug.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7625E6545334714B4B253BC1 /* Pods-DoCMind AI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DoCMind AI.release.xcconfig"; path = "Target Support Files/Pods-DoCMind AI/Pods-DoCMind AI.release.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
@@ -65,9 +87,33 @@
 		B8AEF91488E69C740C998344 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		BF15B11273A19BA6A954BFDC /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C1E93794D947FD167215E221 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		E2F8885EEB4F69342FE680EF /* Pods-DoCMind AI.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DoCMind AI.profile.xcconfig"; path = "Target Support Files/Pods-DoCMind AI/Pods-DoCMind AI.profile.xcconfig"; sourceTree = "<group>"; };
+		E969343576AB56B5C0B316B4 /* Pods_DoCMind_AI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DoCMind_AI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F253B905B173B88B7FAEBCA9 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		F91C9C052F6AD0700065F6E7 /* DoCMind AI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "DoCMind AI.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9B5E2F12F14E3A00026FD11 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F91C9C062F6AD0700065F6E7 /* DoCMind AI */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F91C9CFF2F6AD0710065F6E7 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
+			path = "DoCMind AI";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F91C9CFF2F6AD0710065F6E7 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F91C9C042F6AD0700065F6E7 /* DoCMind AI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8A445AA9A6A634F9477C362C /* Frameworks */ = {
@@ -84,6 +130,14 @@
 			files = (
 				F9B5E2F22F14E3A00026FD11 /* StoreKit.framework in Frameworks */,
 				03256C09AD1AF927C9F67166 /* Pods_Runner.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F91C9C022F6AD0700065F6E7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94F011ABAE3791AFC60448A4 /* Pods_DoCMind_AI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +168,7 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				F91C9C062F6AD0700065F6E7 /* DoCMind AI */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				B65A5CBA61DACB2998E09199 /* Pods */,
@@ -126,6 +181,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
+				F91C9C052F6AD0700065F6E7 /* DoCMind AI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,6 +210,9 @@
 				BF15B11273A19BA6A954BFDC /* Pods-RunnerTests.debug.xcconfig */,
 				0B4080364C6435B9C1162DF4 /* Pods-RunnerTests.release.xcconfig */,
 				C1E93794D947FD167215E221 /* Pods-RunnerTests.profile.xcconfig */,
+				5905A9B67A36E392A306F56B /* Pods-DoCMind AI.debug.xcconfig */,
+				7625E6545334714B4B253BC1 /* Pods-DoCMind AI.release.xcconfig */,
+				E2F8885EEB4F69342FE680EF /* Pods-DoCMind AI.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -164,6 +223,7 @@
 				F9B5E2F12F14E3A00026FD11 /* StoreKit.framework */,
 				2F409CC8B14FC51B66F080FE /* Pods_Runner.framework */,
 				AB9B4575F4BA8A3B9FBAAC42 /* Pods_RunnerTests.framework */,
+				E969343576AB56B5C0B316B4 /* Pods_DoCMind_AI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -200,17 +260,40 @@
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
+				F91C9C102F6AD0700065F6E7 /* Embed Foundation Extensions */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
-				4170C4787421C319240DAE3C /* [CP] Embed Pods Frameworks */,
+				2DB90BEC6A8B4FD442B9D501 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F91C9C0E2F6AD0700065F6E7 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F91C9C042F6AD0700065F6E7 /* DoCMind AI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F91C9C152F6AD0700065F6E7 /* Build configuration list for PBXNativeTarget "DoCMind AI" */;
+			buildPhases = (
+				BB629A442D0A68C0B47C70B9 /* [CP] Check Pods Manifest.lock */,
+				F91C9C012F6AD0700065F6E7 /* Sources */,
+				F91C9C022F6AD0700065F6E7 /* Frameworks */,
+				F91C9C032F6AD0700065F6E7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F91C9C062F6AD0700065F6E7 /* DoCMind AI */,
+			);
+			name = "DoCMind AI";
+			productName = "DoCMind AI";
+			productReference = F91C9C052F6AD0700065F6E7 /* DoCMind AI.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -219,6 +302,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -230,23 +314,39 @@
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
 					};
+					F91C9C042F6AD0700065F6E7 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
 				};
 			};
 			buildConfigurationList = 97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */;
-			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				nl,
+				fr,
+				de,
+				id,
+				it,
+				ja,
+				pt,
+				ru,
+				"zh-Hans",
+				es,
+				"zh-Hant",
+				tr,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
+				F91C9C042F6AD0700065F6E7 /* DoCMind AI */,
 			);
 		};
 /* End PBXProject section */
@@ -270,9 +370,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F91C9C032F6AD0700065F6E7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2DB90BEC6A8B4FD442B9D501 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		372DD310B97C76A76E3A3BF8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -311,23 +435,6 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
 		};
-		4170C4787421C319240DAE3C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		481D9B878502995717A60633 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -365,6 +472,28 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
 		};
+		BB629A442D0A68C0B47C70B9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DoCMind AI-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -385,6 +514,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F91C9C012F6AD0700065F6E7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -392,6 +528,11 @@
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
+		};
+		F91C9C0E2F6AD0700065F6E7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F91C9C042F6AD0700065F6E7 /* DoCMind AI */;
+			targetProxy = F91C9C0D2F6AD0700065F6E7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -477,6 +618,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				CUSTOM_GROUP_ID = group.com.docmind.docmindAi;
 				DEVELOPMENT_TEAM = 9PKC7ABKYS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -665,6 +807,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				CUSTOM_GROUP_ID = group.com.docmind.docmindAi;
 				DEVELOPMENT_TEAM = 9PKC7ABKYS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -689,6 +832,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				CUSTOM_GROUP_ID = group.com.docmind.docmindAi;
 				DEVELOPMENT_TEAM = 9PKC7ABKYS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -703,6 +847,135 @@
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		F91C9C112F6AD0700065F6E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5905A9B67A36E392A306F56B /* Pods-DoCMind AI.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "DoCMind AI/DoCMind AI.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				CUSTOM_GROUP_ID = group.com.docmind.docmindAi;
+				DEVELOPMENT_TEAM = 9PKC7ABKYS;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "DoCMind AI/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "DoCMind AI";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 13;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.docmind.docmindAi.DoCMindAI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F91C9C122F6AD0700065F6E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7625E6545334714B4B253BC1 /* Pods-DoCMind AI.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "DoCMind AI/DoCMind AI.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				CUSTOM_GROUP_ID = group.com.docmind.docmindAi;
+				DEVELOPMENT_TEAM = 9PKC7ABKYS;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "DoCMind AI/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "DoCMind AI";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 13;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.docmind.docmindAi.DoCMindAI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F91C9C132F6AD0700065F6E7 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E2F8885EEB4F69342FE680EF /* Pods-DoCMind AI.profile.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "DoCMind AI/DoCMind AI.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				CUSTOM_GROUP_ID = group.com.docmind.docmindAi;
+				DEVELOPMENT_TEAM = 9PKC7ABKYS;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "DoCMind AI/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "DoCMind AI";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 13;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.docmind.docmindAi.DoCMindAI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
 		};
 /* End XCBuildConfiguration section */
 
@@ -733,6 +1006,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F91C9C152F6AD0700065F6E7 /* Build configuration list for PBXNativeTarget "DoCMind AI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F91C9C112F6AD0700065F6E7 /* Debug */,
+				F91C9C122F6AD0700065F6E7 /* Release */,
+				F91C9C132F6AD0700065F6E7 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

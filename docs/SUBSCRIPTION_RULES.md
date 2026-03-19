@@ -4,7 +4,7 @@
 
 | Plan  | Sənəd sayı | Sənəd başına səhifə | Max fayl ölçüsü (MB) |
 |-------|------------|----------------------|----------------------|
-| Free  | 2          | 5                    | 10                   |
+| Free  | 2/day      | 5                    | 5                    |
 | Pro   | Limitsiz   | Limitsiz             | 50                   |
 | Pro+  | Limitsiz   | Limitsiz             | 100                  |
 
@@ -22,6 +22,7 @@
 
 - **Config:** `config/docmind.php` – hər plan üçün `max_file_size_mb` (free 10, pro 50, pro_plus 100).
 - **Upload:** `DocumentController::store()` plana görə max fayl ölçüsü yoxlanır.
+- **Free günlük limit:** `Device::canUploadDocument()` indi günlük sayına baxır (`getDailyUsageCount`) və `config('docmind.plans.free.docs_per_day', 2)` ilə müqayisə edir. `CheckUsageLimit` və `subscription/usage` cavabları da günlük limitlə uyğunlaşdırılıb.
 - **Premium sayılma:** `Device::isPremium()` və `User::isPremium()` indi **`Subscription::isActive()`** istifadə edir:
   - `isActive()` = `status === 'active'` **və** (`end_date` yoxdur **və ya** `end_date` gələcəkdir).
   - Aylıq/illik bitəndə (`end_date` keçəndə) istifadəçi artıq premium sayılmır və upload/summary limitlərinə (free) düşür.

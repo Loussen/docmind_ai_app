@@ -1,0 +1,454 @@
+{
+  "@@locale": "en",
+
+  "appName": "DoCMind AI",
+  "appTagline": "OCR, Doc & AI Summarizer",
+
+  "navHome": "Home",
+  "navHistory": "History",
+  "navSettings": "Settings",
+
+  "addDocument": "Add document",
+  "optionDocument": "Document",
+  "optionDocumentSub": "PDF, Word, or other files",
+  "optionGallery": "Gallery",
+  "optionGallerySub": "Choose from photo library",
+  "optionCamera": "Camera",
+  "optionCameraSub": "Take a photo",
+
+  "greeting": "Hello, there",
+  "planPro": "Pro",
+  "planProPlus": "Pro+",
+  "planFree": "Free",
+  "quickActions": "Quick Actions",
+  "recentDocuments": "Recent Documents",
+  "upload": "Upload",
+  "uploadFormats": "PDF, DOCX, Image",
+  "history": "History",
+  "viewAllDocs": "View all docs",
+  "seeAll": "See All",
+  "noDocumentsYet": "No documents yet",
+  "uploadFirstDoc": "Upload your first document and let AI summarize it for you",
+  "uploadDocument": "Upload Document",
+
+  "premiumActive": "Premium Active",
+  "unlimitedDocsSummaries": "Unlimited documents & summaries",
+  "freePlan": "Free Plan",
+  "noFreeDocsLeft": "No free docs left",
+  "freeLeftCount": "{count} free left",
+  "@freeLeftCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeForUnlimited": "Upgrade for unlimited access",
+  "freeDocsUsed": "{used} of {limit} free documents used",
+  "@freeDocsUsed": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "upgrade": "Upgrade",
+
+  "failed": "Failed",
+  "minAgo": "{count} min ago",
+  "@minAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count}h ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yesterday": "Yesterday",
+  "daysAgo": "{count} days ago",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "clearFilters": "Clear filters",
+  "documentDeleted": "Document deleted",
+  "noDocumentsFiltered": "No documents found",
+  "tryRemovingFilters": "Try removing filters or uploading\nnew documents",
+  "clearFiltersButton": "Clear Filters",
+  "deleteDocument": "Delete Document",
+  "deleteDocumentConfirm": "Are you sure you want to delete this document?",
+  "deleteDocumentConfirmFull": "Are you sure you want to delete this document? This action cannot be undone.",
+  "cancel": "Cancel",
+  "delete": "Delete",
+
+  "allDocuments": "All Documents",
+  "pdfOnly": "PDF Only",
+  "wordOnly": "Word Only",
+  "imagesOnly": "Images Only",
+
+  "settings": "Settings",
+  "proMember": "Pro Member",
+  "proPlusMember": "Pro+ Member",
+  "unlimitedAccess": "Unlimited access",
+  "upgradeForMoreFeatures": "Upgrade for more features",
+  "preferences": "Preferences",
+  "support": "Support",
+  "account": "Account",
+  "notifications": "Notifications",
+  "darkMode": "Dark Mode",
+  "appLanguage": "App Language",
+  "summaryLanguage": "Summary Language",
+  "helpFaq": "Help & FAQ",
+  "rateApp": "Rate App",
+  "rateAppSub": "Love DoCMind AI? Rate us!",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "restorePurchases": "Restore Purchases",
+  "signOut": "Sign Out",
+  "deleteAccount": "Delete Account",
+  "deleteAccountConfirm": "Are you sure you want to delete your account? This cannot be undone.",
+  "deleteAccountTitle": "Delete Account?",
+  "appVersion": "DoCMind AI v{version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "whatsNew": "What's New in v{version}",
+  "@whatsNew": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "ok": "OK",
+
+  "document": "Document",
+  "failedToLoadDocument": "Failed to load document",
+  "tryAgain": "Try Again",
+  "documentNotFound": "Document not found",
+  "loadingPdf": "Loading PDF...",
+  "loadingPreview": "Loading document preview...",
+  "showingPage": "Showing page 1 of {count}",
+  "@showingPage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "documentContent": "Document Content",
+  "noContentExtracted": "No content extracted yet",
+  "previewNotAvailable": "Preview not available",
+  "viewSummary": "View Summary",
+  "generating": "Generating...",
+  "generateAiSummary": "Generate AI Summary",
+  "pagesCount": "{count} pages",
+  "@pagesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "uploadDocumentTitle": "Upload Document",
+  "tipReading": "AI is reading through your document...",
+  "tipExtracting": "Extracting key information...",
+  "tipIdentifying": "Identifying important sections...",
+  "tipBuilding": "Building a structured summary...",
+  "tipFinalizing": "Almost there, finalizing results...",
+  "stepUploading": "Uploading",
+  "stepExtractingText": "Extracting Text",
+  "stepAiAnalyzing": "AI Analyzing",
+  "summaryLang": "Summary language",
+  "uploadingProgress": "Uploading your document... {percent}%",
+  "@uploadingProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "extractingText": "Extracting text from your document...",
+  "aiAnalyzing": "AI is analyzing and summarizing...",
+  "preparing": "Preparing...",
+  "tapToUpload": "Tap to upload a document",
+  "supportedFormats": "PDF, DOCX, JPG, PNG up to {size}MB",
+  "@supportedFormats": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "aiWillExtract": "AI will extract and summarize content",
+  "freeLimitReached": "Free limit reached. Upgrade to continue",
+  "readyToProcess": "Ready to process",
+  "chooseDifferentFile": "Choose Different File",
+  "selectedFile": "Selected file",
+  "generateSummary": "Generate Summary",
+  "freePlanFileLimit": "Free plan limit: max {size}MB per file. Upgrade to upload larger documents.",
+  "@freePlanFileLimit": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "fileSizeExceeded": "File size exceeds your plan limit (max {size}MB). Upgrade for larger files.",
+  "@fileSizeExceeded": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "freeLimitReachedTitle": "Free Limit Reached",
+  "freeLimitReachedMsg": "You've used all your free documents. Upgrade to Pro for unlimited access!",
+  "maybeLater": "Maybe Later",
+  "upgradeNow": "Upgrade Now",
+
+  "summary": "Summary",
+  "failedToLoadSummary": "Failed to load summary",
+  "summaryNotFound": "Summary not found",
+  "overview": "Overview",
+  "keyPoints": "Key Points",
+  "actionItems": "Action Items",
+  "keywords": "Keywords",
+  "importantFacts": "Important Facts",
+  "obligations": "Obligations",
+  "risks": "Risks",
+  "findings": "Findings",
+  "wordsCount": "{count} words",
+  "@wordsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingTime": "{seconds}s",
+  "@processingTime": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "viewOriginalDocument": "View Original Document",
+  "copySummary": "Copy Summary",
+  "summaryCopied": "Summary copied to clipboard",
+  "generatedBy": "Generated by DoCMind AI",
+  "wordCountLabel": "Word count: {count}",
+  "@wordCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "processingTimeLabel": "Processing time: {seconds}s",
+  "@processingTimeLabel": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeRequired": "Upgrade required",
+  "translateProOnly": "Translation is available on Pro plans. Upgrade to translate summaries.",
+  "notNow": "Not now",
+
+  "manageSubscription": "Manage Subscription",
+  "changeYourPlan": "Change Your Plan",
+  "unlockPremium": "Unlock Premium",
+  "upgradeOrSwitch": "Upgrade or switch to a different plan",
+  "getUnlimitedAccess": "Get unlimited access to all features",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "save40": "SAVE 40%",
+  "unlimitedDocuments": "Unlimited documents",
+  "unlimitedSummaries": "Unlimited summaries",
+  "priorityAiProcessing": "Priority AI processing",
+  "exportToPdf": "Export to PDF",
+  "emailSupport": "Email support",
+  "everythingInPro": "Everything in Pro",
+  "ocrScannedDocs": "OCR for scanned documents",
+  "longDocSupport": "Long document support (100+ pages)",
+  "advancedAiAnalysis": "Advanced AI analysis",
+  "prioritySupport": "Priority support",
+  "earlyAccess": "Early access to features",
+  "freePlanInfo": "Free plan includes 2 documents with up to 5 pages each.",
+  "restoring": "Restoring...",
+  "current": "CURRENT",
+  "popular": "POPULAR",
+  "perYear": "/year",
+  "perMonth": "/month",
+  "billedAnnually": "Billed annually",
+  "thatsOnly": "That's only {price}/month",
+  "@thatsOnly": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "getPro": "Get Pro",
+  "getProPlus": "Get Pro+",
+  "currentPlan": "Current Plan",
+  "switchToYearly": "Switch to Yearly",
+  "switchToMonthly": "Switch to Monthly",
+  "upgradeToPro": "Upgrade to Pro",
+  "upgradeToProPlus": "Upgrade to Pro+",
+  "downgradeToPro": "Downgrade to Pro",
+  "downgradeToProPlus": "Downgrade to Pro+",
+  "changesAtEnd": "Changes at end of billing period",
+  "autoRenews": "Auto-renews {date}",
+  "@autoRenews": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "expires": "Expires {date}",
+  "@expires": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "soon": "soon",
+  "active": "ACTIVE",
+  "downgradePlan": "Downgrade Plan",
+  "downgradeConfirm": "Your plan will be downgraded at the end of your current billing period. You will keep your current features until then.",
+  "confirmDowngrade": "Confirm Downgrade",
+
+  "welcomeBack": "Welcome Back",
+  "signInContinue": "Sign in to continue to DoCMind AI",
+  "createAccountToStart": "Create your account to get started",
+  "emailAddress": "Email address",
+  "password": "Password",
+  "enterEmail": "Please enter your email",
+  "validEmail": "Please enter a valid email",
+  "enterPassword": "Please enter your password",
+  "passwordMinLength": "Password must be at least 8 characters",
+  "signIn": "Sign In",
+  "createAccount": "Create Account",
+  "orContinueWith": "or continue with",
+  "continueWithApple": "Continue with Apple",
+  "tryWithoutAccount": "Try Without Account",
+  "noAccount": "Don't have an account? ",
+  "haveAccount": "Already have an account? ",
+  "signUp": "Sign Up",
+
+  "tryDoCMindAi": "Try DoCMind AI",
+  "trialsLeft": "{count} trial(s) left",
+  "@trialsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noTrialsRemaining": "No trials remaining",
+  "summarizeNow": "Summarize Now",
+  "analyzingDocument": "Analyzing your document...",
+  "thisMayTakeAMoment": "This may take a moment",
+  "guestModeLimitations": "Guest Mode Limitations",
+  "maxPagesGuest": "Max 2 pages per document",
+  "twoTrialsOnly": "Only 2 total trials (no reset)",
+  "notSavedToHistory": "Summary not saved to history",
+  "noCloudSync": "No cloud sync",
+  "withFreeAccount": "With a free account you get:",
+  "upToFivePages": "Up to 5 pages per document",
+  "threeDocsPerDay": "3 documents per day",
+  "historySavedForever": "History saved forever",
+  "cloudSyncDevices": "Cloud sync across devices",
+  "wantUnlimitedAccess": "Want unlimited access?",
+  "createFreeForMore": "Create a free account for more features",
+  "createFreeAccount": "Create Free Account",
+  "selectDocSource": "Select Document Source",
+  "browseFiles": "Browse Files",
+  "pdfWordDocs": "PDF, Word documents",
+  "takePhoto": "Take Photo",
+  "captureDocCamera": "Capture document with camera",
+  "photoLibrary": "Photo Library",
+  "selectFromGallery": "Select from gallery",
+  "fileTooLargeGuest": "File too large. Maximum 5MB for guest mode.",
+  "failedPickFile": "Failed to pick file",
+  "failedCapturePhoto": "Failed to capture photo",
+  "failedPickImage": "Failed to pick image",
+  "trialLimitReached": "Trial Limit Reached",
+  "trialLimitMsg": "You have used all your free trials. Create an account to continue using DoCMind AI with unlimited access.",
+
+  "noSummaryAvailable": "No summary available",
+  "summaryNotSaved": "This summary won't be saved. Create an account to keep it!",
+  "documentSummary": "Document Summary",
+  "noOverviewAvailable": "No overview available",
+  "moreKeyPoints": "{count} more key points",
+  "@moreKeyPoints": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsCount": "{count} items",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createFreeToUnlock": "Create Free Account to Unlock",
+  "trialsRemaining": "{count} Trial(s) Remaining",
+  "@trialsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createAccountContinue": "Create an account to continue using DoCMind AI",
+  "createAccountUnlimited": "Create an account for unlimited summaries",
+  "close": "Close",
+
+  "processingFailed": "Document processing failed. Please try again.",
+  "processingTakingLong": "Processing is taking longer than expected. Check History for status.",
+
+  "translating": "Translating",
+  "aiTranslatingYourSummary": "AI is translating your summary",
+  "translationComplete": "Translation complete",
+  "translatedTo": "Translated to {language}",
+  "@translatedTo": { "placeholders": { "language": { "type": "String" } } },
+  "originalLanguage": "Original: {language}",
+  "@originalLanguage": { "placeholders": { "language": { "type": "String" } } },
+  "generatedOn": "Generated on {date}",
+  "@generatedOn": { "placeholders": { "date": { "type": "String" } } },
+  "pleaseWait": "Please wait",
+
+  "updateRequired": "Update Required",
+  "updateRequiredMsg": "A new version of DoCMind AI is available. Please update to continue using the app.",
+  "updateNow": "Update Now"
+}

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:dio/dio.dart';
@@ -41,6 +40,7 @@ class DocumentPreviewScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor:
             isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: Icon(
             Iconsax.arrow_left,
@@ -111,13 +111,12 @@ class DocumentPreviewScreen extends ConsumerWidget {
     final isImage = document.type == DocumentType.image;
     final isPdf = document.type == DocumentType.pdf;
     final hasFileUrl = document.fileUrl != null && document.fileUrl!.isNotEmpty;
-    final hasPreview = document.previewUrl != null && document.previewUrl!.isNotEmpty;
 
     if (isPdf && hasFileUrl) {
       return _buildPdfViewer(context, ref, document, isDark);
     }
 
-    if (hasPreview && (isImage || isPdf)) {
+    if (isImage && hasFileUrl) {
       return _buildImagePreview(context, ref, document, isDark);
     }
 
@@ -202,6 +201,11 @@ class DocumentPreviewScreen extends ConsumerWidget {
     bool isDark,
   ) {
     final deviceId = ref.watch(_deviceIdProvider).valueOrNull;
+    if (deviceId == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final imageUrl = document.fileUrl ?? document.previewUrl ?? '';
 
     return Column(
       children: [
@@ -213,46 +217,55 @@ class DocumentPreviewScreen extends ConsumerWidget {
             child: Container(
               width: double.infinity,
               color: isDark ? Colors.black : const Color(0xFFF0F0F0),
-              child: CachedNetworkImage(
-                imageUrl: document.previewUrl!,
-                httpHeaders: {
-                  if (deviceId != null) 'X-Device-ID': deviceId,
+              child: FutureBuilder<Uint8List?>(
+                future: _fetchImageBytes(ref, imageUrl, deviceId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 16),
+                          Text('Loading document preview...'),
+                        ],
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError || snapshot.data == null || snapshot.data!.isEmpty) {
+                    return _buildPreviewErrorOrFallback(context, ref, document, isDark);
+                  }
+                  return Image.memory(
+                    snapshot.data!,
+                    fit: BoxFit.contain,
+                  );
                 },
-                fit: BoxFit.contain,
-                placeholder: (context, url) => const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      Text('Loading document preview...'),
-                    ],
-                  ),
-                ),
-                errorWidget: (context, url, error) =>
-                    _buildPreviewErrorOrFallback(context, ref, document, isDark),
               ),
             ),
           ),
         ),
-        if (document.type == DocumentType.pdf && (document.pageCount) > 1)
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
-            child: Center(
-              child: Text(
-                'Showing page 1 of ${document.pageCount}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: isDark
-                      ? AppColors.textTertiaryDark
-                      : AppColors.textTertiary,
-                ),
-              ),
-            ),
-          ),
       ],
     );
+  }
+
+  Future<Uint8List?> _fetchImageBytes(
+    WidgetRef ref,
+    String imageUrl,
+    String deviceId,
+  ) async {
+    try {
+      final dio = ref.read(dioClientProvider).dio;
+      final response = await dio.get<Uint8List>(
+        imageUrl,
+        options: Options(
+          responseType: ResponseType.bytes,
+          headers: {'X-Device-ID': deviceId},
+        ),
+      );
+      return response.data;
+    } catch (_) {
+      return null;
+    }
   }
 
   Widget _buildTextPreview(

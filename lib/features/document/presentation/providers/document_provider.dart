@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/document_model.dart';
 import '../../data/repositories/document_repository.dart';
+import '../../../../l10n/app_localizations.dart';
 
 enum UploadStatus { idle, selecting, uploading, processing, analyzing, success, error }
 
@@ -154,16 +156,16 @@ extension DocumentFilterTypeExtension on DocumentFilterType {
     }
   }
 
-  String get label {
+  String label(BuildContext context) {
     switch (this) {
       case DocumentFilterType.all:
-        return 'All Documents';
+        return S.of(context)!.allDocuments;
       case DocumentFilterType.pdf:
-        return 'PDF Only';
+        return S.of(context)!.pdfOnly;
       case DocumentFilterType.docx:
-        return 'Word Only';
+        return S.of(context)!.wordOnly;
       case DocumentFilterType.image:
-        return 'Images Only';
+        return S.of(context)!.imagesOnly;
     }
   }
 }

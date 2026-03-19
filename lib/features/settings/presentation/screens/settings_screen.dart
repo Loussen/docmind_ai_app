@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,8 +6,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/i18n/language_options.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../providers/settings_provider.dart';
 
@@ -18,6 +21,71 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  void _showLanguagePicker({
+    required bool isDark,
+    required String title,
+    required List<LanguageOption> options,
+    required String selectedCode,
+    required void Function(String code) onSelect,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: isDark ? AppColors.cardDark : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: isDark ? AppColors.textLight : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: options.map((lang) {
+                    final isSelected = lang.code == selectedCode;
+                    return ListTile(
+                      leading: Text(
+                        lang.flag,
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                      title: Text(
+                        lang.name,
+                        style: TextStyle(
+                          color:
+                              isDark ? AppColors.textLight : AppColors.textPrimary,
+                          fontWeight:
+                              isSelected ? FontWeight.w700 : FontWeight.w500,
+                        ),
+                      ),
+                      trailing: isSelected
+                          ? const Icon(Iconsax.tick_circle, color: AppColors.primary)
+                          : null,
+                      onTap: () {
+                        Navigator.pop(context);
+                        onSelect(lang.code);
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +101,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     final subscriptionState = ref.watch(subscriptionProvider);
+    final isPremium = ref.watch(effectiveIsPremiumProvider);
+    final isProPlus = ref.watch(effectiveIsProPlusProvider);
     final settingsState = ref.watch(settingsProvider);
 
     ref.listen<SubscriptionState>(subscriptionProvider, (previous, next) {
@@ -80,7 +150,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        surfaceTintColor: Colors.transparent,
+        title: Text(S.of(context)!.settings),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -95,16 +167,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    gradient: subscriptionState.isPremium
+                    gradient: isPremium
                         ? const LinearGradient(
                             colors: [Color(0xFF667eea), Color(0xFF764ba2)],
                           )
                         : null,
-                    color: subscriptionState.isPremium
+                    color: isPremium
                         ? null
                         : colorScheme.surface,
                     borderRadius: BorderRadius.circular(20),
-                    border: subscriptionState.isPremium
+                    border: isPremium
                         ? null
                         : Border.all(
                             color: isDark
@@ -118,14 +190,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: subscriptionState.isPremium
+                          color: isPremium
                               ? Colors.white.withOpacity(0.2)
                               : AppColors.secondary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Icon(
                           Iconsax.crown5,
-                          color: subscriptionState.isPremium
+                          color: isPremium
                               ? Colors.white
                               : AppColors.secondary,
                           size: 24,
@@ -137,27 +209,27 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              subscriptionState.isProPlus
-                                  ? 'Pro+ Member'
-                                  : subscriptionState.isPremium
-                                      ? 'Pro Member'
-                                      : 'Free Plan',
+                              isProPlus
+                                  ? S.of(context)!.proPlusMember
+                                  : isPremium
+                                      ? S.of(context)!.proMember
+                                      : S.of(context)!.freePlan,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color: subscriptionState.isPremium
+                                color: isPremium
                                     ? Colors.white
                                     : colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              subscriptionState.isPremium
-                                  ? 'Unlimited access'
-                                  : 'Upgrade for more features',
+                              isPremium
+                                  ? S.of(context)!.unlimitedAccess
+                                  : S.of(context)!.upgradeForMoreFeatures,
                               style: TextStyle(
                                 fontSize: 13,
-                                color: subscriptionState.isPremium
+                                color: isPremium
                                     ? Colors.white70
                                     : isDark
                                         ? AppColors.textSecondaryDark
@@ -169,7 +241,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       ),
                       Icon(
                         Iconsax.arrow_right_3,
-                        color: subscriptionState.isPremium
+                        color: isPremium
                             ? Colors.white
                             : isDark
                                 ? AppColors.textTertiaryDark
@@ -187,7 +259,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             FadeInUp(
               delay: const Duration(milliseconds: 50),
               duration: const Duration(milliseconds: 300),
-              child: _buildSectionTitle('Preferences', isDark),
+              child: _buildSectionTitle(S.of(context)!.preferences, isDark),
             ),
 
             const SizedBox(height: 12),
@@ -201,7 +273,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 tiles: [
                   _SettingsTile(
                     icon: Iconsax.notification,
-                    title: 'Notifications',
+                    title: S.of(context)!.notifications,
                     trailing: Switch.adaptive(
                       value: settingsState.notificationsEnabled,
                       onChanged: (value) {
@@ -214,7 +286,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                   _SettingsTile(
                     icon: Iconsax.moon,
-                    title: 'Dark Mode',
+                    title: S.of(context)!.darkMode,
                     trailing: Switch.adaptive(
                       value: isDark,
                       onChanged: (value) {
@@ -227,10 +299,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                   _SettingsTile(
                     icon: Iconsax.language_circle,
-                    title: 'Language',
-                    subtitle: 'Coming Soon',
-                    onTap: null,
-                    isDisabled: true,
+                    title: S.of(context)!.appLanguage,
+                    subtitle: '${languageFlag(settingsState.uiLanguage, forUi: true)} ${languageName(settingsState.uiLanguage, forUi: true)}',
+                    onTap: () => _showLanguagePicker(
+                      isDark: isDark,
+                      title: S.of(context)!.appLanguage,
+                      options: appUiLanguages,
+                      selectedCode: settingsState.uiLanguage,
+                      onSelect: (code) => ref
+                          .read(settingsProvider.notifier)
+                          .setUiLanguage(code),
+                    ),
+                  ),
+                  _SettingsTile(
+                    icon: Iconsax.translate,
+                    title: S.of(context)!.summaryLanguage,
+                    subtitle: '${languageFlag(settingsState.outputLanguage)} ${languageName(settingsState.outputLanguage)}',
+                    onTap: () => _showLanguagePicker(
+                      isDark: isDark,
+                      title: S.of(context)!.summaryLanguage,
+                      options: outputLanguages,
+                      selectedCode: settingsState.outputLanguage,
+                      onSelect: (code) => ref
+                          .read(settingsProvider.notifier)
+                          .setOutputLanguage(code),
+                    ),
                   ),
                 ],
               ),
@@ -242,7 +335,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             FadeInUp(
               delay: const Duration(milliseconds: 150),
               duration: const Duration(milliseconds: 300),
-              child: _buildSectionTitle('Support', isDark),
+              child: _buildSectionTitle(S.of(context)!.support, isDark),
             ),
 
             const SizedBox(height: 12),
@@ -256,23 +349,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 tiles: [
                   _SettingsTile(
                     icon: Iconsax.message_question,
-                    title: 'Help & FAQ',
+                    title: S.of(context)!.helpFaq,
                     onTap: () => _launchUrl('https://docsmind.app/support'),
                   ),
                   _SettingsTile(
                     icon: Iconsax.star,
-                    title: 'Rate App',
-                    subtitle: 'Love DoCMind AI? Rate us!',
+                    title: S.of(context)!.rateApp,
+                    subtitle: S.of(context)!.rateAppSub,
                     onTap: () => _launchUrl(AppConstants.appStoreReviewUrl),
                   ),
                   _SettingsTile(
                     icon: Iconsax.document,
-                    title: 'Privacy Policy',
+                    title: S.of(context)!.privacyPolicy,
                     onTap: () => _launchUrl('https://docsmind.app/privacy'),
                   ),
                   _SettingsTile(
                     icon: Iconsax.document_text,
-                    title: 'Terms of Service',
+                    title: S.of(context)!.termsOfService,
                     onTap: () => _launchUrl('https://docsmind.app/terms'),
                   ),
                 ],
@@ -285,7 +378,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             FadeInUp(
               delay: const Duration(milliseconds: 250),
               duration: const Duration(milliseconds: 300),
-              child: _buildSectionTitle('Account', isDark),
+              child: _buildSectionTitle(S.of(context)!.account, isDark),
             ),
 
             const SizedBox(height: 12),
@@ -299,7 +392,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 tiles: [
                   _SettingsTile(
                     icon: Iconsax.refresh,
-                    title: 'Restore Purchases',
+                    title: S.of(context)!.restorePurchases,
                     trailing: subscriptionState.isRestoring
                         ? SizedBox(
                             width: 20,
@@ -323,6 +416,68 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ],
               ),
             ),
+
+            if (kDebugMode) ...[
+              const SizedBox(height: 24),
+
+              FadeInUp(
+                delay: const Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 300),
+                child: _buildSectionTitle('Debug', isDark),
+              ),
+
+              const SizedBox(height: 12),
+
+              FadeInUp(
+                delay: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 300),
+                child: _buildSettingsCard(
+                  isDark: isDark,
+                  colorScheme: colorScheme,
+                  tiles: [
+                    _SettingsTile(
+                      icon: Iconsax.shield_tick,
+                      title: 'Simulate Free Plan',
+                      trailing: Switch.adaptive(
+                        value: ref.watch(debugFreeModProvider),
+                        onChanged: (value) {
+                          ref.read(debugFreeModProvider.notifier).state = value;
+                        },
+                        activeColor: AppColors.error,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              if (ref.watch(debugFreeModProvider))
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, left: 4, right: 4),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.error.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Iconsax.warning_2, color: AppColors.error, size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Free plan active: ${AppConstants.maxFileSizeFree}MB limit, daily upload limit, no translate',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isDark ? AppColors.error : AppColors.error,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
 
             const SizedBox(height: 32),
 

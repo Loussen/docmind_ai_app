@@ -182,3 +182,9 @@ final summariesProvider =
   return SummariesNotifier(repository);
 });
 
+// Translated summary cache per summaryId (client-side)
+final translatedSummaryProvider =
+    StateProvider.family<SummaryModel?, String>((ref, summaryId) => null);
+
+final isTranslatingProvider = StateProvider<bool>((ref) => false);
+

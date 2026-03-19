@@ -39,7 +39,7 @@ class AppConstants {
   static const int proPagesPerDoc = -1; // Unlimited
 
   // File Size Limits (in MB)
-  static const int maxFileSizeFree = 10;
+  static const int maxFileSizeFree = 5;
   static const int maxFileSizePro = 50;
   static const int maxFileSizeProPlus = 100;
 
