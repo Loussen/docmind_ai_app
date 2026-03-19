@@ -856,4 +856,58 @@ class SEs extends S {
 
   @override
   String get updateNow => 'Actualizar ahora';
+
+  @override
+  String get onboardingUploadTitle => 'Sube documentos';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Sube tus PDF, DOCX o imágenes y deja que la IA haga el resto. Obtén resúmenes en segundos.';
+
+  @override
+  String get onboardingSummaryTitle => 'Resúmenes con IA';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Obtén al instante puntos clave, tareas y datos importantes de cualquier documento.';
+
+  @override
+  String get onboardingTranslateTitle => 'Traduce resúmenes';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Traduce tus resúmenes a más de 13 idiomas con un solo toque.';
+
+  @override
+  String get onboardingShareTitle => 'Comparte desde cualquier app';
+
+  @override
+  String get onboardingShareDesc =>
+      'Envía archivos directamente desde WhatsApp, Telegram o cualquier app para obtener resúmenes instantáneos.';
+
+  @override
+  String get onboardingHistoryTitle => 'Historial y filtros';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Todos tus documentos organizados en un solo lugar. Filtra por PDF, Word o imágenes.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Copiar y Compartir';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Copia tus resúmenes al portapapeles o compártelos a través de tus aplicaciones favoritas.';
+
+  @override
+  String get tutorial => 'Tutorial';
+
+  @override
+  String get onboardingSkip => 'Omitir';
+
+  @override
+  String get onboardingNext => 'Siguiente';
+
+  @override
+  String get onboardingGetStarted => 'Empezar';
 }

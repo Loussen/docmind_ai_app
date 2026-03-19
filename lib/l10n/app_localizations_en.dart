@@ -851,4 +851,58 @@ class SEn extends S {
 
   @override
   String get updateNow => 'Update Now';
+
+  @override
+  String get onboardingUploadTitle => 'Upload Documents';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Drop your PDF, DOCX, or images and let AI do the rest. Get structured summaries in seconds.';
+
+  @override
+  String get onboardingSummaryTitle => 'AI-Powered Summaries';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Instantly get key points, action items, and highlights from any document.';
+
+  @override
+  String get onboardingTranslateTitle => 'Translate Summaries';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Translate your summaries into 13+ languages with a single tap.';
+
+  @override
+  String get onboardingShareTitle => 'Share from Any App';
+
+  @override
+  String get onboardingShareDesc =>
+      'Send files directly from WhatsApp, Telegram, or any app to get instant summaries.';
+
+  @override
+  String get onboardingHistoryTitle => 'History & Filters';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'All your documents organized in one place. Filter by PDF, Word, or images.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Copy & Share';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Copy your summaries to clipboard or share them with anyone via your favorite apps.';
+
+  @override
+  String get tutorial => 'Tutorial';
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingGetStarted => 'Get Started';
 }

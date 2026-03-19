@@ -276,5 +276,22 @@
 
   "updateRequired": "Update vereist",
   "updateRequiredMsg": "Er is een nieuwe versie van DoCMind AI beschikbaar. Werk de app bij om deze te blijven gebruiken.",
-  "updateNow": "Nu bijwerken"
+  "updateNow": "Nu bijwerken",
+
+  "onboardingUploadTitle": "Documenten uploaden",
+  "onboardingUploadDesc": "Upload uw PDF's, DOCX of afbeeldingen en laat AI de rest doen. Krijg samenvattingen in seconden.",
+  "onboardingSummaryTitle": "AI-gestuurde samenvattingen",
+  "onboardingSummaryDesc": "Krijg direct de kernpunten, actiepunten en highlights uit elk document.",
+  "onboardingTranslateTitle": "Samenvattingen vertalen",
+  "onboardingTranslateDesc": "Vertaal uw samenvattingen naar meer dan 13 talen met één tik.",
+  "onboardingShareTitle": "Deel vanuit elke app",
+  "onboardingShareDesc": "Stuur bestanden rechtstreeks vanuit WhatsApp, Telegram of elke app voor directe samenvattingen.",
+  "onboardingHistoryTitle": "Geschiedenis & filters",
+  "onboardingHistoryDesc": "Al uw documenten op één plek georganiseerd. Filter op PDF, Word of afbeeldingen.",
+  "onboardingCopyShareTitle": "Kopiëren & Delen",
+  "onboardingCopyShareDesc": "Kopieer uw samenvattingen naar het klembord of deel ze via uw favoriete apps.",
+  "tutorial": "Handleiding",
+  "onboardingSkip": "Overslaan",
+  "onboardingNext": "Volgende",
+  "onboardingGetStarted": "Aan de slag"
 }

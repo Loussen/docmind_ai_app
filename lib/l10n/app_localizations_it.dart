@@ -858,4 +858,58 @@ class SIt extends S {
 
   @override
   String get updateNow => 'Aggiorna ora';
+
+  @override
+  String get onboardingUploadTitle => 'Carica documenti';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Carica PDF, DOCX o immagini e lascia che l\'IA faccia il resto. Ottieni riassunti in pochi secondi.';
+
+  @override
+  String get onboardingSummaryTitle => 'Riassunti con IA';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Ottieni istantaneamente punti chiave, azioni e informazioni importanti da qualsiasi documento.';
+
+  @override
+  String get onboardingTranslateTitle => 'Traduci i riassunti';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Traduci i tuoi riassunti in oltre 13 lingue con un solo tocco.';
+
+  @override
+  String get onboardingShareTitle => 'Condividi da qualsiasi app';
+
+  @override
+  String get onboardingShareDesc =>
+      'Invia file direttamente da WhatsApp, Telegram o qualsiasi app per riassunti istantanei.';
+
+  @override
+  String get onboardingHistoryTitle => 'Cronologia e filtri';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Tutti i tuoi documenti organizzati in un unico posto. Filtra per PDF, Word o immagini.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Copia e Condividi';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Copia i tuoi riassunti negli appunti o condividili tramite le tue app preferite.';
+
+  @override
+  String get tutorial => 'Tutorial';
+
+  @override
+  String get onboardingSkip => 'Salta';
+
+  @override
+  String get onboardingNext => 'Avanti';
+
+  @override
+  String get onboardingGetStarted => 'Inizia';
 }

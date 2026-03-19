@@ -276,5 +276,22 @@
 
   "updateRequired": "Pembaruan diperlukan",
   "updateRequiredMsg": "Versi baru DoCMind AI tersedia. Silakan perbarui untuk terus menggunakan aplikasi.",
-  "updateNow": "Perbarui sekarang"
+  "updateNow": "Perbarui sekarang",
+
+  "onboardingUploadTitle": "Unggah Dokumen",
+  "onboardingUploadDesc": "Unggah PDF, DOCX, atau gambar Anda dan biarkan AI menyelesaikan sisanya. Dapatkan ringkasan dalam hitungan detik.",
+  "onboardingSummaryTitle": "Ringkasan Berbasis AI",
+  "onboardingSummaryDesc": "Dapatkan poin-poin penting, tugas, dan sorotan secara instan dari dokumen apa pun.",
+  "onboardingTranslateTitle": "Terjemahkan Ringkasan",
+  "onboardingTranslateDesc": "Terjemahkan ringkasan Anda ke 13+ bahasa hanya dengan satu ketukan.",
+  "onboardingShareTitle": "Bagikan dari Aplikasi Apa Pun",
+  "onboardingShareDesc": "Kirim file langsung dari WhatsApp, Telegram, atau aplikasi apa pun untuk ringkasan instan.",
+  "onboardingHistoryTitle": "Riwayat & Filter",
+  "onboardingHistoryDesc": "Semua dokumen Anda terorganisir di satu tempat. Filter berdasarkan PDF, Word, atau gambar.",
+  "onboardingCopyShareTitle": "Salin & Bagikan",
+  "onboardingCopyShareDesc": "Salin ringkasan ke papan klip atau bagikan melalui aplikasi favorit Anda.",
+  "tutorial": "Panduan",
+  "onboardingSkip": "Lewati",
+  "onboardingNext": "Berikutnya",
+  "onboardingGetStarted": "Mulai"
 }

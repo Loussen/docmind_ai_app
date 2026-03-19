@@ -348,6 +348,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 colorScheme: colorScheme,
                 tiles: [
                   _SettingsTile(
+                    icon: Iconsax.teacher,
+                    title: S.of(context)!.tutorial,
+                    onTap: () => context.push('/onboarding', extra: true),
+                  ),
+                  _SettingsTile(
                     icon: Iconsax.message_question,
                     title: S.of(context)!.helpFaq,
                     onTap: () => _launchUrl('https://docsmind.app/support'),

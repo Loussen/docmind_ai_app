@@ -859,4 +859,58 @@ class SFr extends S {
 
   @override
   String get updateNow => 'Mettre à jour';
+
+  @override
+  String get onboardingUploadTitle => 'Télécharger des documents';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Déposez vos PDF, DOCX ou images et laissez l\'IA faire le reste. Obtenez des résumés en quelques secondes.';
+
+  @override
+  String get onboardingSummaryTitle => 'Résumés par IA';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Obtenez instantanément les points clés, actions et faits importants de n\'importe quel document.';
+
+  @override
+  String get onboardingTranslateTitle => 'Traduire les résumés';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Traduisez vos résumés dans plus de 13 langues en un seul geste.';
+
+  @override
+  String get onboardingShareTitle => 'Partager depuis toute app';
+
+  @override
+  String get onboardingShareDesc =>
+      'Envoyez des fichiers directement depuis WhatsApp, Telegram ou toute autre app pour des résumés instantanés.';
+
+  @override
+  String get onboardingHistoryTitle => 'Historique et filtres';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Tous vos documents organisés au même endroit. Filtrez par PDF, Word ou images.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Copier et Partager';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Copiez vos résumés dans le presse-papiers ou partagez-les via vos applications préférées.';
+
+  @override
+  String get tutorial => 'Tutoriel';
+
+  @override
+  String get onboardingSkip => 'Passer';
+
+  @override
+  String get onboardingNext => 'Suivant';
+
+  @override
+  String get onboardingGetStarted => 'Commencer';
 }

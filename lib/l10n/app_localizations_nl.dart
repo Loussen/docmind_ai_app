@@ -855,4 +855,58 @@ class SNl extends S {
 
   @override
   String get updateNow => 'Nu bijwerken';
+
+  @override
+  String get onboardingUploadTitle => 'Documenten uploaden';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Upload uw PDF\'s, DOCX of afbeeldingen en laat AI de rest doen. Krijg samenvattingen in seconden.';
+
+  @override
+  String get onboardingSummaryTitle => 'AI-gestuurde samenvattingen';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Krijg direct de kernpunten, actiepunten en highlights uit elk document.';
+
+  @override
+  String get onboardingTranslateTitle => 'Samenvattingen vertalen';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Vertaal uw samenvattingen naar meer dan 13 talen met één tik.';
+
+  @override
+  String get onboardingShareTitle => 'Deel vanuit elke app';
+
+  @override
+  String get onboardingShareDesc =>
+      'Stuur bestanden rechtstreeks vanuit WhatsApp, Telegram of elke app voor directe samenvattingen.';
+
+  @override
+  String get onboardingHistoryTitle => 'Geschiedenis & filters';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Al uw documenten op één plek georganiseerd. Filter op PDF, Word of afbeeldingen.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Kopiëren & Delen';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Kopieer uw samenvattingen naar het klembord of deel ze via uw favoriete apps.';
+
+  @override
+  String get tutorial => 'Handleiding';
+
+  @override
+  String get onboardingSkip => 'Overslaan';
+
+  @override
+  String get onboardingNext => 'Volgende';
+
+  @override
+  String get onboardingGetStarted => 'Aan de slag';
 }

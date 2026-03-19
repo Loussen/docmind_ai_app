@@ -839,4 +839,54 @@ class SJa extends S {
 
   @override
   String get updateNow => '今すぐアップデート';
+
+  @override
+  String get onboardingUploadTitle => 'ドキュメントをアップロード';
+
+  @override
+  String get onboardingUploadDesc =>
+      'PDF、DOCX、画像をアップロードすると、AIが残りを処理します。数秒で要約を取得。';
+
+  @override
+  String get onboardingSummaryTitle => 'AI搭載の要約';
+
+  @override
+  String get onboardingSummaryDesc => 'あらゆるドキュメントから重要ポイント、アクション項目、ハイライトを即座に取得。';
+
+  @override
+  String get onboardingTranslateTitle => '要約を翻訳';
+
+  @override
+  String get onboardingTranslateDesc => 'ワンタップで要約を13以上の言語に翻訳できます。';
+
+  @override
+  String get onboardingShareTitle => 'どのアプリからも共有';
+
+  @override
+  String get onboardingShareDesc =>
+      'WhatsApp、Telegramなど、どのアプリからでもファイルを直接送信して即座に要約を取得。';
+
+  @override
+  String get onboardingHistoryTitle => '履歴とフィルター';
+
+  @override
+  String get onboardingHistoryDesc => 'すべてのドキュメントを一か所で整理。PDF、Word、画像でフィルタリング。';
+
+  @override
+  String get onboardingCopyShareTitle => 'コピー＆共有';
+
+  @override
+  String get onboardingCopyShareDesc => '要約をクリップボードにコピーしたり、お気に入りのアプリで共有できます。';
+
+  @override
+  String get tutorial => 'チュートリアル';
+
+  @override
+  String get onboardingSkip => 'スキップ';
+
+  @override
+  String get onboardingNext => '次へ';
+
+  @override
+  String get onboardingGetStarted => '始める';
 }

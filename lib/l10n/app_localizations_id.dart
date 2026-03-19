@@ -852,4 +852,58 @@ class SId extends S {
 
   @override
   String get updateNow => 'Perbarui sekarang';
+
+  @override
+  String get onboardingUploadTitle => 'Unggah Dokumen';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Unggah PDF, DOCX, atau gambar Anda dan biarkan AI menyelesaikan sisanya. Dapatkan ringkasan dalam hitungan detik.';
+
+  @override
+  String get onboardingSummaryTitle => 'Ringkasan Berbasis AI';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Dapatkan poin-poin penting, tugas, dan sorotan secara instan dari dokumen apa pun.';
+
+  @override
+  String get onboardingTranslateTitle => 'Terjemahkan Ringkasan';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Terjemahkan ringkasan Anda ke 13+ bahasa hanya dengan satu ketukan.';
+
+  @override
+  String get onboardingShareTitle => 'Bagikan dari Aplikasi Apa Pun';
+
+  @override
+  String get onboardingShareDesc =>
+      'Kirim file langsung dari WhatsApp, Telegram, atau aplikasi apa pun untuk ringkasan instan.';
+
+  @override
+  String get onboardingHistoryTitle => 'Riwayat & Filter';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Semua dokumen Anda terorganisir di satu tempat. Filter berdasarkan PDF, Word, atau gambar.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Salin & Bagikan';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Salin ringkasan ke papan klip atau bagikan melalui aplikasi favorit Anda.';
+
+  @override
+  String get tutorial => 'Panduan';
+
+  @override
+  String get onboardingSkip => 'Lewati';
+
+  @override
+  String get onboardingNext => 'Berikutnya';
+
+  @override
+  String get onboardingGetStarted => 'Mulai';
 }

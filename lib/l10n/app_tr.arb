@@ -276,5 +276,22 @@
 
   "updateRequired": "Güncelleme gerekli",
   "updateRequiredMsg": "DoCMind AI'ın yeni bir sürümü mevcut. Uygulamayı kullanmaya devam etmek için lütfen güncelleyin.",
-  "updateNow": "Şimdi güncelle"
+  "updateNow": "Şimdi güncelle",
+
+  "onboardingUploadTitle": "Belge Yükle",
+  "onboardingUploadDesc": "PDF, DOCX veya görsellerinizi yükleyin, gerisini yapay zeka halletsin. Saniyeler içinde özetler alın.",
+  "onboardingSummaryTitle": "Yapay Zeka Destekli Özetler",
+  "onboardingSummaryDesc": "Herhangi bir belgeden anında anahtar noktalar, yapılacaklar ve önemli bilgiler çıkarın.",
+  "onboardingTranslateTitle": "Özetleri Çevir",
+  "onboardingTranslateDesc": "Özetlerinizi tek dokunuşla 13'ten fazla dile çevirin.",
+  "onboardingShareTitle": "Her Uygulamadan Paylaş",
+  "onboardingShareDesc": "WhatsApp, Telegram veya herhangi bir uygulamadan doğrudan dosya göndererek anında özet alın.",
+  "onboardingHistoryTitle": "Geçmiş ve Filtreler",
+  "onboardingHistoryDesc": "Tüm belgeleriniz tek bir yerde. PDF, Word veya görsellere göre filtreleyin.",
+  "onboardingCopyShareTitle": "Kopyala ve Paylaş",
+  "onboardingCopyShareDesc": "Özetlerinizi panoya kopyalayın veya favori uygulamalarınız aracılığıyla paylaşın.",
+  "tutorial": "Rehber",
+  "onboardingSkip": "Atla",
+  "onboardingNext": "İleri",
+  "onboardingGetStarted": "Başla"
 }

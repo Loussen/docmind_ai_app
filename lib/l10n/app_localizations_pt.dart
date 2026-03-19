@@ -855,4 +855,58 @@ class SPt extends S {
 
   @override
   String get updateNow => 'Atualizar agora';
+
+  @override
+  String get onboardingUploadTitle => 'Enviar documentos';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Envie seus PDFs, DOCX ou imagens e deixe a IA fazer o resto. Obtenha resumos em segundos.';
+
+  @override
+  String get onboardingSummaryTitle => 'Resumos com IA';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Obtenha instantaneamente pontos-chave, tarefas e destaques de qualquer documento.';
+
+  @override
+  String get onboardingTranslateTitle => 'Traduzir resumos';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Traduza seus resumos para mais de 13 idiomas com um único toque.';
+
+  @override
+  String get onboardingShareTitle => 'Compartilhar de qualquer app';
+
+  @override
+  String get onboardingShareDesc =>
+      'Envie arquivos diretamente do WhatsApp, Telegram ou qualquer app para resumos instantâneos.';
+
+  @override
+  String get onboardingHistoryTitle => 'Histórico e filtros';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Todos os seus documentos organizados em um só lugar. Filtre por PDF, Word ou imagens.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Copiar e Compartilhar';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Copie seus resumos para a área de transferência ou compartilhe-os pelos seus aplicativos favoritos.';
+
+  @override
+  String get tutorial => 'Tutorial';
+
+  @override
+  String get onboardingSkip => 'Pular';
+
+  @override
+  String get onboardingNext => 'Próximo';
+
+  @override
+  String get onboardingGetStarted => 'Começar';
 }

@@ -10,6 +10,7 @@ import '../../features/summary/presentation/screens/summary_screen.dart';
 import '../../features/history/presentation/screens/history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/subscription/presentation/screens/subscription_screen.dart';
+import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../shell/main_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -21,6 +22,32 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/',
         name: 'splash',
         builder: (context, state) => const SplashScreen(),
+      ),
+
+      GoRoute(
+        path: '/onboarding',
+        name: 'onboarding',
+        pageBuilder: (context, state) {
+          final fromSettings = state.extra == true;
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: OnboardingScreen(fromSettings: fromSettings),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return fromSettings
+                  ? SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, 1),
+                        end: Offset.zero,
+                      ).animate(CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeOutCubic,
+                      )),
+                      child: child,
+                    )
+                  : FadeTransition(opacity: animation, child: child);
+            },
+          );
+        },
       ),
 
       // Main Shell with Bottom Navigation

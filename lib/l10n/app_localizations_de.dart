@@ -859,4 +859,58 @@ class SDe extends S {
 
   @override
   String get updateNow => 'Jetzt aktualisieren';
+
+  @override
+  String get onboardingUploadTitle => 'Dokumente hochladen';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Laden Sie PDFs, DOCX oder Bilder hoch und lassen Sie die KI den Rest erledigen. Erhalten Sie Zusammenfassungen in Sekunden.';
+
+  @override
+  String get onboardingSummaryTitle => 'KI-gestützte Zusammenfassungen';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Erhalten Sie sofort Kernpunkte, Aufgaben und Highlights aus jedem Dokument.';
+
+  @override
+  String get onboardingTranslateTitle => 'Zusammenfassungen übersetzen';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Übersetzen Sie Ihre Zusammenfassungen mit einem Fingertipp in über 13 Sprachen.';
+
+  @override
+  String get onboardingShareTitle => 'Aus jeder App teilen';
+
+  @override
+  String get onboardingShareDesc =>
+      'Senden Sie Dateien direkt aus WhatsApp, Telegram oder jeder anderen App für sofortige Zusammenfassungen.';
+
+  @override
+  String get onboardingHistoryTitle => 'Verlauf & Filter';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Alle Ihre Dokumente an einem Ort organisiert. Filtern Sie nach PDF, Word oder Bildern.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Kopieren & Teilen';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Kopieren Sie Ihre Zusammenfassungen in die Zwischenablage oder teilen Sie sie über Ihre Lieblings-Apps.';
+
+  @override
+  String get tutorial => 'Anleitung';
+
+  @override
+  String get onboardingSkip => 'Überspringen';
+
+  @override
+  String get onboardingNext => 'Weiter';
+
+  @override
+  String get onboardingGetStarted => 'Loslegen';
 }

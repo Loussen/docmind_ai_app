@@ -853,4 +853,58 @@ class STr extends S {
 
   @override
   String get updateNow => 'Şimdi güncelle';
+
+  @override
+  String get onboardingUploadTitle => 'Belge Yükle';
+
+  @override
+  String get onboardingUploadDesc =>
+      'PDF, DOCX veya görsellerinizi yükleyin, gerisini yapay zeka halletsin. Saniyeler içinde özetler alın.';
+
+  @override
+  String get onboardingSummaryTitle => 'Yapay Zeka Destekli Özetler';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Herhangi bir belgeden anında anahtar noktalar, yapılacaklar ve önemli bilgiler çıkarın.';
+
+  @override
+  String get onboardingTranslateTitle => 'Özetleri Çevir';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Özetlerinizi tek dokunuşla 13\'ten fazla dile çevirin.';
+
+  @override
+  String get onboardingShareTitle => 'Her Uygulamadan Paylaş';
+
+  @override
+  String get onboardingShareDesc =>
+      'WhatsApp, Telegram veya herhangi bir uygulamadan doğrudan dosya göndererek anında özet alın.';
+
+  @override
+  String get onboardingHistoryTitle => 'Geçmiş ve Filtreler';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Tüm belgeleriniz tek bir yerde. PDF, Word veya görsellere göre filtreleyin.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Kopyala ve Paylaş';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Özetlerinizi panoya kopyalayın veya favori uygulamalarınız aracılığıyla paylaşın.';
+
+  @override
+  String get tutorial => 'Rehber';
+
+  @override
+  String get onboardingSkip => 'Atla';
+
+  @override
+  String get onboardingNext => 'İleri';
+
+  @override
+  String get onboardingGetStarted => 'Başla';
 }

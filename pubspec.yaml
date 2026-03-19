@@ -93,6 +93,7 @@ flutter:
   
   assets:
     - assets/images/
+    - assets/images/onboarding/
   
   # Uncomment and add SF Pro Display fonts when available
   # fonts:

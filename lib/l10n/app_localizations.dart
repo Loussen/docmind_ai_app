@@ -1665,6 +1665,102 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Update Now'**
   String get updateNow;
+
+  /// No description provided for @onboardingUploadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload Documents'**
+  String get onboardingUploadTitle;
+
+  /// No description provided for @onboardingUploadDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop your PDF, DOCX, or images and let AI do the rest. Get structured summaries in seconds.'**
+  String get onboardingUploadDesc;
+
+  /// No description provided for @onboardingSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-Powered Summaries'**
+  String get onboardingSummaryTitle;
+
+  /// No description provided for @onboardingSummaryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Instantly get key points, action items, and highlights from any document.'**
+  String get onboardingSummaryDesc;
+
+  /// No description provided for @onboardingTranslateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Translate Summaries'**
+  String get onboardingTranslateTitle;
+
+  /// No description provided for @onboardingTranslateDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Translate your summaries into 13+ languages with a single tap.'**
+  String get onboardingTranslateDesc;
+
+  /// No description provided for @onboardingShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share from Any App'**
+  String get onboardingShareTitle;
+
+  /// No description provided for @onboardingShareDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Send files directly from WhatsApp, Telegram, or any app to get instant summaries.'**
+  String get onboardingShareDesc;
+
+  /// No description provided for @onboardingHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History & Filters'**
+  String get onboardingHistoryTitle;
+
+  /// No description provided for @onboardingHistoryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'All your documents organized in one place. Filter by PDF, Word, or images.'**
+  String get onboardingHistoryDesc;
+
+  /// No description provided for @onboardingCopyShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy & Share'**
+  String get onboardingCopyShareTitle;
+
+  /// No description provided for @onboardingCopyShareDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy your summaries to clipboard or share them with anyone via your favorite apps.'**
+  String get onboardingCopyShareDesc;
+
+  /// No description provided for @tutorial.
+  ///
+  /// In en, this message translates to:
+  /// **'Tutorial'**
+  String get tutorial;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get onboardingGetStarted;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

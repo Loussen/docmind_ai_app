@@ -835,6 +835,54 @@ class SZh extends S {
 
   @override
   String get updateNow => '立即更新';
+
+  @override
+  String get onboardingUploadTitle => '上传文档';
+
+  @override
+  String get onboardingUploadDesc => '上传您的PDF、DOCX或图片，让AI完成其余工作。几秒内即可获得摘要。';
+
+  @override
+  String get onboardingSummaryTitle => 'AI智能摘要';
+
+  @override
+  String get onboardingSummaryDesc => '即时获取任何文档的关键要点、待办事项和重要信息。';
+
+  @override
+  String get onboardingTranslateTitle => '翻译摘要';
+
+  @override
+  String get onboardingTranslateDesc => '一键将您的摘要翻译成13种以上的语言。';
+
+  @override
+  String get onboardingShareTitle => '从任何应用分享';
+
+  @override
+  String get onboardingShareDesc => '直接从WhatsApp、Telegram或任何应用发送文件，即时获取摘要。';
+
+  @override
+  String get onboardingHistoryTitle => '历史记录与筛选';
+
+  @override
+  String get onboardingHistoryDesc => '所有文档集中在一个地方。按PDF、Word或图片筛选。';
+
+  @override
+  String get onboardingCopyShareTitle => '复制与分享';
+
+  @override
+  String get onboardingCopyShareDesc => '将摘要复制到剪贴板，或通过您喜爱的应用分享给任何人。';
+
+  @override
+  String get tutorial => '教程';
+
+  @override
+  String get onboardingSkip => '跳过';
+
+  @override
+  String get onboardingNext => '下一步';
+
+  @override
+  String get onboardingGetStarted => '开始使用';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1668,4 +1716,52 @@ class SZhHant extends SZh {
 
   @override
   String get updateNow => '立即更新';
+
+  @override
+  String get onboardingUploadTitle => '上傳文件';
+
+  @override
+  String get onboardingUploadDesc => '上傳您的PDF、DOCX或圖片，讓AI完成其餘工作。幾秒內即可獲得摘要。';
+
+  @override
+  String get onboardingSummaryTitle => 'AI智慧摘要';
+
+  @override
+  String get onboardingSummaryDesc => '即時取得任何文件的關鍵要點、待辦事項和重要資訊。';
+
+  @override
+  String get onboardingTranslateTitle => '翻譯摘要';
+
+  @override
+  String get onboardingTranslateDesc => '一鍵將您的摘要翻譯成13種以上的語言。';
+
+  @override
+  String get onboardingShareTitle => '從任何應用程式分享';
+
+  @override
+  String get onboardingShareDesc => '直接從WhatsApp、Telegram或任何應用程式傳送檔案，即時取得摘要。';
+
+  @override
+  String get onboardingHistoryTitle => '歷史記錄與篩選';
+
+  @override
+  String get onboardingHistoryDesc => '所有文件集中在一處。按PDF、Word或圖片篩選。';
+
+  @override
+  String get onboardingCopyShareTitle => '複製與分享';
+
+  @override
+  String get onboardingCopyShareDesc => '將摘要複製到剪貼簿，或透過您喜愛的應用程式分享給任何人。';
+
+  @override
+  String get tutorial => '教學';
+
+  @override
+  String get onboardingSkip => '略過';
+
+  @override
+  String get onboardingNext => '下一步';
+
+  @override
+  String get onboardingGetStarted => '開始使用';
 }

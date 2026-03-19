@@ -276,5 +276,22 @@
 
   "updateRequired": "アップデートが必要です",
   "updateRequiredMsg": "DoCMind AIの新しいバージョンが利用可能です。アプリを引き続きご利用いただくには、アップデートしてください。",
-  "updateNow": "今すぐアップデート"
+  "updateNow": "今すぐアップデート",
+
+  "onboardingUploadTitle": "ドキュメントをアップロード",
+  "onboardingUploadDesc": "PDF、DOCX、画像をアップロードすると、AIが残りを処理します。数秒で要約を取得。",
+  "onboardingSummaryTitle": "AI搭載の要約",
+  "onboardingSummaryDesc": "あらゆるドキュメントから重要ポイント、アクション項目、ハイライトを即座に取得。",
+  "onboardingTranslateTitle": "要約を翻訳",
+  "onboardingTranslateDesc": "ワンタップで要約を13以上の言語に翻訳できます。",
+  "onboardingShareTitle": "どのアプリからも共有",
+  "onboardingShareDesc": "WhatsApp、Telegramなど、どのアプリからでもファイルを直接送信して即座に要約を取得。",
+  "onboardingHistoryTitle": "履歴とフィルター",
+  "onboardingHistoryDesc": "すべてのドキュメントを一か所で整理。PDF、Word、画像でフィルタリング。",
+  "onboardingCopyShareTitle": "コピー＆共有",
+  "onboardingCopyShareDesc": "要約をクリップボードにコピーしたり、お気に入りのアプリで共有できます。",
+  "tutorial": "チュートリアル",
+  "onboardingSkip": "スキップ",
+  "onboardingNext": "次へ",
+  "onboardingGetStarted": "始める"
 }

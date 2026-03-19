@@ -276,5 +276,22 @@
 
   "updateRequired": "Требуется обновление",
   "updateRequiredMsg": "Доступна новая версия DoCMind AI. Пожалуйста, обновите приложение, чтобы продолжить использование.",
-  "updateNow": "Обновить сейчас"
+  "updateNow": "Обновить сейчас",
+
+  "onboardingUploadTitle": "Загрузите документы",
+  "onboardingUploadDesc": "Загрузите PDF, DOCX или изображения, и ИИ сделает всё остальное. Получите сводку за секунды.",
+  "onboardingSummaryTitle": "Сводки на основе ИИ",
+  "onboardingSummaryDesc": "Мгновенно получайте ключевые моменты, задачи и важные факты из любого документа.",
+  "onboardingTranslateTitle": "Переводите сводки",
+  "onboardingTranslateDesc": "Переведите ваши сводки на 13+ языков одним нажатием.",
+  "onboardingShareTitle": "Делитесь из любого приложения",
+  "onboardingShareDesc": "Отправляйте файлы прямо из WhatsApp, Telegram или любого приложения для мгновенных сводок.",
+  "onboardingHistoryTitle": "История и фильтры",
+  "onboardingHistoryDesc": "Все ваши документы организованы в одном месте. Фильтруйте по PDF, Word или изображениям.",
+  "onboardingCopyShareTitle": "Копировать и Поделиться",
+  "onboardingCopyShareDesc": "Скопируйте резюме в буфер обмена или поделитесь ими через любимые приложения.",
+  "tutorial": "Руководство",
+  "onboardingSkip": "Пропустить",
+  "onboardingNext": "Далее",
+  "onboardingGetStarted": "Начать"
 }

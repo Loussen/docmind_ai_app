@@ -276,5 +276,22 @@
 
   "updateRequired": "Update erforderlich",
   "updateRequiredMsg": "Eine neue Version von DoCMind AI ist verfügbar. Bitte aktualisieren Sie die App, um sie weiter nutzen zu können.",
-  "updateNow": "Jetzt aktualisieren"
+  "updateNow": "Jetzt aktualisieren",
+
+  "onboardingUploadTitle": "Dokumente hochladen",
+  "onboardingUploadDesc": "Laden Sie PDFs, DOCX oder Bilder hoch und lassen Sie die KI den Rest erledigen. Erhalten Sie Zusammenfassungen in Sekunden.",
+  "onboardingSummaryTitle": "KI-gestützte Zusammenfassungen",
+  "onboardingSummaryDesc": "Erhalten Sie sofort Kernpunkte, Aufgaben und Highlights aus jedem Dokument.",
+  "onboardingTranslateTitle": "Zusammenfassungen übersetzen",
+  "onboardingTranslateDesc": "Übersetzen Sie Ihre Zusammenfassungen mit einem Fingertipp in über 13 Sprachen.",
+  "onboardingShareTitle": "Aus jeder App teilen",
+  "onboardingShareDesc": "Senden Sie Dateien direkt aus WhatsApp, Telegram oder jeder anderen App für sofortige Zusammenfassungen.",
+  "onboardingHistoryTitle": "Verlauf & Filter",
+  "onboardingHistoryDesc": "Alle Ihre Dokumente an einem Ort organisiert. Filtern Sie nach PDF, Word oder Bildern.",
+  "onboardingCopyShareTitle": "Kopieren & Teilen",
+  "onboardingCopyShareDesc": "Kopieren Sie Ihre Zusammenfassungen in die Zwischenablage oder teilen Sie sie über Ihre Lieblings-Apps.",
+  "tutorial": "Anleitung",
+  "onboardingSkip": "Überspringen",
+  "onboardingNext": "Weiter",
+  "onboardingGetStarted": "Loslegen"
 }

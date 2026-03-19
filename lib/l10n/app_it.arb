@@ -276,5 +276,22 @@
 
   "updateRequired": "Aggiornamento richiesto",
   "updateRequiredMsg": "È disponibile una nuova versione di DoCMind AI. Aggiorna per continuare a utilizzare l'app.",
-  "updateNow": "Aggiorna ora"
+  "updateNow": "Aggiorna ora",
+
+  "onboardingUploadTitle": "Carica documenti",
+  "onboardingUploadDesc": "Carica PDF, DOCX o immagini e lascia che l'IA faccia il resto. Ottieni riassunti in pochi secondi.",
+  "onboardingSummaryTitle": "Riassunti con IA",
+  "onboardingSummaryDesc": "Ottieni istantaneamente punti chiave, azioni e informazioni importanti da qualsiasi documento.",
+  "onboardingTranslateTitle": "Traduci i riassunti",
+  "onboardingTranslateDesc": "Traduci i tuoi riassunti in oltre 13 lingue con un solo tocco.",
+  "onboardingShareTitle": "Condividi da qualsiasi app",
+  "onboardingShareDesc": "Invia file direttamente da WhatsApp, Telegram o qualsiasi app per riassunti istantanei.",
+  "onboardingHistoryTitle": "Cronologia e filtri",
+  "onboardingHistoryDesc": "Tutti i tuoi documenti organizzati in un unico posto. Filtra per PDF, Word o immagini.",
+  "onboardingCopyShareTitle": "Copia e Condividi",
+  "onboardingCopyShareDesc": "Copia i tuoi riassunti negli appunti o condividili tramite le tue app preferite.",
+  "tutorial": "Tutorial",
+  "onboardingSkip": "Salta",
+  "onboardingNext": "Avanti",
+  "onboardingGetStarted": "Inizia"
 }

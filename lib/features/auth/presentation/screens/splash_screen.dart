@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/constants/app_constants.dart';
 import '../../../device/presentation/providers/device_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -27,7 +30,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     await ref.read(deviceProvider.notifier).initializeDevice();
 
     if (!mounted) return;
-    context.go('/home');
+
+    final prefs = await SharedPreferences.getInstance();
+    final onboardingDone =
+        prefs.getBool(AppConstants.onboardingCompleteKey) ?? false;
+
+    if (!mounted) return;
+
+    if (onboardingDone && !kDebugMode) {
+      context.go('/home');
+    } else {
+      context.go('/onboarding');
+    }
   }
 
   @override

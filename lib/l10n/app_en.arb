@@ -450,5 +450,22 @@
 
   "updateRequired": "Update Required",
   "updateRequiredMsg": "A new version of DoCMind AI is available. Please update to continue using the app.",
-  "updateNow": "Update Now"
+  "updateNow": "Update Now",
+
+  "onboardingUploadTitle": "Upload Documents",
+  "onboardingUploadDesc": "Drop your PDF, DOCX, or images and let AI do the rest. Get structured summaries in seconds.",
+  "onboardingSummaryTitle": "AI-Powered Summaries",
+  "onboardingSummaryDesc": "Instantly get key points, action items, and highlights from any document.",
+  "onboardingTranslateTitle": "Translate Summaries",
+  "onboardingTranslateDesc": "Translate your summaries into 13+ languages with a single tap.",
+  "onboardingShareTitle": "Share from Any App",
+  "onboardingShareDesc": "Send files directly from WhatsApp, Telegram, or any app to get instant summaries.",
+  "onboardingHistoryTitle": "History & Filters",
+  "onboardingHistoryDesc": "All your documents organized in one place. Filter by PDF, Word, or images.",
+  "onboardingCopyShareTitle": "Copy & Share",
+  "onboardingCopyShareDesc": "Copy your summaries to clipboard or share them with anyone via your favorite apps.",
+  "tutorial": "Tutorial",
+  "onboardingSkip": "Skip",
+  "onboardingNext": "Next",
+  "onboardingGetStarted": "Get Started"
 }

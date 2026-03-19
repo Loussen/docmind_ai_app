@@ -859,4 +859,58 @@ class SRu extends S {
 
   @override
   String get updateNow => 'Обновить сейчас';
+
+  @override
+  String get onboardingUploadTitle => 'Загрузите документы';
+
+  @override
+  String get onboardingUploadDesc =>
+      'Загрузите PDF, DOCX или изображения, и ИИ сделает всё остальное. Получите сводку за секунды.';
+
+  @override
+  String get onboardingSummaryTitle => 'Сводки на основе ИИ';
+
+  @override
+  String get onboardingSummaryDesc =>
+      'Мгновенно получайте ключевые моменты, задачи и важные факты из любого документа.';
+
+  @override
+  String get onboardingTranslateTitle => 'Переводите сводки';
+
+  @override
+  String get onboardingTranslateDesc =>
+      'Переведите ваши сводки на 13+ языков одним нажатием.';
+
+  @override
+  String get onboardingShareTitle => 'Делитесь из любого приложения';
+
+  @override
+  String get onboardingShareDesc =>
+      'Отправляйте файлы прямо из WhatsApp, Telegram или любого приложения для мгновенных сводок.';
+
+  @override
+  String get onboardingHistoryTitle => 'История и фильтры';
+
+  @override
+  String get onboardingHistoryDesc =>
+      'Все ваши документы организованы в одном месте. Фильтруйте по PDF, Word или изображениям.';
+
+  @override
+  String get onboardingCopyShareTitle => 'Копировать и Поделиться';
+
+  @override
+  String get onboardingCopyShareDesc =>
+      'Скопируйте резюме в буфер обмена или поделитесь ими через любимые приложения.';
+
+  @override
+  String get tutorial => 'Руководство';
+
+  @override
+  String get onboardingSkip => 'Пропустить';
+
+  @override
+  String get onboardingNext => 'Далее';
+
+  @override
+  String get onboardingGetStarted => 'Начать';
 }
