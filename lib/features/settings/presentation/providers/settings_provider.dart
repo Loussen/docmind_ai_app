@@ -1,7 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../../core/theme/theme_provider.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/settings_model.dart';
 import '../../data/repositories/settings_repository.dart';
 
@@ -35,7 +38,7 @@ class SettingsState {
 
   bool get notificationsEnabled => settings?.notificationsEnabled ?? true;
   bool get darkModeEnabled => settings?.darkModeEnabled ?? false;
-  String get uiLanguage => settings?.uiLanguage ?? settings?.legacyLanguage ?? 'en';
+  String get uiLanguage => settings?.uiLanguage ?? settings?.legacyLanguage ?? SettingsNotifier._resolveDeviceLanguage();
   String get outputLanguage => settings?.outputLanguage ?? 'en';
 }
 
@@ -52,20 +55,39 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   static SettingsModel? _loadCachedSettings() {
     try {
       final box = Hive.box(_settingsBoxName);
-      final ui = box.get(_keyUiLanguage) as String?;
+      final cachedUi = box.get(_keyUiLanguage) as String?;
       final out = box.get(_keyOutputLanguage) as String?;
       final dark = box.get(_keyDarkMode) as bool?;
 
-      if (ui == null && out == null && dark == null) return null;
+      final resolvedUi = cachedUi ?? _resolveDeviceLanguage();
 
       return SettingsModel(
-        uiLanguage: ui ?? 'en',
-        outputLanguage: out ?? 'en',
+        uiLanguage: resolvedUi,
+        outputLanguage: out ?? resolvedUi,
         darkModeEnabled: dark ?? false,
       );
     } catch (_) {
       return null;
     }
+  }
+
+  static String _resolveDeviceLanguage() {
+    final deviceLocale = ui.PlatformDispatcher.instance.locale;
+    final supportedCodes = S.supportedLocales.map((l) => l.languageCode).toSet();
+
+    if (deviceLocale.scriptCode != null) {
+      final withScript = '${deviceLocale.languageCode}-${deviceLocale.scriptCode}';
+      final hasScript = S.supportedLocales.any(
+        (l) => l.languageCode == deviceLocale.languageCode && l.scriptCode == deviceLocale.scriptCode,
+      );
+      if (hasScript) return withScript;
+    }
+
+    if (supportedCodes.contains(deviceLocale.languageCode)) {
+      return deviceLocale.languageCode;
+    }
+
+    return 'en';
   }
 
   Future<void> _cacheSettings(SettingsModel settings) async {

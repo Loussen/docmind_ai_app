@@ -48,7 +48,7 @@ Gratis: 2 documenten per dag. Upgrade naar Pro voor onbeperkte toegang.
 ## Keywords (100 tek., geen spaties)
 
 ```
-pdf,ai,samenvatting,vertalen,document,ocr,lezer,scan,notities,delen,studie,afbeelding,tekst,onderzoek
+pdf,ai,samenvatting,vertalen,document,ocr,lezer,scan,notitie,delen,studie,afbeelding,tekst,onderzoek
 ```
 
 ## iPhone Screenshots (10)

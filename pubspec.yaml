@@ -1,7 +1,7 @@
 name: docmind_ai
 description: DoCMind AI — OCR, Doc & AI Summarizer
 publish_to: 'none'
-version: 1.0.9+10
+version: 1.1.0+11
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -93,7 +93,21 @@ flutter:
   
   assets:
     - assets/images/
-    - assets/images/onboarding/
+    # Onboarding screenshots are locale-specific.
+    # We list each locale folder explicitly so Flutter packages them.
+    - assets/images/onboarding/en/
+    - assets/images/onboarding/de/
+    - assets/images/onboarding/fr/
+    - assets/images/onboarding/es/
+    - assets/images/onboarding/it/
+    - assets/images/onboarding/tr/
+    - assets/images/onboarding/nl/
+    - assets/images/onboarding/pt/
+    - assets/images/onboarding/ru/
+    - assets/images/onboarding/ja/
+    - assets/images/onboarding/id/
+    - assets/images/onboarding/zh/
+    - assets/images/onboarding/zh-Hant/
   
   # Uncomment and add SF Pro Display fonts when available
   # fonts:

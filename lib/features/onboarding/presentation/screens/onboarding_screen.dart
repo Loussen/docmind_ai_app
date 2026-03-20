@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,6 +22,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _controller = PageController();
   int _currentPage = 0;
 
+  String _resolveOnboardingAssetLocaleFolder(BuildContext context) {
+    // Short path: show only English onboarding screenshots for now.
+    // We can prepare other locales later without touching the UI again.
+    return 'en';
+  }
+
   List<_OnboardingPage> _pages(BuildContext context) {
     final l = S.of(context)!;
     return [
@@ -29,42 +36,42 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         gradient: const [Color(0xFF667eea), Color(0xFF764ba2)],
         title: l.onboardingUploadTitle,
         description: l.onboardingUploadDesc,
-        screenshot: 'assets/images/onboarding/upload.png',
+        screenshotBaseName: 'upload.png',
       ),
       _OnboardingPage(
         icon: Iconsax.magic_star,
         gradient: const [Color(0xFFf857a6), Color(0xFFff5858)],
         title: l.onboardingSummaryTitle,
         description: l.onboardingSummaryDesc,
-        screenshot: 'assets/images/onboarding/summary.png',
+        screenshotBaseName: 'summary.png',
       ),
       _OnboardingPage(
         icon: Iconsax.share,
         gradient: const [Color(0xFF4facfe), Color(0xFF00f2fe)],
         title: l.onboardingShareTitle,
         description: l.onboardingShareDesc,
-        screenshot: 'assets/images/onboarding/share.png',
+        screenshotBaseName: 'share.png',
       ),
       _OnboardingPage(
         icon: Iconsax.translate,
         gradient: const [Color(0xFF43e97b), Color(0xFF38f9d7)],
         title: l.onboardingTranslateTitle,
         description: l.onboardingTranslateDesc,
-        screenshot: 'assets/images/onboarding/translate.png',
+        screenshotBaseName: 'translate.png',
       ),
       _OnboardingPage(
         icon: Iconsax.filter,
         gradient: const [Color(0xFFfa709a), Color(0xFFfee140)],
         title: l.onboardingHistoryTitle,
         description: l.onboardingHistoryDesc,
-        screenshot: 'assets/images/onboarding/history.png',
+        screenshotBaseName: 'history.png',
       ),
       _OnboardingPage(
         icon: Iconsax.copy,
         gradient: const [Color(0xFF6366f1), Color(0xFFa78bfa)],
         title: l.onboardingCopyShareTitle,
         description: l.onboardingCopyShareDesc,
-        screenshot: 'assets/images/onboarding/copy_share.png',
+        screenshotBaseName: 'copy_share.png',
       ),
     ];
   }
@@ -301,11 +308,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildPhoneMockup(_OnboardingPage page, bool isDark) {
+    final assetLocaleFolder = _resolveOnboardingAssetLocaleFolder(context);
+    final assetPath =
+        'assets/images/onboarding/$assetLocaleFolder/${page.screenshotBaseName}';
+
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 450),
+        constraints: const BoxConstraints(maxHeight: 500),
         child: AspectRatio(
-          aspectRatio: 9 / 16,
+          // Use the typical iPhone portrait aspect ratio (9:19.5) to avoid cropping.
+          aspectRatio: 9 / 19.5,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28),
@@ -328,9 +340,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Container(
                 color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
                 child: Image.asset(
-                  page.screenshot,
+                  assetPath,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
+                    if (kDebugMode) {
+                      // Helps confirm the exact asset path when images fail to load.
+                      // (Flutter assets are packaged at build time, so a cold restart may be needed.)
+                      debugPrint('Onboarding asset missing: $assetPath');
+                    }
                     return Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -393,13 +410,13 @@ class _OnboardingPage {
   final List<Color> gradient;
   final String title;
   final String description;
-  final String screenshot;
+  final String screenshotBaseName;
 
   const _OnboardingPage({
     required this.icon,
     required this.gradient,
     required this.title,
     required this.description,
-    required this.screenshot,
+    required this.screenshotBaseName,
   });
 }
