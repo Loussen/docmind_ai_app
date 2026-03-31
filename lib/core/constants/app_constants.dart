@@ -4,8 +4,18 @@ class AppConstants {
   // App Info
   static const String appName = 'DoCMind AI';
   static const String appTagline = 'OCR, Doc & AI Summarizer';
-  static const String appVersion = '1.1.0';
+  static const String appVersion = '1.1.1';
   static const String appStoreId = '6757693350';
+
+  /// What's New text for 1.1.1 (App Store / in-app release notes)
+  static const String whatsNew1_1_1 = '''
+• iOS — Supported languages are correctly packaged for the App Store listing.
+• Onboarding — Guided tour for new users (Tutorial in Settings).
+• Share to DoCMind — Open PDFs and images from other apps (e.g. WhatsApp) into the app.
+• App opens in your device language when supported; English otherwise.
+• Force update prompt when a newer App Store version is available.
+• Onboarding and UI improvements; performance and stability fixes.
+''';
 
   /// What's New text for 1.1.0 (App Store / in-app release notes)
   static const String whatsNew1_1_0 = '''

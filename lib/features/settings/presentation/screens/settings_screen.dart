@@ -619,7 +619,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
         content: SingleChildScrollView(
           child: Text(
-            AppConstants.whatsNew1_1_0.trim(),
+            AppConstants.whatsNew1_1_1.trim(),
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
