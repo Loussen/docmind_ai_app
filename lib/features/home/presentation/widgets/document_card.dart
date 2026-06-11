@@ -127,7 +127,8 @@ class DocumentCard extends ConsumerWidget {
     final isImage = document.type == DocumentType.image;
 
     if (hasPreview && (isImage || document.type == DocumentType.pdf)) {
-      final deviceId = ref.watch(_deviceIdProvider).valueOrNull;
+      final deviceIdAsync = ref.watch(_deviceIdProvider);
+      final deviceId = deviceIdAsync.valueOrNull;
 
       return ClipRRect(
         borderRadius: const BorderRadius.only(
@@ -136,30 +137,44 @@ class DocumentCard extends ConsumerWidget {
         ),
         child: SizedBox(
           width: 72,
-          child: CachedNetworkImage(
-            imageUrl: document.previewUrl!,
-            httpHeaders: {
-              if (deviceId != null) 'X-Device-ID': deviceId,
-            },
-            fit: BoxFit.cover,
-            placeholder: (context, url) => Container(
-              color: _getTypeColor().withOpacity(0.08),
-              child: Center(
-                child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      _getTypeColor().withOpacity(0.5),
+          child: deviceIdAsync.isLoading || deviceId == null
+              ? Container(
+                  color: _getTypeColor().withOpacity(0.08),
+                  child: Center(
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          _getTypeColor().withOpacity(0.5),
+                        ),
+                      ),
                     ),
                   ),
+                )
+              : CachedNetworkImage(
+                  imageUrl: document.previewUrl!,
+                  httpHeaders: {'X-Device-ID': deviceId},
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    color: _getTypeColor().withOpacity(0.08),
+                    child: Center(
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            _getTypeColor().withOpacity(0.5),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) =>
+                      _buildFallbackPreview(isDark),
                 ),
-              ),
-            ),
-            errorWidget: (context, url, error) =>
-                _buildFallbackPreview(isDark),
-          ),
         ),
       );
     }
