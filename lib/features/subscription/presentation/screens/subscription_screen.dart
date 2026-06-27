@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/services/tiktok_analytics_service.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../data/models/subscription_model.dart';
@@ -29,6 +30,10 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     // Reset any stale purchasing state when screen opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(subscriptionProvider.notifier).clearPurchasingState();
+      TikTokAnalyticsService.instance.logViewContent(
+        contentId: 'subscription_screen',
+        contentName: 'Subscription Plans',
+      );
     });
   }
 
@@ -292,6 +297,42 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
             const SizedBox(height: 24),
 
+            FadeInUp(
+              delay: Duration(milliseconds: isPremium ? 120 : 80),
+              duration: const Duration(milliseconds: 300),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Text(
+                  S.of(context)!.subscriptionLegalDisclosure,
+                  style: TextStyle(
+                    fontSize: 12,
+                    height: 1.45,
+                    color: isDark
+                        ? AppColors.textTertiaryDark
+                        : AppColors.textTertiary,
+                  ),
+                ),
+              ),
+            ),
+
+            if (isPremium) ...[
+              const SizedBox(height: 12),
+              FadeInUp(
+                delay: Duration(milliseconds: isPremium ? 130 : 90),
+                duration: const Duration(milliseconds: 300),
+                child: Center(
+                  child: TextButton(
+                    onPressed: () => _launchUrl(
+                      'https://apps.apple.com/account/subscriptions',
+                    ),
+                    child: Text(S.of(context)!.manageInAppStore),
+                  ),
+                ),
+              ),
+            ],
+
+            const SizedBox(height: 16),
+
             // Plans
             FadeInUp(
               delay: Duration(milliseconds: isPremium ? 150 : 100),
@@ -301,9 +342,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                 title: S.of(context)!.planPro,
                 monthlyPrice:
                     subscriptionState.productPrices?.proMonthlyPrice ??
-                        '\$5.99',
+                        S.of(context)!.pricesLoading,
                 yearlyPrice: subscriptionState.productPrices?.proYearlyPrice ??
-                    '\$35.99',
+                    S.of(context)!.pricesLoading,
                 features: [
                   S.of(context)!.unlimitedDocuments,
                   S.of(context)!.unlimitedSummaries,
@@ -331,10 +372,10 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                 title: S.of(context)!.planProPlus,
                 monthlyPrice:
                     subscriptionState.productPrices?.proPlusMonthlyPrice ??
-                        '\$9.99',
+                        S.of(context)!.pricesLoading,
                 yearlyPrice:
                     subscriptionState.productPrices?.proPlusYearlyPrice ??
-                        '\$71.99',
+                        S.of(context)!.pricesLoading,
                 features: [
                   S.of(context)!.everythingInPro,
                   S.of(context)!.ocrScannedDocs,
@@ -493,6 +534,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     required String planType, // 'pro' or 'pro_plus'
     required bool isDark,
   }) {
+    final pricesLoaded = subscriptionState.productPrices != null;
     final price = _isYearly ? yearlyPrice : monthlyPrice;
     final period = _isYearly ? S.of(context)!.perYear : S.of(context)!.perMonth;
 
@@ -659,7 +701,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             width: double.infinity,
             height: 52,
             child: ElevatedButton(
-              onPressed: isCurrentPlan || subscriptionState.isPurchasing
+              onPressed: !pricesLoaded || isCurrentPlan || subscriptionState.isPurchasing
                   ? null
                   : () => _purchasePlan(productId, buttonInfo.isDowngrade),
               style: ElevatedButton.styleFrom(

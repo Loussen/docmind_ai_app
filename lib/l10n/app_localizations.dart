@@ -568,6 +568,42 @@ abstract class S {
   /// **'Delete Account?'**
   String get deleteAccountTitle;
 
+  /// No description provided for @deleteAccountSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data has been deleted successfully.'**
+  String get deleteAccountSuccess;
+
+  /// No description provided for @deleteAccountFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not delete your data. Please try again.'**
+  String get deleteAccountFailed;
+
+  /// No description provided for @signOutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out?'**
+  String get signOutConfirm;
+
+  /// No description provided for @subscriptionLegalDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment will be charged to your Apple ID account at confirmation of purchase. Subscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage and cancel subscriptions in your App Store account settings.'**
+  String get subscriptionLegalDisclosure;
+
+  /// No description provided for @manageInAppStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage in App Store'**
+  String get manageInAppStore;
+
+  /// No description provided for @pricesLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading prices...'**
+  String get pricesLoading;
+
   /// No description provided for @appVersion.
   ///
   /// In en, this message translates to:

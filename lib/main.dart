@@ -9,6 +9,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'core/constants/app_constants.dart';
 import 'core/router/app_router.dart';
+import 'core/services/tiktok_analytics_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'features/settings/presentation/providers/settings_provider.dart';
@@ -24,6 +25,8 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  await TikTokAnalyticsService.instance.initialize();
 
   runApp(
     const ProviderScope(child: DoCMindApp()),

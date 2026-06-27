@@ -252,6 +252,26 @@ class SRu extends S {
   String get deleteAccountTitle => 'Удалить аккаунт?';
 
   @override
+  String get deleteAccountSuccess => 'Your data has been deleted successfully.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Could not delete your data. Please try again.';
+
+  @override
+  String get signOutConfirm => 'Are you sure you want to sign out?';
+
+  @override
+  String get subscriptionLegalDisclosure =>
+      'Payment will be charged to your Apple ID account at confirmation of purchase. Subscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage and cancel subscriptions in your App Store account settings.';
+
+  @override
+  String get manageInAppStore => 'Manage in App Store';
+
+  @override
+  String get pricesLoading => 'Loading prices...';
+
+  @override
   String appVersion(String version) {
     return 'DoCMind AI v$version';
   }

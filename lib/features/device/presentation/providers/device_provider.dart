@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/tiktok_analytics_service.dart';
 import '../../data/repositories/device_repository.dart';
 
 class DeviceState {
@@ -139,6 +140,8 @@ class DeviceNotifier extends StateNotifier<DeviceState> {
           );
         },
       );
+
+      await TikTokAnalyticsService.instance.identifyUser(externalId: deviceId);
 
       return true;
     } catch (e) {

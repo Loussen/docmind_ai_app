@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/document_model.dart';
 import '../../data/repositories/document_repository.dart';
+import '../../../../core/services/tiktok_analytics_service.dart';
 import '../../../../l10n/app_localizations.dart';
 
 enum UploadStatus { idle, selecting, uploading, processing, analyzing, success, error }
@@ -98,6 +99,10 @@ class UploadNotifier extends StateNotifier<UploadState> {
           status: UploadStatus.processing,
           uploadedDocument: document,
           currentStep: ProcessingStep.extractText,
+        );
+        TikTokAnalyticsService.instance.logDocumentUploaded(
+          documentId: document.id,
+          fileType: document.type.name,
         );
         return document;
       },
@@ -280,6 +285,10 @@ class DocumentsNotifier extends StateNotifier<DocumentsState> {
       hasMore: true,
     );
     loadDocuments(refresh: true);
+  }
+
+  void clearAll() {
+    state = const DocumentsState();
   }
 
   Future<void> deleteDocument(String id) async {

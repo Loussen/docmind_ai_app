@@ -1,3 +1,28 @@
+# What's New in DoCMind AI 1.1.2
+
+## Delete Account (App Store requirement)
+Settings now includes Delete Account to permanently remove your documents, summaries, and usage data.
+
+## Subscription transparency
+Clear auto-renewal terms and a direct link to manage subscriptions in the App Store.
+
+## Privacy improvements
+Removed debug-only local network permissions from the release build and added privacy manifest declarations.
+
+## Other improvements
+Stability fixes and App Store review compliance updates.
+
+---
+
+**Short version for App Store (What's New field):**
+
+• Settings — Delete Account to permanently remove your data  
+• Subscription screen — clearer auto-renewal terms and manage link  
+• Privacy and App Store review fixes  
+• Stability improvements  
+
+---
+
 # What's New in DoCMind AI 1.0.8
 
 ## Document preview

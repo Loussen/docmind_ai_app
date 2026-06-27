@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -29,7 +30,8 @@ class DioClient {
 
     _dio.interceptors.addAll([
       _DeviceInterceptor(_storage),
-      _LoggingInterceptor(),
+      _AuthInterceptor(_storage),
+      if (kDebugMode) _LoggingInterceptor(),
       _ErrorInterceptor(),
     ]);
   }
@@ -129,6 +131,24 @@ class _DeviceInterceptor extends Interceptor {
     final deviceId = await _storage.read(key: AppConstants.deviceIdKey);
     if (deviceId != null) {
       options.headers['X-Device-ID'] = deviceId;
+    }
+    handler.next(options);
+  }
+}
+
+class _AuthInterceptor extends Interceptor {
+  final FlutterSecureStorage _storage;
+
+  _AuthInterceptor(this._storage);
+
+  @override
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    final token = await _storage.read(key: AppConstants.authTokenKey);
+    if (token != null && token.isNotEmpty) {
+      options.headers['Authorization'] = 'Bearer $token';
     }
     handler.next(options);
   }

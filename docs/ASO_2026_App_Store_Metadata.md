@@ -11,14 +11,14 @@
 
 | Field | Content | Chars |
 |-------|---------|-------|
-| **Name** | Chat with PDF: DoCMind AI | 24 |
+| **Name** | DoCMind AI: PDF Summarizer | 26 |
 | **Subtitle** | OCR, Doc & AI Summariser | 26 |
-| **Promotional Text** | Turn documents into smart summaries in seconds. Upload PDFs, Word & images—get AI insights instantly. Try 2 free summaries! | 118 |
+| **Promotional Text** | Summarize PDFs, Word docs & photos in seconds. AI key points, OCR & action items. Try free on iPhone. | 118 |
 
 **Description:**
 
 ```
-Chat with PDFs & Turn Photos into Smart Summaries
+Summarize PDFs, Word Docs & Photos with AI
 
 Upload PDF, DOC, DOCX or photos and get instant AI summaries, key points and extracted text.
 
@@ -26,7 +26,7 @@ DoCMind AI helps you read smarter, analyse faster and save time every day.
 
 KEY FEATURES
 
-• Chat with your PDF documents
+• AI document summarization
 • Summarise long files instantly
 • Extract keywords and main points
 • Convert images and photos to text (OCR)

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animate_do/animate_do.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/tiktok_analytics_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -83,6 +84,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(AppConstants.onboardingCompleteKey, true);
+    await TikTokAnalyticsService.instance.logCompleteTutorial();
     if (mounted) context.go('/home');
   }
 

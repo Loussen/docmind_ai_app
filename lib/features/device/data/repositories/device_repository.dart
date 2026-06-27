@@ -50,4 +50,15 @@ class DeviceRepository {
       return Left('An unexpected error occurred');
     }
   }
+
+  Future<Either<String, void>> deleteAllData() async {
+    try {
+      await _dioClient.delete(ApiConstants.deviceDeleteData);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(e.error?.toString() ?? 'Failed to delete data');
+    } catch (e) {
+      return Left('An unexpected error occurred');
+    }
+  }
 }

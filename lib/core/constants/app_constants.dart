@@ -4,8 +4,16 @@ class AppConstants {
   // App Info
   static const String appName = 'DoCMind AI';
   static const String appTagline = 'OCR, Doc & AI Summarizer';
-  static const String appVersion = '1.1.1';
+  static const String appVersion = '1.1.2';
   static const String appStoreId = '6757693350';
+
+  /// What's New text for 1.1.2 (App Store / in-app release notes)
+  static const String whatsNew1_1_2 = '''
+• Settings — Delete Account option to permanently remove your data.
+• Subscription screen — clearer auto-renewal terms and manage subscription link.
+• Privacy — improved tracking transparency; removed debug-only network permissions.
+• Stability and App Store review fixes.
+''';
 
   /// What's New text for 1.1.1 (App Store / in-app release notes)
   static const String whatsNew1_1_1 = '''

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/tiktok_analytics_service.dart';
 import '../../data/models/subscription_model.dart';
 import '../../data/repositories/subscription_repository.dart';
 
@@ -198,6 +199,17 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
       },
       (response) {
         if (response.success && response.subscription != null) {
+          final price = _priceForProduct(purchase.productID);
+          TikTokAnalyticsService.instance.logSubscribe(
+            productId: purchase.productID,
+            value: price,
+          );
+          TikTokAnalyticsService.instance.logPurchase(
+            productId: purchase.productID,
+            value: price ?? 0,
+            transactionId: purchase.purchaseID,
+          );
+
           state = state.copyWith(
             subscription: response.subscription,
             isPurchasing: false,
@@ -274,6 +286,8 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     }
 
     final product = response.productDetails.first;
+    TikTokAnalyticsService.instance.logCheckoutStarted(productId: productId);
+
     final purchaseParam = PurchaseParam(productDetails: product);
 
     try {
@@ -325,6 +339,25 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         isRestoring: false,
         clearError: true,
         clearSuccess: true);
+  }
+
+  double? _priceForProduct(String productId) {
+    final prices = state.productPrices;
+    if (prices == null) return null;
+
+    String? raw;
+    switch (productId) {
+      case AppConstants.proMonthlyProductId:
+        raw = prices.proMonthlyPrice;
+      case AppConstants.proYearlyProductId:
+        raw = prices.proYearlyPrice;
+      case AppConstants.proPlusMonthlyProductId:
+        raw = prices.proPlusMonthlyPrice;
+      case AppConstants.proPlusYearlyProductId:
+        raw = prices.proPlusYearlyPrice;
+    }
+
+    return TikTokAnalyticsService.parsePrice(raw);
   }
 
   @override

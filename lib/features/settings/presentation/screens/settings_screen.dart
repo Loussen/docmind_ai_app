@@ -10,6 +10,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/i18n/language_options.dart';
+import '../../../device/data/repositories/device_repository.dart';
+import '../../../document/presentation/providers/document_provider.dart';
 import '../../../subscription/presentation/providers/subscription_provider.dart';
 import '../providers/settings_provider.dart';
 
@@ -418,6 +420,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                 .restorePurchases();
                           },
                   ),
+
+                  _SettingsTile(
+                    icon: Iconsax.trash,
+                    title: S.of(context)!.deleteAccount,
+                    titleColor: AppColors.error,
+                    onTap: () => _confirmDeleteAccount(context),
+                  ),
                 ],
               ),
             ),
@@ -619,7 +628,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
         content: SingleChildScrollView(
           child: Text(
-            AppConstants.whatsNew1_1_1.trim(),
+            AppConstants.whatsNew1_1_2.trim(),
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
@@ -634,6 +643,62 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _confirmDeleteAccount(BuildContext context) async {
+    final l = S.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l.deleteAccountTitle),
+        content: Text(l.deleteAccountConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
+            child: Text(l.delete),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    final result = await ref.read(deviceRepositoryProvider).deleteAllData();
+
+    if (!mounted) return;
+    Navigator.pop(context);
+
+    result.fold(
+      (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l.deleteAccountFailed),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      },
+      (_) async {
+        ref.read(documentsProvider.notifier).clearAll();
+        ref.read(subscriptionProvider.notifier).loadSubscriptionData();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l.deleteAccountSuccess),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      },
     );
   }
 

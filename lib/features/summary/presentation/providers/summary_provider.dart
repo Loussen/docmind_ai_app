@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/summary_model.dart';
 import '../../data/repositories/summary_repository.dart';
+import '../../../../core/services/tiktok_analytics_service.dart';
 
 // Summary generation state
 enum SummaryGenerationStatus { idle, generating, success, error }
@@ -72,6 +73,10 @@ class SummaryGenerationNotifier extends StateNotifier<SummaryGenerationState> {
           status: SummaryGenerationStatus.success,
           summary: summary,
           processingTimeMs: endTime.difference(startTime).inMilliseconds,
+        );
+        TikTokAnalyticsService.instance.logSummaryGenerated(
+          summaryId: summary.id,
+          documentId: documentId,
         );
         return summary;
       },

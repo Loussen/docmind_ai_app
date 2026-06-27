@@ -6,6 +6,7 @@ class ApiConstants {
   // Device Endpoints
   static const String deviceRegister = '/device/register';
   static const String deviceSync = '/device/sync';
+  static const String deviceDeleteData = '/device/data';
 
   // Document Endpoints
   static const String documents = '/documents';
